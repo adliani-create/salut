@@ -1,8 +1,36 @@
 // Fonts
 @import url('https://fonts.bunny.net/css?family=Nunito');
 
-// Variables
-@import 'variables';
-
 // Bootstrap
 @import 'bootstrap/scss/bootstrap';
+
+// Icons
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+
+// Custom Dashboard Styles
+.card {
+    border: none;
+    border-radius: 0.75rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.stats-icon {
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    font-size: 1.5rem;
+}
+
+.bg-light-primary { background-color: rgba(13, 110, 253, 0.1); color: #0d6efd; }
+.bg-light-success { background-color: rgba(25, 135, 84, 0.1); color: #198754; }
+.bg-light-warning { background-color: rgba(255, 193, 7, 0.1); color: #ffc107; }
+

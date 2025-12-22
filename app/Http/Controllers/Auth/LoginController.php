@@ -28,6 +28,28 @@ class LoginController extends Controller
     protected $redirectTo = '/home';
 
     /**
+     * The user has been authenticated.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     * @return mixed
+     */
+    protected function authenticated(\Illuminate\Http\Request $request, $user)
+    {
+        if ($user->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        } elseif ($user->role === 'yayasan') {
+            return redirect()->route('yayasan.dashboard');
+        } elseif ($user->role === 'staff') {
+            return redirect()->route('staff.dashboard');
+        } elseif ($user->role === 'mahasiswa') {
+            return redirect('/home');
+        }
+
+        return redirect('/home');
+    }
+
+    /**
      * Create a new controller instance.
      *
      * @return void
