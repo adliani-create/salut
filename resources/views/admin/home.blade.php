@@ -56,6 +56,7 @@
              <div class="card">
                 <div class="card-header fw-bold">Master Data & Actions</div>
                 <div class="card-body">
+                    <a href="{{ route('admin.roles.index') }}" class="btn btn-outline-warning text-dark me-2"><i class="bi bi-shield-lock"></i> Roles</a>
                     <a href="{{ route('admin.users.index') }}" class="btn btn-outline-dark me-2"><i class="bi bi-people"></i> Users</a>
                     <hr>
                     <a href="{{ route('admin.fakultas.index') }}" class="btn btn-outline-primary me-2"><i class="bi bi-building"></i> Fakultas</a>

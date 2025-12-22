@@ -35,17 +35,18 @@ class UserController extends Controller
 
     public function edit(\App\Models\User $user)
     {
-        return view('admin.users.edit', compact('user'));
+        $roles = \App\Models\Role::all();
+        return view('admin.users.edit', compact('user', 'roles'));
     }
 
     public function update(Request $request, \App\Models\User $user)
     {
         $validated = $request->validate([
-            'role' => 'required|in:admin,mahasiswa,yayasan,staff',
+            'role_id' => 'required|exists:roles,id',
         ]);
 
         $user->update([
-            'role' => $validated['role']
+            'role_id' => $validated['role_id']
         ]);
 
         return redirect()->route('admin.users.index')->with('success', 'User role updated successfully.');

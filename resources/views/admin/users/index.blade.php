@@ -33,14 +33,18 @@
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
                         <td>
-                            @if($user->role === 'admin')
-                                <span class="badge bg-danger">Admin</span>
-                            @elseif($user->role === 'yayasan')
-                                <span class="badge bg-warning text-dark">Yayasan</span>
-                            @elseif($user->role === 'staff')
-                                <span class="badge bg-info text-dark">Staff</span>
+                            @if($user->role && $user->role->name === 'admin')
+                                <span class="badge bg-danger">{{ $user->role->label }}</span>
+                            @elseif($user->role && $user->role->name === 'yayasan')
+                                <span class="badge bg-warning text-dark">{{ $user->role->label }}</span>
+                            @elseif($user->role && $user->role->name === 'staff')
+                                <span class="badge bg-info text-dark">{{ $user->role->label }}</span>
+                            @elseif($user->role && $user->role->name === 'mahasiswa')
+                                <span class="badge bg-secondary">{{ $user->role->label }}</span>
+                            @elseif($user->role)
+                                <span class="badge bg-light text-dark">{{ $user->role->label }}</span> <!-- Fallback for new dynamic roles -->
                             @else
-                                <span class="badge bg-secondary">Mahasiswa</span>
+                                <span class="badge bg-dark">No Role</span>
                             @endif
                         </td>
                         <td>{{ $user->created_at->format('d M Y') }}</td>

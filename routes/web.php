@@ -27,6 +27,7 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
     })->name('admin.dashboard');
 
     // Master Data
+    Route::resource('admin/roles', App\Http\Controllers\Admin\RoleController::class, ['as' => 'admin']);
     Route::resource('admin/users', App\Http\Controllers\Admin\UserController::class, ['as' => 'admin']);
     Route::resource('admin/fakultas', App\Http\Controllers\Admin\FakultasController::class, ['as' => 'admin']);
     Route::resource('admin/prodi', App\Http\Controllers\Admin\ProdiController::class, ['as' => 'admin']);

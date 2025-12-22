@@ -13,13 +13,14 @@
                 
                 <div class="mb-3">
                     <label for="role" class="form-label">Role</label>
-                    <select class="form-select" name="role" required>
-                        <option value="mahasiswa" {{ $user->role === 'mahasiswa' ? 'selected' : '' }}>Mahasiswa</option>
-                        <option value="staff" {{ $user->role === 'staff' ? 'selected' : '' }}>Staff</option>
-                        <option value="yayasan" {{ $user->role === 'yayasan' ? 'selected' : '' }}>Yayasan</option>
-                        <option value="admin" {{ $user->role === 'admin' ? 'selected' : '' }}>Admin (Super User)</option>
+                    <select class="form-select" name="role_id" required>
+                        @foreach($roles as $role)
+                            <option value="{{ $role->id }}" {{ $user->role_id == $role->id ? 'selected' : '' }}>
+                                {{ $role->label }}
+                            </option>
+                        @endforeach
                     </select>
-                    <div class="form-text text-danger">Warning: Changing to Admin grants full access.</div>
+                    <div class="form-text text-danger">Warning: Changing to Admin grants full access. (Admin ID: 1)</div>
                 </div>
 
                 <button type="submit" class="btn btn-primary">Update Role</button>

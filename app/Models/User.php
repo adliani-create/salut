@@ -21,15 +21,23 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role',
+        'role_id',
     ];
+
+    /**
+     * Get the user's role.
+     */
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
 
     /**
      * Check if user is admin
      */
     public function isAdmin(): bool
     {
-        return $this->role === 'admin';
+        return $this->role && $this->role->name === 'admin';
     }
 
     /**
@@ -37,7 +45,7 @@ class User extends Authenticatable
      */
     public function isMahasiswa(): bool
     {
-        return $this->role === 'mahasiswa';
+        return $this->role && $this->role->name === 'mahasiswa';
     }
 
     /**

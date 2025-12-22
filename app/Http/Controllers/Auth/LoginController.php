@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Route;
 
 class LoginController extends Controller
 {
@@ -36,14 +37,13 @@ class LoginController extends Controller
      */
     protected function authenticated(\Illuminate\Http\Request $request, $user)
     {
-        if ($user->role === 'admin') {
-            return redirect()->route('admin.dashboard');
-        } elseif ($user->role === 'yayasan') {
-            return redirect()->route('yayasan.dashboard');
-        } elseif ($user->role === 'staff') {
-            return redirect()->route('staff.dashboard');
-        } elseif ($user->role === 'mahasiswa') {
-            return redirect('/home');
+        // Dynamic redirect based on role configuration
+        if ($user->role && $user->role->redirect_to) {
+            // Check if the redirect_to is a route name or a path
+            if (Route::has($user->role->redirect_to)) {
+                return redirect()->route($user->role->redirect_to);
+            }
+            return redirect($user->role->redirect_to);
         }
 
         return redirect('/home');

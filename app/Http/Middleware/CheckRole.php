@@ -21,8 +21,8 @@ class CheckRole
 
         $user = auth()->user();
 
-        // Check if user role is in the allowed roles
-        if (in_array($user->role, $roles)) {
+        // Check if user has a role and if that role name is in the allowed list
+        if ($user->role && in_array($user->role->name, $roles)) {
             return $next($request);
         }
 
