@@ -20,7 +20,7 @@
             <div class="card bg-primary text-white mb-3">
                 <div class="card-body">
                     <h5 class="card-title">Total Users 👥</h5>
-                    <h2 class="fw-bold">1,250</h2>
+                    <h2 class="fw-bold">{{ $stats['total_users'] }}</h2>
                 </div>
             </div>
         </div>
