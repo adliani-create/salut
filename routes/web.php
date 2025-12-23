@@ -30,6 +30,11 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
     Route::resource('admin/fakultas', App\Http\Controllers\Admin\FakultasController::class, ['as' => 'admin']);
     Route::resource('admin/prodi', App\Http\Controllers\Admin\ProdiController::class, ['as' => 'admin']);
     Route::resource('admin/semester', App\Http\Controllers\Admin\SemesterController::class, ['as' => 'admin']);
+
+    // Non-Academic Modules
+    Route::resource('admin/webinars', App\Http\Controllers\Admin\webinarController::class, ['as' => 'admin']);
+    Route::resource('admin/lms-materials', App\Http\Controllers\Admin\LmsMaterialController::class, ['as' => 'admin']);
+    Route::resource('admin/trainings', App\Http\Controllers\Admin\TrainingController::class, ['as' => 'admin']);
 });
 
 // Yayasan Routes
@@ -41,7 +46,12 @@ Route::middleware(['auth', 'role:yayasan'])->group(function () {
 
 // Staff Routes
 Route::middleware(['auth', 'role:staff'])->group(function () {
-    Route::get('/staff/dashboard', function () {
-        return view('staff.home');
-    })->name('staff.dashboard');
+    Route::get('/staff/dashboard', [App\Http\Controllers\Staff\DashboardController::class, 'index'])->name('staff.dashboard');
+    
+    // Modules
+    Route::resource('staff/validation', App\Http\Controllers\Staff\ValidationController::class, ['as' => 'staff']);
+    Route::resource('staff/tickets', App\Http\Controllers\Staff\TicketController::class, ['as' => 'staff']);
+    Route::post('staff/tickets/{ticket}/reply', [App\Http\Controllers\Staff\TicketController::class, 'reply'])->name('staff.tickets.reply');
+    Route::put('staff/tickets/{ticket}/status', [App\Http\Controllers\Staff\TicketController::class, 'updateStatus'])->name('staff.tickets.status');
+    Route::resource('staff/materials', App\Http\Controllers\Staff\MaterialController::class, ['as' => 'staff']);
 });

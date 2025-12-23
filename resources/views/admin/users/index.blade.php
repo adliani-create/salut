@@ -3,9 +3,10 @@
 @section('content')
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>User Management</h2>
+        <h2>Users</h2>
+        <a href="{{ route('admin.users.create') }}" class="btn btn-primary">Add New</a>
     </div>
-
+    
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
@@ -33,18 +34,14 @@
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
                         <td>
-                            @if($user->role && $user->role->name === 'admin')
-                                <span class="badge bg-danger">{{ $user->role->label }}</span>
-                            @elseif($user->role && $user->role->name === 'yayasan')
-                                <span class="badge bg-warning text-dark">{{ $user->role->label }}</span>
-                            @elseif($user->role && $user->role->name === 'staff')
-                                <span class="badge bg-info text-dark">{{ $user->role->label }}</span>
-                            @elseif($user->role && $user->role->name === 'mahasiswa')
-                                <span class="badge bg-secondary">{{ $user->role->label }}</span>
-                            @elseif($user->role)
-                                <span class="badge bg-light text-dark">{{ $user->role->label }}</span> <!-- Fallback for new dynamic roles -->
+                            @if($user->role === 'admin')
+                                <span class="badge bg-danger">Admin</span>
+                            @elseif($user->role === 'yayasan')
+                                <span class="badge bg-warning text-dark">Yayasan</span>
+                            @elseif($user->role === 'staff')
+                                <span class="badge bg-info text-dark">Staff</span>
                             @else
-                                <span class="badge bg-dark">No Role</span>
+                                <span class="badge bg-secondary">Mahasiswa</span>
                             @endif
                         </td>
                         <td>{{ $user->created_at->format('d M Y') }}</td>
