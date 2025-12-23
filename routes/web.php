@@ -14,7 +14,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $fakultas = \App\Models\Fakultas::all();
+    return view('welcome', compact('fakultas'));
 });
 
 Auth::routes();
