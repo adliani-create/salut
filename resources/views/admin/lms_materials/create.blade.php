@@ -1,7 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.admin')
+
+@section('title', 'Upload Material')
 
 @section('content')
-<div class="container">
+<div class="container-fluid">
     <h2>Upload Material</h2>
     <div class="card">
         <div class="card-body">

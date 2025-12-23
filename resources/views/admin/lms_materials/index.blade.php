@@ -1,7 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.admin')
+
+@section('title', 'LMS Materials')
 
 @section('content')
-<div class="container">
+<div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>LMS Lokal - Materials</h2>
         <a href="{{ route('admin.lms-materials.create') }}" class="btn btn-primary">Upload Material</a>

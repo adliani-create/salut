@@ -1,87 +1,59 @@
-@extends('layouts.app')
+@extends('layouts.admin')
+
+@section('title', 'Dashboard Overview')
 
 @section('content')
-<div class="container">
-    {{-- Admin Welcome --}}
-    <div class="row mb-4">
-        <div class="col-md-12">
-            <div class="card bg-dark text-white shadow">
-                <div class="card-body p-5">
-                    <h1 class="display-4 fw-bold">Admin Dashboard 🛡️</h1>
-                    <p class="lead">Welcome, {{ Auth::user()->name }}. You have full control over the system.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {{-- Admin Stats --}}
-    <div class="row mb-4">
+    {{-- Stats Cards --}}
+    <div class="row g-3 my-2">
         <div class="col-md-3">
-            <div class="card bg-primary text-white mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">Total Users 👥</h5>
-                    <h2 class="fw-bold">{{ $stats['total_users'] }}</h2>
+            <div class="card p-3 bg-white d-flex justify-content-between align-items-center h-100">
+                <div>
+                    <h3 class="fs-2 fw-bold text-warning">{{ $stats['total_roles'] ?? 0 }}</h3>
+                    <p class="fs-5 text-muted mb-0">Roles</p>
+                </div>
+                <div class="rounded-circle bg-warning bg-opacity-10 p-3">
+                    <i class="bi bi-shield-lock fs-1 text-warning"></i>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card bg-success text-white mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">Revenue 💰</h5>
-                    <h2 class="fw-bold">$45,000</h2>
-                </div>
-            </div>
-        </div>
+        
          <div class="col-md-3">
-            <div class="card bg-warning text-dark mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">Pending Issues ⚠️</h5>
-                    <h2 class="fw-bold">5</h2>
+            <div class="card p-3 bg-white d-flex justify-content-between align-items-center h-100">
+                <div>
+                    <h3 class="fs-2 fw-bold text-success">{{ $stats['total_fakultas'] ?? 0 }}</h3>
+                    <p class="fs-5 text-muted mb-0">Fakultas</p>
+                </div>
+                <div class="rounded-circle bg-success bg-opacity-10 p-3">
+                    <i class="bi bi-building fs-1 text-success"></i>
                 </div>
             </div>
         </div>
+        
         <div class="col-md-3">
-            <div class="card bg-danger text-white mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">Server Load 🖥️</h5>
-                    <h2 class="fw-bold">12%</h2>
+            <div class="card p-3 bg-white d-flex justify-content-between align-items-center h-100">
+                <div>
+                    <h3 class="fs-2 fw-bold text-info">{{ $stats['total_prodi'] ?? 0 }}</h3>
+                    <p class="fs-5 text-muted mb-0">Prodi</p>
+                </div>
+                <div class="rounded-circle bg-info bg-opacity-10 p-3">
+                    <i class="bi bi-book fs-1 text-info"></i>
                 </div>
             </div>
         </div>
     </div>
+    
 
-    {{-- Admin Actions --}}
-    <div class="row">
+    
+    <div class="row my-4">
         <div class="col-md-12">
-             <div class="card">
-                <div class="card-header fw-bold">Master Data & Actions</div>
-                <div class="card-body">
-                    <a href="{{ route('admin.users.index') }}" class="btn btn-outline-dark me-2"><i class="bi bi-people"></i> Users</a>
-                    <hr>
-                    <a href="{{ route('admin.fakultas.index') }}" class="btn btn-outline-primary me-2"><i class="bi bi-building"></i> Fakultas</a>
-                    <a href="{{ route('admin.prodi.index') }}" class="btn btn-outline-info me-2"><i class="bi bi-book"></i> Prodi</a>
-                    <a href="{{ route('admin.semester.index') }}" class="btn btn-outline-success me-2"><i class="bi bi-calendar-event"></i> Semester</a>
-                    <hr>
-                    <button class="btn btn-outline-secondary me-2"><i class="bi bi-gear"></i> Settings</button>
-                    <button class="btn btn-outline-danger"><i class="bi bi-trash"></i> Clear Cache</button>
-                </div>
-            </div>
+            <div class="card p-4">
+                <h4 class="mb-3">System Overview</h4>
+                <p>Welcome to the new Admin Dashboard layout. Use the sidebar to navigate between modules.</p>
+                
+                <div class="alert alert-info border-0 shadow-sm">
+                    <i class="bi bi-info-circle-fill me-2"></i> Use the hamburger menu in the top left to toggle the sidebar on mobile devices.
                 </div>
             </div>
         </div>
     </div>
-
-    {{-- Non-Academic Modules --}}
-    <div class="row mt-4">
-        <div class="col-md-12">
-             <div class="card">
-                <div class="card-header fw-bold">Non-Academic Modules</div>
-                <div class="card-body">
-                    <a href="{{ route('admin.lms-materials.index') }}" class="btn btn-outline-success me-2"><i class="bi bi-journal-album"></i> LMS Lokal (Materi)</a>
-                    <a href="{{ route('admin.trainings.index') }}" class="btn btn-outline-info me-2"><i class="bi bi-calendar-check"></i> Jadwal Pelatihan</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 @endsection

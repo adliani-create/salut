@@ -1,7 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.staff')
+
+@section('title', 'Staff Dashboard')
 
 @section('content')
-<div class="container">
+<div class="container-fluid">
     <div class="row mb-4">
         <div class="col-md-12">
             <h1 class="display-5 fw-bold">Staff Dashboard 👨‍💼</h1>

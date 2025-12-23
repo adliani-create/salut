@@ -1,7 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.admin')
+
+@section('title', 'Manage Prodi')
 
 @section('content')
-<div class="container">
+<div class="container-fluid">
     <h2>Edit Program Studi</h2>
     <div class="card">
         <div class="card-body">

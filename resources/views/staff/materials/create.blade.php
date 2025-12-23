@@ -1,7 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.staff')
+
+@section('title', 'Upload Bahan Ajar')
 
 @section('content')
-<div class="container">
+<div class="container-fluid">
     <h2>Distribute Teaching Material</h2>
     <div class="card">
         <div class="card-body">

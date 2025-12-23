@@ -1,7 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.staff')
+
+@section('title', 'Review Berkas')
 
 @section('content')
-<div class="container">
+<div class="container-fluid">
     <div class="row">
         <div class="col-md-8">
             <div class="card mb-3">

@@ -1,7 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.staff')
+
+@section('title', 'Tiket Support')
 
 @section('content')
-<div class="container">
+<div class="container-fluid">
     <h2>Tiket Support</h2>
     <div class="card">
         <div class="card-body">

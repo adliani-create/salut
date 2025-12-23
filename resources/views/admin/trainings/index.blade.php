@@ -1,7 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.admin')
+
+@section('title', 'Training Schedule')
 
 @section('content')
-<div class="container">
+<div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Jadwal Pelatihan</h2>
         <a href="{{ route('admin.trainings.create') }}" class="btn btn-primary">Schedule New Training</a>

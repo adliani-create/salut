@@ -1,7 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.staff')
+
+@section('title', 'View Ticket')
 
 @section('content')
-<div class="container">
+<div class="container-fluid">
     <div class="row">
         <div class="col-md-8">
             {{-- Ticket Header --}}
