@@ -20,6 +20,12 @@ Route::get('/', function () {
 
 Auth::routes();
 
+// Profile Routes
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+});
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::middleware(['auth', 'is_admin'])->group(function () {
