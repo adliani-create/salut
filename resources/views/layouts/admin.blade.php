@@ -133,9 +133,7 @@
                 </a>
                 
                 <div class="sidebar-heading text-uppercase fs-6 text-muted mt-3 mb-1 ms-3">Non-Akademik</div>
-                <a href="{{ route('admin.lms-materials.index') }}" class="list-group-item list-group-item-action bg-transparent {{ request()->routeIs('admin.lms-materials.*') ? 'active' : '' }}">
-                    <i class="bi bi-journal-album me-2"></i>LMS Lokal
-                </a>
+
                 <a href="{{ route('admin.trainings.index') }}" class="list-group-item list-group-item-action bg-transparent {{ request()->routeIs('admin.trainings.*') ? 'active' : '' }}">
                     <i class="bi bi-calendar-check me-2"></i>Jadwal Pelatihan
                 </a>

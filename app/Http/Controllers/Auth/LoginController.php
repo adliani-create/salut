@@ -37,6 +37,11 @@ class LoginController extends Controller
      */
     protected function authenticated(\Illuminate\Http\Request $request, $user)
     {
+        // specific check for Mahasiswa to ensure dashboard access
+        if ($user->isMahasiswa()) { 
+             return redirect()->route('student.dashboard');
+        }
+
         // Dynamic redirect based on role configuration
         if ($user->role && $user->role->redirect_to) {
             // Check if the redirect_to is a route name or a path

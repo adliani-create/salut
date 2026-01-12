@@ -51,6 +51,22 @@ Route::middleware(['auth', 'role:yayasan'])->group(function () {
     })->name('yayasan.dashboard');
 });
 
+// Student Routes
+Route::middleware(['auth', 'role:mahasiswa'])->group(function () { // Ensure role middleware accepts 'mahasiswa'
+    Route::get('/mahasiswa/dashboard', [App\Http\Controllers\Student\DashboardController::class, 'index'])->name('student.dashboard');
+    
+    // Enrollment Routes for Maba
+    Route::get('/mahasiswa/enrollment/step1', [App\Http\Controllers\Student\EnrollmentController::class, 'step1'])->name('student.enrollment.step1');
+    Route::post('/mahasiswa/enrollment/step1', [App\Http\Controllers\Student\EnrollmentController::class, 'storeStep1'])->name('student.enrollment.storeStep1');
+    Route::get('/mahasiswa/enrollment/step2', [App\Http\Controllers\Student\EnrollmentController::class, 'step2'])->name('student.enrollment.step2');
+    Route::post('/mahasiswa/enrollment/step2', [App\Http\Controllers\Student\EnrollmentController::class, 'storeStep2'])->name('student.enrollment.storeStep2');
+    Route::get('/mahasiswa/enrollment/step3', [App\Http\Controllers\Student\EnrollmentController::class, 'step3'])->name('student.enrollment.step3');
+    Route::post('/mahasiswa/enrollment/step3', [App\Http\Controllers\Student\EnrollmentController::class, 'storeStep3'])->name('student.enrollment.storeStep3');
+    
+    // Finance Routes
+    Route::get('/mahasiswa/invoice/{id}/print', [App\Http\Controllers\Student\DashboardController::class, 'printInvoice'])->name('student.invoice.print');
+});
+            
 // Staff Routes
 Route::middleware(['auth', 'role:staff'])->group(function () {
     Route::get('/staff/dashboard', [App\Http\Controllers\Staff\DashboardController::class, 'index'])->name('staff.dashboard');

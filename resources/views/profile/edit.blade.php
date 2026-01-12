@@ -65,6 +65,48 @@
                             </div>
                         </div>
 
+                        @if($user->isMahasiswa())
+                        <div class="row mb-3">
+                            <label for="nim" class="col-md-4 col-form-label text-md-end">{{ __('NIM') }}</label>
+                            <div class="col-md-6">
+                                <input id="nim" type="text" class="form-control @error('nim') is-invalid @enderror" name="nim" value="{{ old('nim', $user->nim) }}">
+                                @error('nim')
+                                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="faculty" class="col-md-4 col-form-label text-md-end">{{ __('Fakultas') }}</label>
+                            <div class="col-md-6">
+                                <input id="faculty" type="text" class="form-control @error('faculty') is-invalid @enderror" name="faculty" value="{{ old('faculty', $user->faculty) }}">
+                                @error('faculty')
+                                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="major" class="col-md-4 col-form-label text-md-end">{{ __('Jurusan') }}</label>
+                            <div class="col-md-6">
+                                <input id="major" type="text" class="form-control @error('major') is-invalid @enderror" name="major" value="{{ old('major', $user->major) }}">
+                                @error('major')
+                                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="semester" class="col-md-4 col-form-label text-md-end">{{ __('Semester') }}</label>
+                            <div class="col-md-6">
+                                <input id="semester" type="number" class="form-control @error('semester') is-invalid @enderror" name="semester" value="{{ old('semester', $user->semester) }}">
+                                @error('semester')
+                                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                                @enderror
+                            </div>
+                        </div>
+                        @endif
+
                         <hr class="my-4">
                         <h6 class="text-center mb-3 text-muted">Change Password (Optional)</h6>
 

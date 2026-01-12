@@ -36,10 +36,21 @@ class ProfileController extends Controller
             'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
             'password' => 'nullable|string|min:8|confirmed',
             'photo' => 'nullable|image|max:2048',
+            'nim' => 'nullable|string|max:20',
+            'faculty' => 'nullable|string|max:100',
+            'major' => 'nullable|string|max:100',
+            'semester' => 'nullable|integer|min:1|max:14',
         ]);
 
         $user->name = $request->name;
         $user->email = $request->email;
+
+        if ($user->isMahasiswa()) {
+            $user->nim = $request->nim;
+            $user->faculty = $request->faculty;
+            $user->major = $request->major;
+            $user->semester = $request->semester;
+        }
 
         if ($request->filled('password')) {
             $user->password = Hash::make($request->password);
