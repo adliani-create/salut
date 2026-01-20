@@ -28,6 +28,8 @@ class User extends Authenticatable
         'faculty',
         'major',
         'semester',
+        'ipk',
+        'password_myut',
     ];
 
     /**
@@ -53,6 +55,20 @@ class User extends Authenticatable
     {
         return $this->role && $this->role->name === 'mahasiswa';
     }
+
+    /**
+     * Get the student registration record.
+     */
+    public function registration()
+    {
+        return $this->hasOne(Registration::class);
+    }
+
+    public function auditLogs()
+    {
+        return $this->hasMany(AuditLog::class, 'target_id')->where('target_model', 'User');
+    }
+
 
     /**
      * The attributes that should be hidden for serialization.

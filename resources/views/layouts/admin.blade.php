@@ -131,7 +131,23 @@
                 <a href="{{ route('admin.semester.index') }}" class="list-group-item list-group-item-action bg-transparent {{ request()->routeIs('admin.semester.*') ? 'active' : '' }}">
                     <i class="bi bi-calendar3 me-2"></i>Semester
                 </a>
+
+                <div class="sidebar-heading text-uppercase fs-6 text-muted mt-3 mb-1 ms-3">Data Mahasiswa</div>
+                <a href="{{ route('admin.registrations.index') }}" class="list-group-item list-group-item-action bg-transparent {{ request()->routeIs('admin.registrations.*') ? 'active' : '' }}">
+                    <i class="bi bi-person-plus me-2"></i>Registrasi Mahasiswa
+                </a>
+                <a href="{{ route('admin.students.index') }}" class="list-group-item list-group-item-action bg-transparent {{ request()->routeIs('admin.students.*') ? 'active' : '' }}">
+                    <i class="bi bi-people-fill me-2"></i>Mahasiswa
+                </a>
                 
+                <div class="sidebar-heading text-uppercase fs-6 text-muted mt-3 mb-1 ms-3">Keuangan & Tagihan</div>
+                <a href="{{ route('admin.billings.index') }}" class="list-group-item list-group-item-action bg-transparent {{ request()->routeIs('admin.billings.index') || request()->routeIs('admin.billings.create-bulk') ? 'active' : '' }}">
+                    <i class="bi bi-wallet2 me-2"></i>Daftar Tagihan
+                </a>
+                <a href="{{ route('admin.billings.verification') }}" class="list-group-item list-group-item-action bg-transparent {{ request()->routeIs('admin.billings.verification') ? 'active' : '' }}">
+                    <i class="bi bi-patch-check me-2"></i>Verifikasi Bayar
+                </a>
+
                 <div class="sidebar-heading text-uppercase fs-6 text-muted mt-3 mb-1 ms-3">Non-Akademik</div>
 
                 <a href="{{ route('admin.trainings.index') }}" class="list-group-item list-group-item-action bg-transparent {{ request()->routeIs('admin.trainings.*') ? 'active' : '' }}">

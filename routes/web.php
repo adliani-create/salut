@@ -18,7 +18,19 @@ Route::get('/', function () {
     return view('welcome', compact('fakultas'));
 });
 
-Auth::routes();
+// Custom Registration Routes
+Route::get('register', [App\Http\Controllers\Auth\StudentRegisterController::class, 'showStep1'])->name('register');
+Route::post('register', [App\Http\Controllers\Auth\StudentRegisterController::class, 'storeStep1'])->name('register.step1.store');
+
+Route::middleware(['auth', 'role:mahasiswa'])->group(function () {
+    Route::get('register/step2', [App\Http\Controllers\Auth\StudentRegisterController::class, 'showStep2'])->name('register.step2');
+    Route::post('register/step2', [App\Http\Controllers\Auth\StudentRegisterController::class, 'storeStep2'])->name('register.step2.store');
+    Route::get('register/step3', [App\Http\Controllers\Auth\StudentRegisterController::class, 'showStep3'])->name('register.step3');
+    Route::post('register/step3', [App\Http\Controllers\Auth\StudentRegisterController::class, 'storeStep3'])->name('register.step3.store');
+    Route::get('api/prodi-by-fakultas', [App\Http\Controllers\Auth\StudentRegisterController::class, 'getProdi'])->name('api.prodi-by-fakultas');
+});
+
+Auth::routes(['register' => false]); // Disable default register routes
 
 // Profile Routes
 Route::middleware('auth')->group(function () {
@@ -38,8 +50,25 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
     Route::resource('admin/prodi', App\Http\Controllers\Admin\ProdiController::class, ['as' => 'admin']);
     Route::resource('admin/semester', App\Http\Controllers\Admin\SemesterController::class, ['as' => 'admin']);
 
+    // Registration Management
+    Route::get('admin/registrations', [App\Http\Controllers\Admin\RegistrationController::class, 'index'])->name('admin.registrations.index');
+    Route::get('admin/registrations/{registration}', [App\Http\Controllers\Admin\RegistrationController::class, 'show'])->name('admin.registrations.show');
+    Route::put('admin/registrations/{registration}', [App\Http\Controllers\Admin\RegistrationController::class, 'update'])->name('admin.registrations.update');
+    Route::put('admin/registrations/{registration}/approve', [App\Http\Controllers\Admin\RegistrationController::class, 'approve'])->name('admin.registrations.approve');
+    
+    // User Management (Students)
+    Route::get('admin/students', [App\Http\Controllers\Admin\UserController::class, 'students'])->name('admin.students.index');
+
+    // Billing Management
+    Route::get('admin/billings/create-bulk', [App\Http\Controllers\Admin\BillingController::class, 'createBulk'])->name('admin.billings.create-bulk');
+    Route::post('admin/billings/create-bulk', [App\Http\Controllers\Admin\BillingController::class, 'storeBulk'])->name('admin.billings.store-bulk');
+    Route::get('admin/billings/verification', [App\Http\Controllers\Admin\BillingController::class, 'verification'])->name('admin.billings.verification');
+    Route::put('admin/billings/{billing}/approve', [App\Http\Controllers\Admin\BillingController::class, 'approve'])->name('admin.billings.approve');
+    Route::put('admin/billings/{billing}/reject', [App\Http\Controllers\Admin\BillingController::class, 'reject'])->name('admin.billings.reject');
+    Route::resource('admin/billings', App\Http\Controllers\Admin\BillingController::class, ['as' => 'admin']);
+
     // Non-Academic Modules
-    Route::resource('admin/webinars', App\Http\Controllers\Admin\webinarController::class, ['as' => 'admin']);
+    Route::resource('admin/webinars', App\Http\Controllers\Admin\WebinarController::class, ['as' => 'admin']);
     Route::resource('admin/lms-materials', App\Http\Controllers\Admin\LmsMaterialController::class, ['as' => 'admin']);
     Route::resource('admin/trainings', App\Http\Controllers\Admin\TrainingController::class, ['as' => 'admin']);
 });
@@ -52,7 +81,7 @@ Route::middleware(['auth', 'role:yayasan'])->group(function () {
 });
 
 // Student Routes
-Route::middleware(['auth', 'role:mahasiswa'])->group(function () { // Ensure role middleware accepts 'mahasiswa'
+Route::middleware(['auth', 'role:mahasiswa', 'ensure_registration_complete'])->group(function () {
     Route::get('/mahasiswa/dashboard', [App\Http\Controllers\Student\DashboardController::class, 'index'])->name('student.dashboard');
     
     // Enrollment Routes for Maba

@@ -5,25 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Registration extends Model
+class AuditLog extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 
-        'files', 
-        'status', 
-        'admin_notes',
-        'whatsapp',
-        'jenjang',
-        'fakultas',
-        'prodi',
-        'jalur_pendaftaran',
-        'fokus_karir'
+        'user_id',
+        'action',
+        'target_model',
+        'target_id',
+        'changes',
+        'description',
     ];
 
     protected $casts = [
-        'files' => 'array',
+        'changes' => 'array',
     ];
 
     public function user()

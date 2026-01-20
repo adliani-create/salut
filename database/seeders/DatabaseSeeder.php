@@ -45,5 +45,9 @@ class DatabaseSeeder extends Seeder
                 'role_id' => $adminRole->id,
             ]
         );
+
+        $this->call([
+            FacultyProdiSeeder::class,
+        ]);
     }
 }
