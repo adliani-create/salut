@@ -19,8 +19,16 @@ Route::get('/', function () {
 });
 
 // Custom Registration Routes
-Route::get('register', [App\Http\Controllers\Auth\StudentRegisterController::class, 'showStep1'])->name('register');
-Route::post('register', [App\Http\Controllers\Auth\StudentRegisterController::class, 'storeStep1'])->name('register.step1.store');
+Route::get('register', [App\Http\Controllers\Auth\StudentRegisterController::class, 'showLanding'])->name('register');
+
+// Option A: Mahasiswa Baru
+Route::get('register/new', [App\Http\Controllers\Auth\StudentRegisterController::class, 'showStep1'])->name('register.new');
+Route::post('register/new', [App\Http\Controllers\Auth\StudentRegisterController::class, 'storeStep1'])->name('register.step1.store');
+
+// Option B: Mahasiswa Aktif
+Route::get('register/existing', [App\Http\Controllers\Auth\StudentRegisterController::class, 'showExistingForm'])->name('register.existing');
+Route::post('register/existing', [App\Http\Controllers\Auth\StudentRegisterController::class, 'storeExistingForm'])->name('register.existing.store');
+
 
 Route::middleware(['auth', 'role:mahasiswa'])->group(function () {
     Route::get('register/step2', [App\Http\Controllers\Auth\StudentRegisterController::class, 'showStep2'])->name('register.step2');

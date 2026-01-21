@@ -69,13 +69,14 @@ class UserController extends Controller
             'jalur' => 'nullable|string',
             'fokus_karir' => 'nullable|string',
             'whatsapp' => 'nullable|string|max:20',
+            'angkatan' => 'nullable|integer|digits:4',
         ]);
 
         $changes = [];
         $description = [];
 
         // Check columns on User model
-        $userFields = ['name', 'email', 'status', 'faculty', 'major', 'semester', 'ipk', 'password_myut'];
+        $userFields = ['name', 'email', 'status', 'faculty', 'major', 'semester', 'ipk', 'password_myut', 'angkatan'];
         foreach ($userFields as $field) {
             if ($user->$field != $validated[$field]) {
                 $old = $user->$field;
@@ -83,7 +84,7 @@ class UserController extends Controller
                 $changes[$field] = ['old' => $old, 'new' => $new];
                 
                 // Sensitive fields logging description
-                if(in_array($field, ['ipk', 'status', 'password_myut'])) {
+                if(in_array($field, ['ipk', 'status', 'password_myut', 'angkatan'])) {
                      $description[] = "Changed $field from '$old' to '$new'";
                 }
                 $user->$field = $new;

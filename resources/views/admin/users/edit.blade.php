@@ -64,6 +64,10 @@
                                 <input type="number" name="semester" class="form-control" value="{{ old('semester', $user->semester) }}">
                             </div>
                             <div class="col-md-3">
+                                <label class="form-label">Angkatan</label>
+                                <input type="number" name="angkatan" class="form-control" value="{{ old('angkatan', $user->angkatan) }}" placeholder="202X">
+                            </div>
+                            <div class="col-md-3">
                                 <label class="form-label">IPK</label>
                                 <input type="number" step="0.01" min="0" max="4.00" name="ipk" class="form-control" value="{{ old('ipk', $user->ipk) }}">
                             </div>

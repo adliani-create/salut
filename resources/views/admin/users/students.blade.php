@@ -178,6 +178,10 @@
                         <div class="fw-bold text-primary">{{ $student->ipk ?? '0.00' }}</div>
                     </div>
                     <div class="col-md-3">
+                        <label class="text-muted small">Angkatan</label>
+                        <div><span class="badge bg-dark">{{ $student->angkatan ?? $student->created_at->format('Y') }}</span></div>
+                    </div>
+                    <div class="col-md-3">
                         <label class="text-muted small">Jenjang</label>
                         <div><span class="badge bg-primary">{{ $student->registration->jenjang ?? '-' }}</span></div>
                     </div>

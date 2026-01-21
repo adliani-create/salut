@@ -124,7 +124,6 @@
             REGISTRASI SALUT INDO GLOBAL
         </div>
         <div class="logo-section">
-            <!-- Text Logo Placeholder since we don't have the image file path correctly mapped yet -->
             <h2 style="margin:0; color:#0d6efd;">SALUT</h2>
             <small>Sentra Layanan UT</small><br>
             <strong>SALUT INDO GLOBAL</strong><br>
@@ -204,11 +203,7 @@
             <strong>Kepala SALUT Indo Global</strong>
             
             <div style="height: 80px; margin-top:10px; margin-bottom:5px;">
-                  <!-- Use absolute path or base64 if needed for images in dompdf -->
-                  <!-- Ideally we would have a signature image here -->
-                  <div style="font-family: 'Courier New', monospace; color: #000; border: 1px solid #eee; padding: 10px; display:inline-block;">
-                      [Stamp & Sig]
-                  </div>
+                  <br><br><br>
             </div>
 
             <div style="font-weight: bold; text-decoration: underline;">Willy Ramadhan, S.Pd.</div>

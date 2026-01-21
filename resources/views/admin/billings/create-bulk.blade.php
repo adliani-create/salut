@@ -49,10 +49,6 @@
                                     <label class="form-check-label" for="cat2">UKT</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="category" id="cat3" value="SPI">
-                                    <label class="form-check-label" for="cat3">SPI / Pangkal</label>
-                                </div>
-                                <div class="form-check">
                                     <input class="form-check-input" type="radio" name="category" id="cat4" value="Lainnya">
                                     <label class="form-check-label" for="cat4">Lainnya</label>
                                 </div>

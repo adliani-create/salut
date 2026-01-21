@@ -30,6 +30,7 @@ class User extends Authenticatable
         'semester',
         'ipk',
         'password_myut',
+        'angkatan',
     ];
 
     /**
