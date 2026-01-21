@@ -77,9 +77,12 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
     Route::resource('admin/billings', App\Http\Controllers\Admin\BillingController::class, ['as' => 'admin']);
 
     // Non-Academic Modules
-    Route::resource('admin/webinars', App\Http\Controllers\Admin\WebinarController::class, ['as' => 'admin']);
+    // Non-Academic Modules
+    Route::get('admin/non-academic', [App\Http\Controllers\Admin\NonAcademicController::class, 'index'])->name('admin.non-academic.index');
+    Route::resource('admin/career-programs', App\Http\Controllers\Admin\CareerProgramController::class, ['as' => 'admin']);
     Route::resource('admin/lms-materials', App\Http\Controllers\Admin\LmsMaterialController::class, ['as' => 'admin']);
     Route::resource('admin/trainings', App\Http\Controllers\Admin\TrainingController::class, ['as' => 'admin']);
+    // Removed old singular webinar/training routes line if duplicated, but sticking to resource above.
 });
 
 // Yayasan Routes

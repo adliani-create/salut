@@ -37,7 +37,8 @@ class StudentRegisterController extends Controller
      */
     public function showExistingForm()
     {
-        return view('auth.register-existing-full');
+        $programs = \App\Models\CareerProgram::all();
+        return view('auth.register-existing-full', compact('programs'));
     }
 
     /**

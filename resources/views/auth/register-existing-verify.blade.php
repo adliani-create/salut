@@ -44,7 +44,7 @@
                             <button type="submit" class="btn btn-success btn-lg">
                                 Verifikasi Data <i class="bi bi-search ms-2"></i>
                             </button>
-                            <a href="{{ route('register.landing') }}" class="btn btn-link text-muted">Kembali ke Pilihan</a>
+                            <a href="{{ route('register') }}" class="btn btn-link text-muted">Kembali ke Pilihan</a>
                         </div>
                     </form>
                 </div>

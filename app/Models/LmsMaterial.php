@@ -15,4 +15,9 @@ class LmsMaterial extends Model
         'file_path',
         'description',
     ];
+
+    public function careerPrograms()
+    {
+        return $this->belongsToMany(CareerProgram::class, 'career_program_lms_material');
+    }
 }

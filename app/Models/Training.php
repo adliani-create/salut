@@ -18,4 +18,9 @@ class Training extends Model
         'location',
         'description',
     ];
+
+    public function careerPrograms()
+    {
+        return $this->belongsToMany(CareerProgram::class, 'career_program_training');
+    }
 }

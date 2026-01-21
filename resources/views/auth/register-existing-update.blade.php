@@ -76,17 +76,21 @@
                         </div>
                         
                         <div class="row g-3">
-                            @foreach(['Kuliah Plus Wirausaha' => 'bi-rocket-takeoff-fill', 
-                                      'Kuliah Plus Magang Kerja' => 'bi-building-fill', 
-                                      'Kuliah Plus Skill Academy' => 'bi-laptop', 
-                                      'Kuliah Plus Creator / Affiliator' => 'bi-phone-fill'] as $prog => $icon)
+                            @foreach($programs as $program)
+                            @php
+                                $icon = 'bi-mortarboard-fill';
+                                if(str_contains($program->name, 'Wirausaha')) $icon = 'bi-rocket-takeoff-fill';
+                                elseif(str_contains($program->name, 'Magang')) $icon = 'bi-building-fill';
+                                elseif(str_contains($program->name, 'Skill')) $icon = 'bi-laptop';
+                                elseif(str_contains($program->name, 'Creator') || str_contains($program->name, 'Affiliator')) $icon = 'bi-phone-fill';
+                            @endphp
                             <div class="col-md-6">
                                 <label class="card h-100 border-success cursor-pointer option-card">
                                     <div class="card-body d-flex align-items-center">
-                                        <input type="radio" name="fokus_karir" value="{{ $prog }}" class="form-check-input me-3" required {{ old('fokus_karir', $user->registration->fokus_karir ?? '') == $prog ? 'checked' : '' }}>
+                                        <input type="radio" name="fokus_karir" value="{{ $program->name }}" class="form-check-input me-3" required {{ old('fokus_karir', $user->registration->fokus_karir ?? '') == $program->name ? 'checked' : '' }}>
                                         <div>
                                             <i class="bi {{ $icon }} fs-4 text-success mb-2 d-block"></i>
-                                            <span class="fw-bold">{{ $prog }}</span>
+                                            <span class="fw-bold">{{ $program->name }}</span>
                                         </div>
                                     </div>
                                 </label>
