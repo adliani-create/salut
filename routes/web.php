@@ -65,6 +65,7 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
     Route::get('admin/billings/verification', [App\Http\Controllers\Admin\BillingController::class, 'verification'])->name('admin.billings.verification');
     Route::put('admin/billings/{billing}/approve', [App\Http\Controllers\Admin\BillingController::class, 'approve'])->name('admin.billings.approve');
     Route::put('admin/billings/{billing}/reject', [App\Http\Controllers\Admin\BillingController::class, 'reject'])->name('admin.billings.reject');
+    Route::get('admin/billings/{billing}/print', [App\Http\Controllers\Admin\BillingController::class, 'printInvoice'])->name('admin.billings.print');
     Route::resource('admin/billings', App\Http\Controllers\Admin\BillingController::class, ['as' => 'admin']);
 
     // Non-Academic Modules

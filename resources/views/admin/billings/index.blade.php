@@ -99,6 +99,10 @@
                                             <i class="bi bi-whatsapp"></i>
                                         </a>
                                         @endif
+
+                                        <a href="{{ route('admin.billings.print', $billing->id) }}" target="_blank" class="btn btn-sm {{ $billing->status == 'paid' ? 'btn-success' : 'btn-danger' }}" title="{{ $billing->status == 'paid' ? 'Cetak Kuitansi' : 'Cetak Tagihan' }}">
+                                            <i class="bi bi-printer"></i>
+                                        </a>
                                     </div>
                                 </td>
                             </tr>

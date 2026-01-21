@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Billing;
 use App\Models\User;
-use Barryvdh\DomPDF\Facade\Pdf;
+use PDF;
 use Illuminate\Support\Str;
 
 class BillingController extends Controller
@@ -119,10 +119,18 @@ class BillingController extends Controller
         return back()->with('info', 'Pembayaran ditolak.');
     }
     
-    // 4. PRINTING (Placeholder for now)
+    // 4. PRINTING
     public function printInvoice(Billing $billing)
     {
-        // $pdf = Pdf::loadView('admin.billings.invoice', compact('billing'));
-        // return $pdf->download('invoice-'.$billing->billing_code.'.pdf');
+        // Ensure relation is loaded
+        $billing->load('user', 'user.registration');
+
+        $data = [
+            'billing' => $billing,
+            'title' => $billing->status == 'paid' ? 'Kuitansi Pembayaran' : 'Invoice Tagihan',
+        ];
+
+        $pdf = Pdf::loadView('admin.billings.invoice_pdf', $data);
+        return $pdf->stream('Invoice-' . $billing->billing_code . '.pdf');
     }
 }
