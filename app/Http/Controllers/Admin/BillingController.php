@@ -14,7 +14,7 @@ class BillingController extends Controller
     // 1. MONITORING (Main List)
     public function index(Request $request)
     {
-        $query = Billing::with('user');
+        $query = Billing::with('user', 'user.registration');
 
         if ($request->category) {
             $query->where('category', $request->category);
@@ -25,6 +25,30 @@ class BillingController extends Controller
 
         $billings = $query->latest()->paginate(10);
         return view('admin.billings.index', compact('billings'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'category' => 'required|string',
+            'amount' => 'required|numeric|min:0',
+            'semester' => 'required|integer',
+            'due_date' => 'required|date',
+        ]);
+
+        Billing::create([
+            'user_id' => $request->user_id,
+            'billing_code' => 'INV-' . date('Ym') . '-' . rand(1000, 9999),
+            'category' => $request->category,
+            'amount' => $request->amount,
+            'semester' => $request->semester,
+            'due_date' => $request->due_date,
+            'description' => $request->description,
+            'status' => 'unpaid',
+        ]);
+
+        return back()->with('success', 'Tagihan berhasil dibuat.');
     }
 
     // 2. BULK GENERATION
@@ -132,5 +156,22 @@ class BillingController extends Controller
 
         $pdf = Pdf::loadView('admin.billings.invoice_pdf', $data);
         return $pdf->stream('Invoice-' . $billing->billing_code . '.pdf');
+    }
+
+    // 5. LEDGER / KARTU KONTROL
+    public function ledger(\App\Models\User $user)
+    {
+        $user->load('registration');
+        
+        // Fetch all billings grouped by semester
+        $billings = Billing::where('user_id', $user->id)
+            ->whereIn('category', ['UKT', 'Layanan SALUT'])
+            ->get()
+            ->groupBy('semester');
+
+        // Determine max semester (at least 8)
+        $maxSemester = max(8, $user->semester, $billings->keys()->max() ?? 0);
+
+        return view('admin.billings.ledger', compact('user', 'billings', 'maxSemester'));
     }
 }

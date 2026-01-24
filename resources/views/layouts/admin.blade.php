@@ -116,42 +116,78 @@
                 <i class="bi bi-mortarboard-fill me-2"></i>{{ config('app.name') }}
             </div>
             <div class="list-group list-group-flush my-3">
+                <!-- Dashboard -->
                 <a href="{{ route('admin.dashboard') }}" class="list-group-item list-group-item-action bg-transparent {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                     <i class="bi bi-speedometer2 me-2"></i>Dashboard
                 </a>
-                <a href="{{ route('admin.roles.index') }}" class="list-group-item list-group-item-action bg-transparent {{ request()->routeIs('admin.roles.*') ? 'active' : '' }}">
-                    <i class="bi bi-shield-lock me-2"></i>Roles
-                </a>
-                <a href="{{ route('admin.fakultas.index') }}" class="list-group-item list-group-item-action bg-transparent {{ request()->routeIs('admin.fakultas.*') ? 'active' : '' }}">
-                    <i class="bi bi-building me-2"></i>Fakultas
-                </a>
-                <a href="{{ route('admin.prodi.index') }}" class="list-group-item list-group-item-action bg-transparent {{ request()->routeIs('admin.prodi.*') ? 'active' : '' }}">
-                    <i class="bi bi-book me-2"></i>Program Studi
-                </a>
-                <a href="{{ route('admin.semester.index') }}" class="list-group-item list-group-item-action bg-transparent {{ request()->routeIs('admin.semester.*') ? 'active' : '' }}">
-                    <i class="bi bi-calendar3 me-2"></i>Semester
-                </a>
 
-                <div class="sidebar-heading text-uppercase fs-6 text-muted mt-3 mb-1 ms-3">Data Mahasiswa</div>
-                <a href="{{ route('admin.registrations.index') }}" class="list-group-item list-group-item-action bg-transparent {{ request()->routeIs('admin.registrations.*') ? 'active' : '' }}">
-                    <i class="bi bi-person-plus me-2"></i>Registrasi Mahasiswa
+                <!-- Master Data Collapsible -->
+                <a href="#submenuMaster" data-bs-toggle="collapse" class="list-group-item list-group-item-action bg-transparent d-flex justify-content-between align-items-center" aria-expanded="{{ request()->routeIs('admin.roles.*') || request()->routeIs('admin.fakultas.*') || request()->routeIs('admin.prodi.*') || request()->routeIs('admin.semester.*') ? 'true' : 'false' }}">
+                    <span><i class="bi bi-database me-2"></i>Master Data</span>
+                    <i class="bi bi-chevron-down small"></i>
                 </a>
-                <a href="{{ route('admin.students.index') }}" class="list-group-item list-group-item-action bg-transparent {{ request()->routeIs('admin.students.*') ? 'active' : '' }}">
-                    <i class="bi bi-people-fill me-2"></i>Mahasiswa
+                <div class="collapse list-group-submenu {{ request()->routeIs('admin.roles.*') || request()->routeIs('admin.fakultas.*') || request()->routeIs('admin.prodi.*') || request()->routeIs('admin.semester.*') ? 'show' : '' }}" id="submenuMaster">
+                    <a href="{{ route('admin.roles.index') }}" class="list-group-item list-group-item-action bg-transparent border-0 ps-5 {{ request()->routeIs('admin.roles.*') ? 'text-primary fw-bold' : '' }}">
+                        Roles
+                    </a>
+                    <a href="{{ route('admin.fakultas.index') }}" class="list-group-item list-group-item-action bg-transparent border-0 ps-5 {{ request()->routeIs('admin.fakultas.*') ? 'text-primary fw-bold' : '' }}">
+                        Fakultas
+                    </a>
+                    <a href="{{ route('admin.prodi.index') }}" class="list-group-item list-group-item-action bg-transparent border-0 ps-5 {{ request()->routeIs('admin.prodi.*') ? 'text-primary fw-bold' : '' }}">
+                        Program Studi
+                    </a>
+                    <a href="{{ route('admin.semester.index') }}" class="list-group-item list-group-item-action bg-transparent border-0 ps-5 {{ request()->routeIs('admin.semester.*') ? 'text-primary fw-bold' : '' }}">
+                        Semester
+                    </a>
+                </div>
+
+                <!-- Data Mahasiswa Collapsible -->
+                <a href="#submenuMahasiswa" data-bs-toggle="collapse" class="list-group-item list-group-item-action bg-transparent d-flex justify-content-between align-items-center" aria-expanded="{{ request()->routeIs('admin.registrations.*') || request()->routeIs('admin.students.*') ? 'true' : 'false' }}">
+                    <span><i class="bi bi-people-fill me-2"></i>Mahasiswa</span>
+                    <i class="bi bi-chevron-down small"></i>
                 </a>
+                <div class="collapse list-group-submenu {{ request()->routeIs('admin.registrations.*') || request()->routeIs('admin.students.*') ? 'show' : '' }}" id="submenuMahasiswa">
+                    <a href="{{ route('admin.registrations.index') }}" class="list-group-item list-group-item-action bg-transparent border-0 ps-5 {{ request()->routeIs('admin.registrations.*') ? 'text-primary fw-bold' : '' }}">
+                        Registrasi
+                    </a>
+                    <a href="{{ route('admin.students.index') }}" class="list-group-item list-group-item-action bg-transparent border-0 ps-5 {{ request()->routeIs('admin.students.*') ? 'text-primary fw-bold' : '' }}">
+                        Data Mahasiswa
+                    </a>
+                </div>
                 
-                <div class="sidebar-heading text-uppercase fs-6 text-muted mt-3 mb-1 ms-3">Keuangan & Tagihan</div>
-                <a href="{{ route('admin.billings.index') }}" class="list-group-item list-group-item-action bg-transparent {{ request()->routeIs('admin.billings.index') || request()->routeIs('admin.billings.create-bulk') ? 'active' : '' }}">
-                    <i class="bi bi-wallet2 me-2"></i>Daftar Tagihan
+                <!-- Keuangan Collapsible -->
+                <a href="#submenuKeuangan" data-bs-toggle="collapse" class="list-group-item list-group-item-action bg-transparent d-flex justify-content-between align-items-center" aria-expanded="{{ request()->routeIs('admin.billings.*') ? 'true' : 'false' }}">
+                    <span><i class="bi bi-wallet2 me-2"></i>Keuangan</span>
+                    <i class="bi bi-chevron-down small"></i>
                 </a>
-                <a href="{{ route('admin.billings.verification') }}" class="list-group-item list-group-item-action bg-transparent {{ request()->routeIs('admin.billings.verification') ? 'active' : '' }}">
-                    <i class="bi bi-patch-check me-2"></i>Verifikasi Bayar
-                </a>
+                <div class="collapse list-group-submenu {{ request()->routeIs('admin.billings.*') ? 'show' : '' }}" id="submenuKeuangan">
+                    <a href="{{ route('admin.billings.index') }}" class="list-group-item list-group-item-action bg-transparent border-0 ps-5 {{ request()->routeIs('admin.billings.index') || request()->routeIs('admin.billings.create-bulk') ? 'text-primary fw-bold' : '' }}">
+                        Daftar Tagihan
+                    </a>
+                    <a href="{{ route('admin.billings.verification') }}" class="list-group-item list-group-item-action bg-transparent border-0 ps-5 {{ request()->routeIs('admin.billings.verification') ? 'text-primary fw-bold' : '' }}">
+                        Verifikasi Bayar
+                    </a>
+                </div>
 
-                <div class="sidebar-heading text-uppercase fs-6 text-muted mt-3 mb-1 ms-3">Non-Akademik</div>
-                <a href="{{ route('admin.non-academic.index') }}" class="list-group-item list-group-item-action bg-transparent {{ request()->routeIs('admin.non-academic.*') || request()->routeIs('admin.career-programs.*') || request()->routeIs('admin.trainings.*') || request()->routeIs('admin.lms-materials.*') ? 'active' : '' }}">
-                    <i class="bi bi-collection-play-fill me-2"></i>LMS & Non-Akademik
+                <!-- Non-Akademik Collapsible -->
+                <a href="#submenuNonAkademik" data-bs-toggle="collapse" class="list-group-item list-group-item-action bg-transparent d-flex justify-content-between align-items-center" aria-expanded="{{ request()->routeIs('admin.non-academic.*') || request()->routeIs('admin.career-programs.*') || request()->routeIs('admin.trainings.*') || request()->routeIs('admin.lms-materials.*') ? 'true' : 'false' }}">
+                    <span><i class="bi bi-collection-play-fill me-2"></i>Non-Akademik</span>
+                    <i class="bi bi-chevron-down small"></i>
                 </a>
+                <div class="collapse list-group-submenu {{ request()->routeIs('admin.non-academic.*') || request()->routeIs('admin.career-programs.*') || request()->routeIs('admin.trainings.*') || request()->routeIs('admin.lms-materials.*') ? 'show' : '' }}" id="submenuNonAkademik">
+                    <a href="{{ route('admin.non-academic.index') }}" class="list-group-item list-group-item-action bg-transparent border-0 ps-5 {{ request()->routeIs('admin.non-academic.index') ? 'text-primary fw-bold' : '' }}">
+                        Dashboard LMS
+                    </a>
+                    <a href="{{ route('admin.career-programs.index') }}" class="list-group-item list-group-item-action bg-transparent border-0 ps-5 {{ request()->routeIs('admin.career-programs.*') ? 'text-primary fw-bold' : '' }}">
+                        Master Program
+                    </a>
+                    <a href="{{ route('admin.lms-materials.index') }}" class="list-group-item list-group-item-action bg-transparent border-0 ps-5 {{ request()->routeIs('admin.lms-materials.*') ? 'text-primary fw-bold' : '' }}">
+                        Materi Belajar
+                    </a>
+                    <a href="{{ route('admin.trainings.index') }}" class="list-group-item list-group-item-action bg-transparent border-0 ps-5 {{ request()->routeIs('admin.trainings.*') ? 'text-primary fw-bold' : '' }}">
+                        Jadwal Pelatihan
+                    </a>
+                </div>
                 
                 <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="list-group-item list-group-item-action bg-transparent text-danger mt-3">
                     <i class="bi bi-box-arrow-right me-2"></i>Logout

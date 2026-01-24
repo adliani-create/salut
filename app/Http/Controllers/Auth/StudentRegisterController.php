@@ -38,7 +38,9 @@ class StudentRegisterController extends Controller
     public function showExistingForm()
     {
         $programs = \App\Models\CareerProgram::all();
-        return view('auth.register-existing-full', compact('programs'));
+        $fakultas = Fakultas::all();
+        $prodis = Prodi::all();
+        return view('auth.register-existing-full', compact('programs', 'fakultas', 'prodis'));
     }
 
     /**
@@ -58,8 +60,15 @@ class StudentRegisterController extends Controller
             
             // Update Data
             'whatsapp' => ['required', 'numeric'],
+            'jenjang' => ['required', 'in:S1,S2'],
+            'fakultas_id' => ['required', 'exists:fakultas,id'],
+            'prodi_id' => ['required', 'exists:prodis,id'],
             'fokus_karir' => ['required', 'string'],
         ]);
+
+        // Lookup Names
+        $fakultasName = Fakultas::find($request->fakultas_id)->nama;
+        $prodiName = Prodi::find($request->prodi_id)->nama;
 
         // Create User
         $user = User::create([
@@ -69,7 +78,7 @@ class StudentRegisterController extends Controller
             'role_id' => Role::where('name', 'mahasiswa')->first()->id ?? 4,
             'nim' => $request->nim,
             'angkatan' => $request->angkatan,
-            'status' => 'pending', // Waiting verification
+            'status' => 'active', // Express: Directly active
         ]);
 
         // Create Registration Data
@@ -77,9 +86,10 @@ class StudentRegisterController extends Controller
             'user_id' => $user->id,
             'whatsapp' => $request->whatsapp,
             'fokus_karir' => $request->fokus_karir,
-            'status' => 'pending',
-            // Defaulting others or leaving null as they are "Existing" so might not need filling
-            'jenjang' => 'S1', // Default or ask? Prompt didn't specify.
+            'jenjang' => $request->jenjang,
+            'fakultas' => $fakultasName,
+            'prodi' => $prodiName,
+            'status' => 'valid', // Express: Directly valid
             'jalur_pendaftaran' => 'Reguler', // Default
         ]);
 
@@ -146,7 +156,8 @@ class StudentRegisterController extends Controller
         }
 
         $fakultas = Fakultas::all();
-        return view('auth.register-step2', compact('fakultas'));
+        $prodis = Prodi::all();
+        return view('auth.register-step2', compact('fakultas', 'prodis'));
     }
 
     /**
@@ -157,8 +168,8 @@ class StudentRegisterController extends Controller
         $request->validate([
             'whatsapp' => ['required', 'numeric'],
             'jenjang' => ['required', 'in:S1,S2'],
-            'fakultas' => ['required', 'string', 'max:255'],
-            'prodi' => ['required', 'string', 'max:255'],
+            'fakultas_id' => ['required', 'exists:fakultas,id'],
+            'prodi_id' => ['required', 'exists:prodis,id'],
             'jalur_pendaftaran' => ['required', 'in:Reguler,RPL'],
         ]);
 
@@ -173,11 +184,15 @@ class StudentRegisterController extends Controller
             ]);
         }
         
+        // Lookup Names
+        $fakultasName = Fakultas::find($request->fakultas_id)->nama;
+        $prodiName = Prodi::find($request->prodi_id)->nama;
+
         $registration->update([
             'whatsapp' => $request->whatsapp,
             'jenjang' => $request->jenjang,
-            'fakultas' => $request->fakultas,
-            'prodi' => $request->prodi,
+            'fakultas' => $fakultasName,
+            'prodi' => $prodiName,
             'jalur_pendaftaran' => $request->jalur_pendaftaran,
             'status' => 'draft', // Keep as draft until step 3
         ]);

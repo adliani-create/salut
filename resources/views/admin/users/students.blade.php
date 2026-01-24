@@ -30,7 +30,7 @@
                             <tr>
                                 <td class="fw-bold">{{ $student->nim ?? '-' }}</td>
                                 <td>{{ $student->name }}</td>
-                                <td>{{ $student->major ?? $student->registration->prodi ?? '-' }}</td>
+                                <td>{{ $student->major ?? $student->registration?->prodi ?? '-' }}</td>
                                 <td>{{ $student->semester ?? 1 }}</td>
                                 <td class="text-center fw-bold text-primary">{{ $student->ipk ?? '0.00' }}</td>
                                 <td>
@@ -45,7 +45,7 @@
                                 </td>
                                 <td>
                                     @php
-                                        $fokus = $student->registration->fokus_karir ?? '-';
+                                        $fokus = $student->registration?->fokus_karir ?? '-';
                                         $icon = '';
                                         $colorClass = 'text-secondary';
                                         
@@ -70,7 +70,7 @@
                                 </td>
                                 <td class="text-center">
                                     @php
-                                        $wa = $student->registration->whatsapp ?? '-';
+                                        $wa = $student->registration?->whatsapp ?? '-';
                                         $hasWa = false;
                                         $waLink = '#';
 
@@ -93,13 +93,27 @@
                                 </td>
 
                                 <td>
-                                    <div class="d-flex gap-1">
-                                        <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#detailModal{{ $student->id }}" title="Detail">
-                                            <i class="bi bi-eye"></i>
+                                    <div class="dropdown">
+                                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton{{ $student->id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Aksi
                                         </button>
-                                        <a href="{{ route('admin.users.edit', $student->id) }}" class="btn btn-sm btn-outline-warning" title="Edit Data">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $student->id }}">
+                                            <li>
+                                                <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#detailModal{{ $student->id }}">
+                                                    <i class="bi bi-eye me-2"></i> Detail
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="{{ route('admin.students.ledger', $student->id) }}">
+                                                    <i class="bi bi-wallet2 me-2"></i> Kartu Kontrol
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="{{ route('admin.users.edit', $student->id) }}">
+                                                    <i class="bi bi-pencil me-2"></i> Edit
+                                                </a>
+                                            </li>
+                                        </ul>
                                     </div>
                                 </td>
                             </tr>

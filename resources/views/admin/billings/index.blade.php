@@ -56,6 +56,7 @@
                             <tr>
                                 <th>Kode</th>
                                 <th>Mahasiswa</th>
+                                <th>Prodi</th> <!-- Added -->
                                 <th>Kategori / Sem</th>
                                 <th>Nominal</th>
                                 <th>Status</th>
@@ -69,7 +70,12 @@
                                 <td class="small text-muted">{{ $billing->billing_code }}</td>
                                 <td>
                                     <div class="fw-bold">{{ $billing->user->name }}</div>
-                                    <div class="small text-muted">{{ $billing->user->nim ?? '-' }}</div>
+                                    <div class="small text-muted">{{ $billing->user->nim ?? 'NIM: -' }}</div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-light text-dark border">
+                                        {{ $billing->user->registration->prodi ?? '-' }}
+                                    </span>
                                 </td>
                                 <td>
                                     <div>{{ $billing->category }}</div>

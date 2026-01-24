@@ -182,57 +182,15 @@
         <!-- Finance Module -->
         <div class="tab-pane fade" id="finance" role="tabpanel">
              <div class="card border-0 shadow-sm rounded-4">
-                <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
-                    <h5 class="fw-bold mb-0 text-primary">Financial History</h5>
-                    <button class="btn btn-sm btn-outline-secondary rounded-pill">Download Report</button>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                         <table class="table table-hover align-middle">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Invoice ID</th>
-                                    <th>Description</th>
-                                    <th>Amount</th>
-                                    <th>Due Date</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($invoices as $inv)
-                                <tr>
-                                    <td>#INV-{{ str_pad($inv->id, 5, '0', STR_PAD_LEFT) }}</td>
-                                    <td class="fw-bold">{{ $inv->title }}</td>
-                                    <td>Rp {{ number_format($inv->amount, 0, ',', '.') }}</td>
-                                    <td>{{ $inv->due_date->format('d M Y') }}</td>
-                                    <td>
-                                        @if($inv->status == 'paid')
-                                            <span class="badge bg-success rounded-pill px-3">Paid</span>
-                                        @elseif($inv->status == 'unpaid')
-                                            <span class="badge bg-danger rounded-pill px-3">Unpaid</span>
-                                        @else
-                                            <span class="badge bg-secondary rounded-pill px-3">{{ ucfirst($inv->status) }}</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if($inv->status == 'unpaid')
-                                        <button class="btn btn-sm btn-primary rounded-pill px-3">Pay</button>
-                                        @else
-                                        <a href="{{ route('student.invoice.print', $inv->id) }}" target="_blank" class="btn btn-sm btn-light rounded-circle" title="Download Invoice">
-                                            <i class="bi bi-download"></i>
-                                        </a>
-                                        @endif
-                                    </td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <td colspan="6" class="text-center text-muted py-5">No payment history found.</td>
-                                </tr>
-                                @endforelse
-                            </tbody>
-                         </table>
+                <div class="card-body text-center p-5">
+                    <div class="mb-4">
+                        <i class="bi bi-wallet2 display-4 text-primary"></i>
                     </div>
+                    <h4 class="fw-bold">Billing & Financial History</h4>
+                    <p class="text-muted">Manage your tuition (UKT) and SALUT service payments using the Payment Control Card.</p>
+                    <a href="{{ route('student.billing.index') }}" class="btn btn-primary btn-lg rounded-pill px-5 fw-bold">
+                        <i class="bi bi-box-arrow-up-right me-2"></i> Open Kartu Kontrol Pembayaran
+                    </a>
                 </div>
              </div>
         </div>

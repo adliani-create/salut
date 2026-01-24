@@ -13,10 +13,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Ajax Routes
+Route::get('ajax/fakultas/{id}/prodis', [App\Http\Controllers\AjaxController::class, 'getProdisByFakultas'])->name('ajax.prodis');
+
 Route::get('/', function () {
-    $fakultas = \App\Models\Fakultas::all();
-    return view('welcome', compact('fakultas'));
-});
+    return view('welcome');
+})->name('landing');
 
 // Custom Registration Routes
 Route::get('register', [App\Http\Controllers\Auth\StudentRegisterController::class, 'showLanding'])->name('register');
@@ -74,6 +76,10 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
     Route::put('admin/billings/{billing}/approve', [App\Http\Controllers\Admin\BillingController::class, 'approve'])->name('admin.billings.approve');
     Route::put('admin/billings/{billing}/reject', [App\Http\Controllers\Admin\BillingController::class, 'reject'])->name('admin.billings.reject');
     Route::get('admin/billings/{billing}/print', [App\Http\Controllers\Admin\BillingController::class, 'printInvoice'])->name('admin.billings.print');
+    
+    // Ledger / Kartu Kontrol
+    Route::get('admin/students/{user}/ledger', [App\Http\Controllers\Admin\BillingController::class, 'ledger'])->name('admin.students.ledger');
+    
     Route::resource('admin/billings', App\Http\Controllers\Admin\BillingController::class, ['as' => 'admin']);
 
     // Non-Academic Modules
@@ -105,7 +111,9 @@ Route::middleware(['auth', 'role:mahasiswa', 'ensure_registration_complete'])->g
     Route::post('/mahasiswa/enrollment/step3', [App\Http\Controllers\Student\EnrollmentController::class, 'storeStep3'])->name('student.enrollment.storeStep3');
     
     // Finance Routes
-    Route::get('/mahasiswa/invoice/{id}/print', [App\Http\Controllers\Student\DashboardController::class, 'printInvoice'])->name('student.invoice.print');
+    Route::get('/mahasiswa/billing', [App\Http\Controllers\Student\BillingController::class, 'index'])->name('student.billing.index');
+    Route::post('/mahasiswa/billing/{id}/upload', [App\Http\Controllers\Student\BillingController::class, 'upload'])->name('student.billing.upload');
+    Route::get('/mahasiswa/invoice/{id}/print', [App\Http\Controllers\Student\BillingController::class, 'print'])->name('student.invoice.print');
 });
             
 // Staff Routes

@@ -23,7 +23,7 @@
                         <h5 class="text-success fw-bold mb-3 border-bottom pb-2">
                             <i class="bi bi-person-badge-fill me-2"></i>Identitas Akademik
                         </h5>
-                        <div class="row mb-4">
+                        <div class="row mb-3">
                             <div class="col-md-4 mb-3">
                                 <label class="form-label fw-bold small text-uppercase text-muted">NIM</label>
                                 <input type="number" class="form-control form-control-lg @error('nim') is-invalid @enderror" name="nim" value="{{ old('nim') }}" required placeholder="Contoh: 041xxxxxx">
@@ -45,6 +45,67 @@
                                 @error('angkatan') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
                         </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold small text-uppercase text-muted">Jenjang Pendidikan</label>
+                                <select name="jenjang" class="form-select form-select-lg @error('jenjang') is-invalid @enderror" required>
+                                    <option value="" selected disabled>Pilih...</option>
+                                    <option value="S1" {{ old('jenjang') == 'S1' ? 'selected' : '' }}>Sarjana (S1)</option>
+                                    <option value="S2" {{ old('jenjang') == 'S2' ? 'selected' : '' }}>Magister (S2)</option>
+                                </select>
+                                @error('jenjang') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold small text-uppercase text-muted">Fakultas</label>
+                                <select name="fakultas_id" id="fakultasSelectExisting" class="form-select form-select-lg @error('fakultas_id') is-invalid @enderror" required onchange="loadProdisExisting(this.value)">
+                                    <option value="" selected disabled>Pilih Fakultas...</option>
+                                    @foreach($fakultas as $f)
+                                        <option value="{{ $f->id }}">{{ $f->nama }}</option>
+                                    @endforeach
+                                </select>
+                                @error('fakultas_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold small text-uppercase text-muted">Program Studi</label>
+                                <select name="prodi_id" id="prodiSelectExisting" class="form-select form-select-lg @error('prodi_id') is-invalid @enderror" required disabled>
+                                    <option value="" selected disabled>Pilih Fakultas Dulu...</option>
+                                </select>
+                                @error('prodi_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
+                        </div>
+
+                        <script>
+                            function loadProdisExisting(fakultasId) {
+                                if (!fakultasId) return;
+
+                                const prodiSelect = document.getElementById('prodiSelectExisting');
+                                prodiSelect.disabled = true;
+                                prodiSelect.innerHTML = '<option value="" selected>Loading...</option>';
+
+                                fetch(`{{ url('ajax/fakultas') }}/${fakultasId}/prodis`)
+                                    .then(response => {
+                                        if (!response.ok) {
+                                            throw new Error('Network response was not ok');
+                                        }
+                                        return response.json();
+                                    })
+                                    .then(data => {
+                                        prodiSelect.innerHTML = '<option value="" selected disabled>Pilih Prodi...</option>';
+                                        data.forEach(prodi => {
+                                            const option = document.createElement('option');
+                                            option.value = prodi.id; // Send ID
+                                            option.text = prodi.nama + ' (' + prodi.jenjang + ')';
+                                            prodiSelect.appendChild(option);
+                                        });
+                                        prodiSelect.disabled = false;
+                                    })
+                                    .catch(error => {
+                                        console.error('Error:', error);
+                                        prodiSelect.innerHTML = '<option value="" selected disabled>Gagal memuat prodi</option>';
+                                    });
+                            }
+                        </script>
 
                         <!-- Section 2: Akun Login -->
                         <h5 class="text-success fw-bold mb-3 border-bottom pb-2 mt-5">
