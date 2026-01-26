@@ -77,6 +77,7 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
     Route::put('admin/billings/{billing}/manual-verify', [App\Http\Controllers\Admin\BillingController::class, 'manualVerify'])->name('admin.billings.manual-verify');
     Route::put('admin/billings/{billing}/reject', [App\Http\Controllers\Admin\BillingController::class, 'reject'])->name('admin.billings.reject');
     Route::get('admin/billings/{billing}/print', [App\Http\Controllers\Admin\BillingController::class, 'printInvoice'])->name('admin.billings.print');
+    Route::post('admin/billings/{billing}/send-whatsapp', [App\Http\Controllers\Admin\BillingController::class, 'sendWhatsappNotification'])->name('billing.send-wa');
     
     // Ledger / Kartu Kontrol
     Route::get('admin/students/{user}/ledger', [App\Http\Controllers\Admin\BillingController::class, 'ledger'])->name('admin.students.ledger');

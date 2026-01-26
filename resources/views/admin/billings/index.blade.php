@@ -48,6 +48,21 @@
             </div>
         </div>
 
+        <!-- Flash Messages -->
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show shadow-sm border-0 mb-4" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="alert alert-danger alert-dismissible fade show shadow-sm border-0 mb-4" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
         <div class="card shadow-sm border-0">
             <div class="card-body p-0">
                 <div class="table-responsive">
@@ -101,10 +116,17 @@
                                         @endphp
                                         
                                         @if($waClean)
-                                        <a href="{{ $waLink }}" target="_blank" class="btn btn-sm btn-outline-success" title="Chat WA">
-                                            <i class="bi bi-whatsapp"></i>
+                                        <a href="{{ $waLink }}" target="_blank" class="btn btn-sm btn-outline-success" title="Chat WA (Manual)">
+                                            <i class="bi bi-whatsapp"></i> Chat
                                         </a>
                                         @endif
+
+                                        <form action="{{ route('billing.send-wa', $billing->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Kirim tagihan via WhatsApp?');">
+                                            @csrf
+                                            <button type="submit" class="btn btn-sm btn-success" title="Kirim Tagihan & PDF via WA">
+                                                <i class="bi bi-whatsapp"></i> PDF
+                                            </button>
+                                        </form>
 
                                         <a href="{{ route('admin.billings.print', $billing->id) }}" target="_blank" class="btn btn-sm {{ $billing->status == 'paid' ? 'btn-success' : 'btn-danger' }}" title="{{ $billing->status == 'paid' ? 'Cetak Kuitansi' : 'Cetak Tagihan' }}">
                                             <i class="bi bi-printer"></i>

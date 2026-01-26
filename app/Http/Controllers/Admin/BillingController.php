@@ -8,6 +8,7 @@ use App\Models\Billing;
 use App\Models\User;
 use PDF;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Http;
 
 class BillingController extends Controller
 {
@@ -198,5 +199,79 @@ class BillingController extends Controller
         $maxSemester = max(8, $user->semester, $billings->keys()->max() ?? 0);
 
         return view('admin.billings.ledger', compact('user', 'billings', 'maxSemester'));
+    }
+
+    // 6. WHATSAPP NOTIFICATION
+    public function sendWhatsappNotification(Billing $billing)
+    {
+        // 1. Get Data
+        $billing->load('user', 'user.registration');
+        $user = $billing->user;
+        
+        // 2. Format Phone Number
+        $phone = $user->registration->whatsapp ?? $user->registration->no_hp ?? '';
+        if (empty($phone)) {
+            return back()->with('error', 'Nomor WhatsApp tidak ditemukan untuk mahasiswa ini.');
+        }
+
+        // Sanitize phone number: remove non-numeric, replace leading 0 or 62
+        $phone = preg_replace('/[^0-9]/', '', $phone);
+        if (str_starts_with($phone, '0')) {
+            $phone = '62' . substr($phone, 1);
+        }
+        
+        // Add suffix for WAHA
+        $chatId = $phone . '@c.us';
+
+        // 3. Generate Invoice PDF File
+        try {
+            $data = [
+                'billing' => $billing,
+                'title' => $billing->status == 'paid' ? 'Kuitansi Pembayaran' : 'Invoice Tagihan',
+            ];
+            
+            $pdf = Pdf::loadView('admin.billings.invoice_pdf', $data);
+            $filename = 'Invoice-' . $billing->billing_code . '.pdf';
+            $path = public_path('invoices');
+            
+            // Ensure directory exists
+            if (!file_exists($path)) {
+                mkdir($path, 0755, true);
+            }
+            
+            $pdf->save($path . '/' . $filename);
+            
+            // Public URL for the file
+            $fileUrl = asset('invoices/' . $filename);
+
+            // 4. Send Request to WAHA
+            $caption = "Halo kak! Tagihan UKT Semester {$billing->semester} sebesar Rp " . number_format($billing->amount, 0, ',', '.') . " belum dibayar. Mohon segera diselesaikan.";
+
+            $wahaUrl = env('WAHA_API_URL', 'http://localhost:3000');
+            
+            try {
+                $response = Http::timeout(5)->post("$wahaUrl/api/sendFile", [
+                    'chatId' => $chatId,
+                    'caption' => $caption,
+                    'file' => [
+                        'mimetype' => 'application/pdf',
+                        'filename' => $filename,
+                        'url' => $fileUrl
+                    ],
+                    'session' => 'default'
+                ]);
+
+                if ($response->successful()) {
+                    return back()->with('success', 'Notifikasi WhatsApp berhasil dikirim.');
+                } else {
+                    return back()->with('error', 'Gagal mengirim WA: ' . $response->body());
+                }
+            } catch (\Illuminate\Http\Client\ConnectionException $e) {
+                return back()->with('error', "Gagal terhubung ke Server WAHA ($wahaUrl). Pastikan server berjalan.");
+            }
+
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
 }
