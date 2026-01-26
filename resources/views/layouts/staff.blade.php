@@ -112,6 +112,11 @@
                 <i class="bi bi-mortarboard-fill me-2"></i>{{ config('app.name') }}
             </div>
             <div class="list-group list-group-flush my-3">
+                <!-- Homepage Link -->
+                <a href="{{ url('/') }}" class="list-group-item list-group-item-action bg-transparent text-primary fw-bold">
+                    <i class="bi bi-house-door-fill me-2"></i>Halaman Utama
+                </a>
+
                 <a href="{{ route('staff.dashboard') }}" class="list-group-item list-group-item-action bg-transparent {{ request()->routeIs('staff.dashboard') ? 'active' : '' }}">
                     <i class="bi bi-speedometer2 me-2"></i>Dashboard
                 </a>

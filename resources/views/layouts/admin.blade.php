@@ -106,16 +106,33 @@
             transform: translateY(-2px);
             box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
         }
+        /* Logo Responsiveness */
+        .sidebar-logo {
+            max-width: 80px; /* Default Desktop Compact */
+            transition: all 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar-logo {
+                max-width: 120px; /* Mobile Larger */
+            }
+        }
     </style>
 </head>
 <body>
     <div class="d-flex" id="wrapper">
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
-            <div class="sidebar-heading text-center py-4 primary-text fs-4 fw-bold text-uppercase">
-                <i class="bi bi-mortarboard-fill me-2"></i>{{ config('app.name') }}
+            <div class="sidebar-heading text-center py-4 primary-text fs-4 fw-bold text-uppercase font-monospace bottom-shadow">
+               <img src="{{ asset('images/sidebar-logo.png') }}" class="img-fluid mb-2 sidebar-logo" alt="Logo SALUT">
+               <div class="fs-6 mt-2 text-primary">Salut Indo Global</div>
             </div>
             <div class="list-group list-group-flush my-3">
+                <!-- Homepage Link -->
+                <a href="{{ url('/') }}" class="list-group-item list-group-item-action bg-transparent text-primary fw-bold">
+                    <i class="bi bi-house-door-fill me-2"></i>Halaman Utama
+                </a>
+
                 <!-- Dashboard -->
                 <a href="{{ route('admin.dashboard') }}" class="list-group-item list-group-item-action bg-transparent {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                     <i class="bi bi-speedometer2 me-2"></i>Dashboard
@@ -200,7 +217,11 @@
         <div id="page-content-wrapper">
             <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
                 <div class="d-flex align-items-center">
-                    <i class="bi bi-list fs-2 me-3" id="menu-toggle" style="cursor: pointer; color: #0d6efd;"></i>
+                    <!-- Sidebar Toggle (Mobile & Desktop) -->
+                    <button id="sidebarToggleTop" class="btn btn-link rounded-circle me-3">
+                        <i class="bi bi-list fs-2 text-primary"></i>
+                    </button>
+                    
                     <h2 class="fs-4 m-0 text-muted">@yield('title', 'Admin Dashboard')</h2>
                 </div>
 
@@ -245,12 +266,28 @@
 
     <script>
         var el = document.getElementById("wrapper");
-        var toggleButton = document.getElementById("menu-toggle");
+        var toggleButton = document.getElementById("menu-toggle"); // Desktop
+        var sidebarToggleTop = document.getElementById("sidebarToggleTop"); // Mobile
 
-        toggleButton.onclick = function () {
+        function toggleMenu() {
             el.classList.toggle("toggled");
             document.body.classList.toggle("sb-sidenav-toggled");
-        };
+        }
+
+        if(toggleButton) {
+            toggleButton.onclick = function(e) {
+                e.preventDefault();
+                toggleMenu();
+            };
+        }
+        
+        if(sidebarToggleTop) {
+            sidebarToggleTop.onclick = function(e) {
+                e.preventDefault();
+                toggleMenu();
+            };
+        }
     </script>
+    @stack('scripts')
 </body>
 </html>

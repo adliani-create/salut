@@ -74,6 +74,7 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
     Route::post('admin/billings/create-bulk', [App\Http\Controllers\Admin\BillingController::class, 'storeBulk'])->name('admin.billings.store-bulk');
     Route::get('admin/billings/verification', [App\Http\Controllers\Admin\BillingController::class, 'verification'])->name('admin.billings.verification');
     Route::put('admin/billings/{billing}/approve', [App\Http\Controllers\Admin\BillingController::class, 'approve'])->name('admin.billings.approve');
+    Route::put('admin/billings/{billing}/manual-verify', [App\Http\Controllers\Admin\BillingController::class, 'manualVerify'])->name('admin.billings.manual-verify');
     Route::put('admin/billings/{billing}/reject', [App\Http\Controllers\Admin\BillingController::class, 'reject'])->name('admin.billings.reject');
     Route::get('admin/billings/{billing}/print', [App\Http\Controllers\Admin\BillingController::class, 'printInvoice'])->name('admin.billings.print');
     

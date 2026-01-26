@@ -133,6 +133,31 @@ class BillingController extends Controller
         return back()->with('success', 'Pembayaran diterima.');
     }
 
+    public function manualVerify(Request $request, Billing $billing)
+    {
+        $request->validate([
+            'payment_date' => 'required|date',
+            'reference_number' => 'required|string',
+            'admin_note' => 'nullable|string',
+        ]);
+
+        $description = "Ref: " . $request->reference_number;
+        if($request->admin_note){
+            $description .= " | Note: " . $request->admin_note;
+        }
+
+        $billing->update([
+            'status' => 'paid',
+            'payment_date' => $request->payment_date,
+            'verified_at' => now(),
+            'description' => $description, // Use existing description field
+            // Rejection reason cleared just in case
+            'rejection_reason' => null,
+        ]);
+
+        return back()->with('success', 'Pembayaran berhasil diverifikasi secara manual.');
+    }
+
     public function reject(Request $request, Billing $billing)
     {
         $billing->update([

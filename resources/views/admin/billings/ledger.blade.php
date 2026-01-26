@@ -74,11 +74,11 @@
                                 $salutBill = $semesterBills->firstWhere('category', 'Layanan SALUT');
                             @endphp
                             
-                            <tr class="semester-row {{ $isCurrent ? 'table-warning border-3 border-warning fw-bold' : '' }} {{ $isFuture ? 'locked-row bg-light text-muted' : '' }}" data-semester="{{ $i }}">
+                            <tr class="semester-row {{ $isCurrent ? 'table-warning border-3 border-warning fw-bold' : '' }}" data-semester="{{ $i }}">
                                 <td class="text-center fw-bold fs-5">{{ $i }}</td>
                                 
-                                <!-- UKT Column -->
-                                <td class="p-3 position-relative {{ $isFuture ? 'locked-content' : '' }}">
+                                <!-- UKT Column (ALWAYS UNLOCKED) -->
+                                <td class="p-3 position-relative">
                                     @if($uktBill)
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div>
@@ -95,30 +95,33 @@
                                                      <a href="{{ route('admin.billings.verification') }}" class="btn btn-sm btn-warning">Cek Status</a>
                                                 @else
                                                     <span class="badge bg-danger mb-2 d-block">Belum Bayar</span>
-                                                    <!-- Assuming we can verify manually or user pays -->
-                                                    <button class="btn btn-sm btn-primary" onclick="payBill('{{ $uktBill->id }}', 'UKT')">
+                                                    <!-- Manuel Verify Button -->
+                                                    <button class="btn btn-sm btn-primary" 
+                                                        data-bs-toggle="modal" 
+                                                        data-bs-target="#payBillModal" 
+                                                        onclick="setupPayBill('{{ $uktBill->id }}', 'UKT')">
                                                         <i class="bi bi-credit-card me-1"></i> Verifikasi Manual
                                                     </button>
                                                 @endif
                                             </div>
                                         </div>
                                     @else
-                                        <!-- No Bill -->
-                                        @if(!$isFuture)
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <span class="text-muted fst-italic">Belum ada tagihan</span>
-                                                <button class="btn btn-primary btn-sm" onclick="createBill({{ $i }}, 'UKT')">
-                                                    <i class="bi bi-plus-lg me-1"></i> Buat Tagihan UKT
-                                                </button>
-                                            </div>
-                                        @else
-                                             <div class="text-center small"><i class="bi bi-lock-fill me-1"></i> Terkunci</div>
-                                        @endif
+                                        <!-- No Bill: Allow creation for ANY semester (Future or Past) -->
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="text-muted fst-italic">Belum ada tagihan</span>
+                                            <button class="btn btn-primary btn-sm" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#createBillModal" 
+                                                onclick="setupCreateBill({{ $i }}, 'UKT')">
+                                                <i class="bi bi-plus-lg me-1"></i> Buat Tagihan UKT
+                                            </button>
+                                        </div>
                                     @endif
                                 </td>
                                 
-                                <!-- Salut Column -->
-                                <td class="p-3 position-relative {{ $isFuture ? 'locked-content' : '' }}">
+                                <!-- Salut Column (Keep Locked logic for future if desired, OR unlock broadly. I'll keep default lock behavior for SALUT if user only specified UKT, but removing row lock makes it accessible unless I enforce cell lock) -->
+                                <!-- I will re-apply locked visual to SALUT specifically if future, since user said 'khusus ukt' -->
+                                <td class="p-3 position-relative {{ $isFuture ? 'bg-light' : '' }}">
                                     @if($salutBill)
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div>
@@ -135,7 +138,11 @@
                                                      <a href="{{ route('admin.billings.verification') }}" class="btn btn-sm btn-warning">Cek Status</a>
                                                 @else
                                                     <span class="badge bg-danger mb-2 d-block">Belum Bayar</span>
-                                                    <button class="btn btn-sm btn-warning text-white" style="background-color: #fd7e14; border-color: #fd7e14;" onclick="payBill('{{ $salutBill->id }}', 'Layanan SALUT')">
+                                                    <button class="btn btn-sm btn-warning text-white" 
+                                                        style="background-color: #fd7e14; border-color: #fd7e14;" 
+                                                        data-bs-toggle="modal" 
+                                                        data-bs-target="#payBillModal" 
+                                                        onclick="setupPayBill('{{ $salutBill->id }}', 'Layanan SALUT')">
                                                         <i class="bi bi-credit-card me-1"></i> Verifikasi Manual
                                                     </button>
                                                 @endif
@@ -146,12 +153,16 @@
                                         @if(!$isFuture)
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <span class="text-muted fst-italic">Belum ada tagihan</span>
-                                                <button class="btn btn-sm text-white" style="background-color: #fd7e14; border-color: #fd7e14;" onclick="createBill({{ $i }}, 'Layanan SALUT')">
+                                                <button class="btn btn-sm text-white" 
+                                                    style="background-color: #fd7e14; border-color: #fd7e14;" 
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#createBillModal" 
+                                                    onclick="setupCreateBill({{ $i }}, 'Layanan SALUT')">
                                                     <i class="bi bi-plus-lg me-1"></i> Buat Tagihan Adm
                                                 </button>
                                             </div>
                                         @else
-                                             <div class="text-center small"><i class="bi bi-lock-fill me-1"></i> Terkunci</div>
+                                             <div class="text-center small text-muted"><i class="bi bi-lock-fill me-1"></i> Terkunci (SALUT)</div>
                                         @endif
                                     @endif
                                 </td>
@@ -213,23 +224,45 @@
         <form id="payForm" action="" method="POST" class="modal-content">
             @csrf
             @method('PUT') 
-            <!-- Assuming we use approve route or a generic update status route. 
-                 Since 'approve' exists, we can use that if pending. 
-                 But if 'unpaid', we might need to update to 'paid'.
-                 I'll assume using 'approve' route logic which sets to paid. 
-            -->
             
-            <div class="modal-header">
-                <h5 class="modal-title">Konfirmasi Pembayaran Manual</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title"><i class="bi bi-check-circle me-1"></i> Verifikasi Pembayaran Manual</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <p>Anda yakin ingin menandai tagihan ini sebagai <strong>LUNAS</strong>?</p>
-                <p class="text-muted small">Pastikan Anda telah menerima dana dari mahasiswa (Cash/Transfer).</p>
+                <div class="alert alert-info small mb-3">
+                    <i class="bi bi-info-circle-fill me-1"></i> Pastikan dana sudah diterima sebelum melakukan verifikasi ini.
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Tanggal Pembayaran</label>
+                    <input type="date" name="payment_date" class="form-control" value="{{ date('Y-m-d') }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">No. Referensi / LIP / Bukti Transfer</label>
+                    <input type="text" name="reference_number" class="form-control" placeholder="Contoh: TRANSFER-BCA-123456" required>
+                    <small class="text-muted">Masukkan kode unik transaksi atau nomor kuitansi manual.</small>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Catatan Admin (Opsional)</label>
+                    <textarea name="admin_note" class="form-control" rows="2" placeholder="Contoh: Diterima Cash oleh Staff A"></textarea>
+                </div>
+
+                <hr>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" required id="confirmCheck">
+                    <label class="form-check-label small text-muted" for="confirmCheck">
+                        Saya menyatakan data di atas benar dan dana telah diterima.
+                    </label>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                <button type="submit" class="btn btn-success">Ya, Tandai Lunas</button>
+                <button type="submit" class="btn btn-success fw-bold">
+                    <i class="bi bi-save me-1"></i> Simpan & Verifikasi
+                </button>
             </div>
         </form>
     </div>
@@ -267,39 +300,21 @@
         // Update button text logic if desired
     }
 
-    function createBill(semester, category) {
+    function setupCreateBill(semester, category) {
         document.getElementById('modalSemester').value = semester;
         document.getElementById('displaySemester').value = semester;
         document.getElementById('modalCategory').value = category;
         document.getElementById('displayCategory').value = category;
         
-        try {
-            var myModal = new bootstrap.Modal(document.getElementById('createBillModal'));
-            myModal.show();
-        } catch (e) {
-            console.error("Bootstrap Modal Error:", e);
-            alert("Gagal membuka modal. Pastikan halaman sudah termuat sempurna.");
-        }
+        // Modal opens via data-bs-toggle
     }
 
-    function payBill(id, category) {
-        // Use approve route: admin.billings.approve
+    function setupPayBill(id, category) {
+        // Use manual verify route
         const form = document.getElementById('payForm');
-        form.action = `{{ url('admin/billings') }}/${id}/approve`; 
+        form.action = `{{ url('admin/billings') }}/${id}/manual-verify`;  
         
-        try {
-            var myModal = new bootstrap.Modal(document.getElementById('payBillModal'));
-            myModal.show();
-        } catch (e) {
-            console.error("Bootstrap Modal Error:", e);
-            // Fallback for missing Bootstrap object
-            var modalEl = document.getElementById('payBillModal');
-            if(window.jQuery) {
-                $(modalEl).modal('show');
-            } else {
-                alert("Error: Bootstrap JS not loaded.");
-            }
-        }
+        // Modal opens via data-bs-toggle
     }
     
     function addSemester() {
