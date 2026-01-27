@@ -15,11 +15,42 @@
                     <input type="text" name="title" class="form-control" value="{{ $lmsMaterial->title }}" required>
                 </div>
                 <div class="mb-3">
+                    <label class="form-label">Program Salut (Target Audience)</label>
+                    <div class="card p-3 bg-light">
+                        <div class="row">
+                            @foreach($programs as $program)
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="career_program_ids[]" value="{{ $program->id }}" id="program_{{ $program->id }}"
+                                            {{ in_array($program->id, $lmsMaterial->careerPrograms->pluck('id')->toArray()) ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="program_{{ $program->id }}">
+                                            {{ $program->name }}
+                                        </label>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
                     <label class="form-label">Type</label>
                     <select name="type" class="form-select" required>
                         <option value="video" {{ $lmsMaterial->type == 'video' ? 'selected' : '' }}>Video</option>
                         <option value="ebook" {{ $lmsMaterial->type == 'ebook' ? 'selected' : '' }}>E-Book (PDF/Doc)</option>
                     </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Thumbnail (Optional)</label>
+                    <input type="file" name="thumbnail" class="form-control" accept="image/*">
+                    @if($lmsMaterial->thumbnail)
+                        <div class="mt-2">
+                            <img src="{{ asset('storage/' . $lmsMaterial->thumbnail) }}" alt="Thumbnail" class="img-thumbnail" width="150">
+                        </div>
+                    @endif
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Duration / Metadata</label>
+                    <input type="text" name="duration" class="form-control" value="{{ $lmsMaterial->duration }}" placeholder='e.g. "10 Menit", "50 Halaman"'>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">File (Leave empty to keep current)</label>

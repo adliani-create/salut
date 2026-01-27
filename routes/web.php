@@ -90,6 +90,12 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
     Route::resource('admin/career-programs', App\Http\Controllers\Admin\CareerProgramController::class, ['as' => 'admin']);
     Route::resource('admin/lms-materials', App\Http\Controllers\Admin\LmsMaterialController::class, ['as' => 'admin']);
     Route::resource('admin/trainings', App\Http\Controllers\Admin\TrainingController::class, ['as' => 'admin']);
+    
+    // Academic / Transcript Management
+    Route::get('admin/academic', [App\Http\Controllers\Admin\AcademicController::class, 'index'])->name('admin.academic.index');
+    Route::get('admin/academic/{user}/upload', [App\Http\Controllers\Admin\AcademicController::class, 'upload'])->name('admin.academic.upload');
+    Route::post('admin/academic/{user}/parse', [App\Http\Controllers\Admin\AcademicController::class, 'parse'])->name('admin.academic.parse');
+    Route::post('admin/academic/{user}/store', [App\Http\Controllers\Admin\AcademicController::class, 'store'])->name('admin.academic.store');
     // Removed old singular webinar/training routes line if duplicated, but sticking to resource above.
 });
 
@@ -103,6 +109,9 @@ Route::middleware(['auth', 'role:yayasan'])->group(function () {
 // Student Routes
 Route::middleware(['auth', 'role:mahasiswa', 'ensure_registration_complete'])->group(function () {
     Route::get('/mahasiswa/dashboard', [App\Http\Controllers\Student\DashboardController::class, 'index'])->name('student.dashboard');
+    Route::get('/mahasiswa/academic', [App\Http\Controllers\Student\DashboardController::class, 'academic'])->name('student.academic');
+    Route::get('/mahasiswa/non-academic', [App\Http\Controllers\Student\DashboardController::class, 'nonAcademic'])->name('student.non-academic');
+    Route::get('/mahasiswa/lms/{material}/view', [App\Http\Controllers\Student\LmsController::class, 'view'])->name('student.lms.view');
     
     // Enrollment Routes for Maba
     Route::get('/mahasiswa/enrollment/step1', [App\Http\Controllers\Student\EnrollmentController::class, 'step1'])->name('student.enrollment.step1');

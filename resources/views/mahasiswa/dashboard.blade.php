@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.student')
 
 @section('content')
 <div class="container py-4">
@@ -18,7 +18,7 @@
 
     <!-- Student Details -->
     <div class="row mb-4">
-        <div class="col-md-3">
+        <div class="col-6 col-md-3 mb-3 mb-md-0">
             <div class="card border-0 shadow-sm rounded-4 h-100">
                 <div class="card-body text-center">
                     <small class="text-muted d-block fw-bold text-uppercase">NIM</small>
@@ -26,7 +26,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-6 col-md-3 mb-3 mb-md-0">
              <div class="card border-0 shadow-sm rounded-4 h-100">
                 <div class="card-body text-center">
                     <small class="text-muted d-block fw-bold text-uppercase">Fakultas</small>
@@ -34,7 +34,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-6 col-md-3">
              <div class="card border-0 shadow-sm rounded-4 h-100">
                 <div class="card-body text-center">
                     <small class="text-muted d-block fw-bold text-uppercase">Jurusan</small>
@@ -42,7 +42,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-6 col-md-3">
              <div class="card border-0 shadow-sm rounded-4 h-100">
                 <div class="card-body text-center">
                      <small class="text-muted d-block fw-bold text-uppercase">Semester</small>
@@ -52,148 +52,72 @@
         </div>
     </div>
 
-    <!-- Main Navigation Tabs -->
-    <ul class="nav nav-pills nav-fill mb-4 bg-white p-2 rounded-4 shadow-sm" id="dashboardTab" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link active rounded-pill fw-bold" id="academic-tab" data-bs-toggle="tab" data-bs-target="#academic" type="button" role="tab">Academic Module</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link rounded-pill fw-bold" id="non-academic-tab" data-bs-toggle="tab" data-bs-target="#non-academic" type="button" role="tab">Non-Academic (LayKep)</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link rounded-pill fw-bold" id="finance-tab" data-bs-toggle="tab" data-bs-target="#finance" type="button" role="tab">Finance</button>
-        </li>
-    </ul>
-
-    <!-- Tab Content -->
-    <div class="tab-content" id="dashboardTabContent">
-        
-        <!-- Academic Module -->
-        <div class="tab-pane fade show active" id="academic" role="tabpanel">
-            <div class="row g-4">
-                <!-- Grades Summary -->
-                <div class="col-md-8">
-                    <div class="card border-0 shadow-sm rounded-4 h-100">
-                        <div class="card-header bg-white border-0 py-3">
-                            <h5 class="fw-bold mb-0 text-primary">Academic Records</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-hover align-middle">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th>Semester</th>
-                                            <th>SKS</th>
-                                            <th>IPS</th>
-                                            <th>IPK</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @forelse($academicRecords as $record)
-                                        <tr>
-                                            <td><span class="badge bg-primary bg-opacity-10 text-primary">{{ $record->semester }}</span></td>
-                                            <td>{{ $record->sks }}</td>
-                                            <td>{{ number_format($record->ips ?? 0, 2) }}</td>
-                                            <td class="fw-bold">{{ number_format($record->ipk, 2) }}</td>
-                                        </tr>
-                                        @empty
-                                        <tr>
-                                            <td colspan="4" class="text-center text-muted py-4">No records found.</td>
-                                        </tr>
-                                        @endforelse
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+    <!-- Overview Widgets -->
+    <div class="row g-4 mb-4">
+        <!-- Billing Widget -->
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
+                <div class="card-body p-4 position-relative">
+                     <div class="position-absolute end-0 top-0 p-4 opacity-10">
+                         <i class="bi bi-wallet2" style="font-size: 5rem; color: #dc3545;"></i>
                     </div>
-                </div>
-
-                <!-- Tutorial Schedule -->
-                <div class="col-md-4">
-                    <div class="card border-0 shadow-sm rounded-4 h-100">
-                        <div class="card-header bg-white border-0 py-3">
-                            <h5 class="fw-bold mb-0 text-primary">Tutorial Schedule</h5>
-                        </div>
-                        <div class="card-body">
-                            <ul class="list-group list-group-flush">
-                                @forelse($schedules as $schedule)
-                                <li class="list-group-item border-0 ps-0 d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="mb-1 text-dark">{{ $schedule->course_name }}</h6>
-                                        <small class="text-muted"><i class="bi bi-calendar-event me-1"></i> {{ $schedule->day }}, {{ \Carbon\Carbon::parse($schedule->time)->format('H:i') }}</small>
-                                    </div>
-                                    @if($schedule->link)
-                                    <a href="{{ $schedule->link }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-circle"><i class="bi bi-camera-video"></i></a>
-                                    @endif
-                                </li>
-                                @empty
-                                <li class="text-center text-muted py-3">No upcoming tutorials.</li>
-                                @endforelse
-                            </ul>
-                        </div>
+                    
+                    <h5 class="fw-bold text-muted mb-3 small text-uppercase">Tagihan Pembayaran</h5>
+                    
+                    <div class="display-6 fw-bold {{ $totalUnpaid > 0 ? 'text-danger' : 'text-success' }} mb-2">
+                        Rp {{ number_format($totalUnpaid, 0, ',', '.') }}
                     </div>
-                </div>
 
-                <!-- Exam Card -->
-                <div class="col-12">
-                     <div class="card border-0 shadow-sm rounded-4 bg-light">
-                        <div class="card-body d-flex align-items-center justify-content-between">
-                            <div>
-                                <h5 class="fw-bold mb-1">Exam Card (Kartu Ujian)</h5>
-                                <p class="mb-0 text-muted small">Download your exam card for the ongoing semester.</p>
-                            </div>
-                            <button class="btn btn-primary rounded-pill"><i class="bi bi-printer me-2"></i> Print Card</button>
+                    @if($totalUnpaid > 0)
+                        <div class="badge bg-danger bg-opacity-10 text-danger mb-3 px-3 py-2 rounded-pill">
+                            <i class="bi bi-exclamation-circle me-1"></i> Belum Lunas
                         </div>
-                     </div>
+                        <a href="{{ route('student.billing.index') }}" class="btn btn-danger rounded-pill fw-bold w-100">
+                            Bayar Sekarang <i class="bi bi-arrow-right-short"></i>
+                        </a>
+                    @else
+                        <div class="badge bg-success bg-opacity-10 text-success mb-3 px-3 py-2 rounded-pill">
+                            <i class="bi bi-check-circle me-1"></i> Lunas
+                        </div>
+                        <button class="btn btn-light text-muted w-100 rounded-pill" disabled>Tidak ada tagihan</button>
+                    @endif
                 </div>
             </div>
         </div>
 
-        <!-- Non-Academic Module -->
-        <div class="tab-pane fade" id="non-academic" role="tabpanel">
-            <div class="row g-4">
-                <div class="col-md-6">
-                    <div class="card border-0 shadow-sm rounded-4 h-100">
-                         <div class="card-body text-center p-5">
-                            <div class="mb-4">
-                                <i class="bi bi-collection-play display-4 text-warning"></i>
-                            </div>
-                            <h4 class="fw-bold">Learning Management System (LMS)</h4>
-                            <p class="text-muted">Access E-books and Video Materials for your selected track.</p>
-                            <button class="btn btn-warning text-white rounded-pill px-4 fw-bold">Enter LMS <i class="bi bi-arrow-right-short"></i></button>
-                         </div>
-                    </div>
+        <!-- Training Widget -->
+        <div class="col-md-6">
+             <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="fw-bold mb-0 text-primary">Jadwal Pelatihan</h5>
+                    <small><a href="{{ route('student.non-academic') }}" class="text-decoration-none fw-bold">Lihat Semua</a></small>
                 </div>
-                 <div class="col-md-6">
-                    <div class="card border-0 shadow-sm rounded-4 h-100">
-                         <div class="card-body text-center p-5">
-                            <div class="mb-4">
-                                <i class="bi bi-calendar-range display-4 text-info"></i>
+                <div class="card-body p-0">
+                    <ul class="list-group list-group-flush">
+                        @forelse($trainings as $training)
+                        <li class="list-group-item border-0 px-4 py-3 d-flex align-items-center">
+                            <div class="me-3 text-center bg-light rounded p-2" style="min-width: 55px;">
+                                <span class="d-block fw-bold text-primary">{{ \Carbon\Carbon::parse($training->date)->format('d') }}</span>
+                                <span class="d-block small text-muted lh-1">{{ \Carbon\Carbon::parse($training->date)->format('M') }}</span>
                             </div>
-                            <h4 class="fw-bold">Training Calendar</h4>
-                            <p class="text-muted">View upcoming webinars and skills training schedules.</p>
-                            <button class="btn btn-info text-white rounded-pill px-4 fw-bold">View Calendar <i class="bi bi-calendar"></i></button>
-                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Finance Module -->
-        <div class="tab-pane fade" id="finance" role="tabpanel">
-             <div class="card border-0 shadow-sm rounded-4">
-                <div class="card-body text-center p-5">
-                    <div class="mb-4">
-                        <i class="bi bi-wallet2 display-4 text-primary"></i>
-                    </div>
-                    <h4 class="fw-bold">Billing & Financial History</h4>
-                    <p class="text-muted">Manage your tuition (UKT) and SALUT service payments using the Payment Control Card.</p>
-                    <a href="{{ route('student.billing.index') }}" class="btn btn-primary btn-lg rounded-pill px-5 fw-bold">
-                        <i class="bi bi-box-arrow-up-right me-2"></i> Open Kartu Kontrol Pembayaran
-                    </a>
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1 fw-bold text-dark text-truncate">{{ $training->title }}</h6>
+                                <div class="small text-muted">
+                                    <i class="bi bi-clock me-1"></i> {{ \Carbon\Carbon::parse($training->time)->format('H:i') }} WIB
+                                </div>
+                            </div>
+                        </li>
+                        @empty
+                        <li class="list-group-item border-0 text-center py-4 text-muted">
+                            <small>Belum ada jadwal pelatihan.</small>
+                        </li>
+                        @endforelse
+                    </ul>
                 </div>
              </div>
         </div>
     </div>
+
+
 </div>
 @endsection

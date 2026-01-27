@@ -10,13 +10,21 @@
             <form action="{{ route('admin.trainings.store') }}" method="POST">
                 @csrf
                 <div class="mb-3">
-                    <label class="form-label">Program Salut</label>
-                    <select name="program" class="form-select" required>
-                        <option value="">Select Program</option>
-                        @foreach($programs as $program)
-                            <option value="{{ $program }}">{{ $program }}</option>
-                        @endforeach
-                    </select>
+                    <label class="form-label">Program Salut (Target Audience)</label>
+                    <div class="card p-3 bg-light">
+                        <div class="row">
+                            @foreach($programs as $program)
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="career_program_ids[]" value="{{ $program->id }}" id="program_{{ $program->id }}">
+                                        <label class="form-check-label" for="program_{{ $program->id }}">
+                                            {{ $program->name }}
+                                        </label>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Training Title</label>

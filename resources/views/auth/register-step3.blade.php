@@ -17,53 +17,27 @@
                             <!-- Helper for selection -->
                             <input type="hidden" name="fokus_karir" id="fokus_karir" required>
 
-                            <!-- Option 1 -->
-                            <div class="col-md-6">
-                                <div class="card h-100 career-card" onclick="selectCareer(this, 'Kuliah Plus Magang Kerja')">
-                                    <div class="card-body text-center p-4">
-                                        <div class="mb-3 text-primary"><i class="bi bi-briefcase fs-1"></i></div>
-                                        <h5 class="card-title fw-bold">Kuliah Plus Magang Kerja</h5>
-                                        <p class="card-text text-muted small">Cocok untuk kamu yang ingin lulus langsung siap kerja. Mendapatkan penempatan magang di perusahaan mitra sejak semester awal.</p>
-                                        <div class="check-icon mt-3 d-none"><i class="bi bi-check-circle-fill text-success fs-3"></i></div>
+                            @foreach($programs as $program)
+                                @php
+                                    // Assign icon based on name similarity (since DB doesn't store icon class)
+                                    $icon = 'bi-mortarboard-fill';
+                                    $color = 'text-primary';
+                                    if(str_contains($program->name, 'Wirausaha')) { $icon = 'bi-shop'; $color = 'text-success'; }
+                                    elseif(str_contains($program->name, 'Magang')) { $icon = 'bi-briefcase'; $color = 'text-primary'; }
+                                    elseif(str_contains($program->name, 'Skill')) { $icon = 'bi-laptop'; $color = 'text-danger'; }
+                                    elseif(str_contains($program->name, 'Creator') || str_contains($program->name, 'Affiliator')) { $icon = 'bi-share'; $color = 'text-warning'; }
+                                @endphp
+                                <div class="col-md-6">
+                                    <div class="card h-100 career-card" onclick="selectCareer(this, '{{ $program->name }}')">
+                                        <div class="card-body text-center p-4">
+                                            <div class="mb-3 {{ $color }}"><i class="bi {{ $icon }} fs-1"></i></div>
+                                            <h5 class="card-title fw-bold">{{ $program->name }}</h5>
+                                            <p class="card-text text-muted small">{{ $program->description ?? 'Program unggulan untuk karir masa depan.' }}</p>
+                                            <div class="check-icon mt-3 d-none"><i class="bi bi-check-circle-fill text-success fs-3"></i></div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <!-- Option 2 -->
-                            <div class="col-md-6">
-                                <div class="card h-100 career-card" onclick="selectCareer(this, 'Kuliah Plus Skill Academy')">
-                                    <div class="card-body text-center p-4">
-                                        <div class="mb-3 text-danger"><i class="bi bi-laptop fs-1"></i></div>
-                                        <h5 class="card-title fw-bold">Kuliah Plus Skill Academy</h5>
-                                        <p class="card-text text-muted small">Fokus pada sertifikasi dan keahlian teknis spesifik. Akses bootcamp dan pelatihan intensif (Coding, Desain, Bahasa).</p>
-                                        <div class="check-icon mt-3 d-none"><i class="bi bi-check-circle-fill text-success fs-3"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Option 3 -->
-                            <div class="col-md-6">
-                                <div class="card h-100 career-card" onclick="selectCareer(this, 'Kuliah Plus Affiliator/Creator')">
-                                    <div class="card-body text-center p-4">
-                                        <div class="mb-3 text-warning"><i class="bi bi-share fs-1"></i></div>
-                                        <h5 class="card-title fw-bold">Kuliah Plus Affiliator/Creator</h5>
-                                        <p class="card-text text-muted small">Untuk kamu yang ingin sukses di dunia digital & medsos. Pelatihan menjadi Content Creator, Digital Marketer dengan monetisasi.</p>
-                                        <div class="check-icon mt-3 d-none"><i class="bi bi-check-circle-fill text-success fs-3"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Option 4 -->
-                            <div class="col-md-6">
-                                <div class="card h-100 career-card" onclick="selectCareer(this, 'Kuliah Plus Wirausaha')">
-                                    <div class="card-body text-center p-4">
-                                        <div class="mb-3 text-success"><i class="bi bi-shop fs-1"></i></div>
-                                        <h5 class="card-title fw-bold">Kuliah Plus Wirausaha</h5>
-                                        <p class="card-text text-muted small">Bangun bisnis sendiri sejak mahasiswa. Inkubasi bisnis, mentoring dengan pengusaha sukses, dan akses ke jaringan pendanaan.</p>
-                                        <div class="check-icon mt-3 d-none"><i class="bi bi-check-circle-fill text-success fs-3"></i></div>
-                                    </div>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
 
                         @error('fokus_karir')

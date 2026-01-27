@@ -214,7 +214,8 @@ class StudentRegisterController extends Controller
              return redirect()->route('register.step2');
          }
 
-        return view('auth.register-step3');
+        $programs = \App\Models\CareerProgram::all();
+        return view('auth.register-step3', compact('programs'));
     }
 
     /**
@@ -223,7 +224,7 @@ class StudentRegisterController extends Controller
     public function storeStep3(Request $request)
     {
         $request->validate([
-            'fokus_karir' => ['required', 'string', 'in:Kuliah Plus Magang Kerja,Kuliah Plus Skill Academy,Kuliah Plus Affiliator/Creator,Kuliah Plus Wirausaha'],
+            'fokus_karir' => ['required', 'string', 'exists:career_programs,name'],
         ]);
 
         $registration = Auth::user()->registration;

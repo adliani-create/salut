@@ -18,12 +18,7 @@ class TrainingController extends Controller
 
     public function create()
     {
-        $programs = [
-            'Kuliah plus Magang Kerja',
-            'Kuliah Plus Skill Academy',
-            'Kuliah plus Affiliator & Creator',
-            'Kuliah Plus Wirausaha',
-        ];
+        $programs = \App\Models\CareerProgram::all();
         return view('admin.trainings.create', compact('programs'));
     }
 
@@ -31,7 +26,8 @@ class TrainingController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string',
-            'program' => 'required|string',
+            'career_program_ids' => 'required|array', // Allow multiple programs
+            'career_program_ids.*' => 'exists:career_programs,id',
             'instructor' => 'nullable|string',
             'date' => 'required|date',
             'time' => 'required',
@@ -39,18 +35,23 @@ class TrainingController extends Controller
             'description' => 'nullable|string',
         ]);
 
-        \App\Models\Training::create($validated);
+        // Create training - for 'program' column, we can store a string representation or the first selected program
+        // This maintains backward compatibility if 'program' column is still used elsewhere
+        $programs = \App\Models\CareerProgram::whereIn('id', $request->career_program_ids)->pluck('name')->toArray();
+        $validated['program'] = implode(', ', $programs);
+
+        $training = \App\Models\Training::create($validated);
+        
+        // Sync relationships
+        $training->careerPrograms()->sync($request->career_program_ids);
+
         return redirect()->route('admin.trainings.index')->with('success', 'Training scheduled successfully.');
     }
 
     public function edit(\App\Models\Training $training)
     {
-        $programs = [
-            'Kuliah plus Magang Kerja',
-            'Kuliah Plus Skill Academy',
-            'Kuliah plus Affiliator & Creator',
-            'Kuliah Plus Wirausaha',
-        ];
+        $programs = \App\Models\CareerProgram::all();
+        $training->load('careerPrograms'); // Load existing relations
         return view('admin.trainings.edit', compact('training', 'programs'));
     }
 
@@ -58,7 +59,8 @@ class TrainingController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string',
-            'program' => 'required|string',
+            'career_program_ids' => 'required|array',
+            'career_program_ids.*' => 'exists:career_programs,id',
             'instructor' => 'nullable|string',
             'date' => 'required|date',
             'time' => 'required',
@@ -66,7 +68,12 @@ class TrainingController extends Controller
             'description' => 'nullable|string',
         ]);
 
+        $programs = \App\Models\CareerProgram::whereIn('id', $request->career_program_ids)->pluck('name')->toArray();
+        $validated['program'] = implode(', ', $programs);
+
         $training->update($validated);
+        $training->careerPrograms()->sync($request->career_program_ids);
+        
         return redirect()->route('admin.trainings.index')->with('success', 'Training updated successfully.');
     }
 

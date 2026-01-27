@@ -18,7 +18,8 @@ class LmsMaterialController extends Controller
 
     public function create()
     {
-        return view('admin.lms_materials.create');
+        $programs = \App\Models\CareerProgram::all();
+        return view('admin.lms_materials.create', compact('programs'));
     }
 
     public function store(Request $request)
@@ -27,6 +28,8 @@ class LmsMaterialController extends Controller
             'title' => 'required|string',
             'type' => 'required|in:video,ebook',
             'file' => 'required|file|mimes:pdf,mp4,mkv,avi,doc,docx|max:20480', // limit 20MB
+            'thumbnail' => 'nullable|image|max:2048', // 2MB max for thumbnail
+            'duration' => 'nullable|string',
             'description' => 'nullable|string',
         ]);
 
@@ -35,13 +38,26 @@ class LmsMaterialController extends Controller
             $validated['file_path'] = $path;
         }
 
-        \App\Models\LmsMaterial::create($validated);
+        if ($request->hasFile('thumbnail')) {
+            $thumbPath = $request->file('thumbnail')->store('lms_thumbnails', 'public');
+            $validated['thumbnail'] = $thumbPath;
+        }
+
+        $material = \App\Models\LmsMaterial::create($validated);
+        
+        // Sync programs if provided
+        if ($request->has('career_program_ids')) {
+            $material->careerPrograms()->sync($request->career_program_ids);
+        }
+
         return redirect()->route('admin.lms-materials.index')->with('success', 'Material uploaded successfully.');
     }
 
     public function edit(\App\Models\LmsMaterial $lmsMaterial)
     {
-        return view('admin.lms_materials.edit', compact('lmsMaterial'));
+        $programs = \App\Models\CareerProgram::all();
+        $lmsMaterial->load('careerPrograms');
+        return view('admin.lms_materials.edit', compact('lmsMaterial', 'programs'));
     }
 
     public function update(Request $request, \App\Models\LmsMaterial $lmsMaterial)
@@ -50,6 +66,8 @@ class LmsMaterialController extends Controller
             'title' => 'required|string',
             'type' => 'required|in:video,ebook',
             'file' => 'nullable|file|mimes:pdf,mp4,mkv,avi,doc,docx|max:20480',
+            'thumbnail' => 'nullable|image|max:2048',
+            'duration' => 'nullable|string',
             'description' => 'nullable|string',
         ]);
 
@@ -59,7 +77,18 @@ class LmsMaterialController extends Controller
             $validated['file_path'] = $path;
         }
 
+        if ($request->hasFile('thumbnail')) {
+            $thumbPath = $request->file('thumbnail')->store('lms_thumbnails', 'public');
+            $validated['thumbnail'] = $thumbPath;
+        }
+
         $lmsMaterial->update($validated);
+        
+        // Sync programs if provided
+        if ($request->has('career_program_ids')) {
+            $lmsMaterial->careerPrograms()->sync($request->career_program_ids);
+        }
+
         return redirect()->route('admin.lms-materials.index')->with('success', 'Material updated successfully.');
     }
 

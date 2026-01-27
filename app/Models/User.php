@@ -41,6 +41,13 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
+    public function completedMaterials()
+    {
+        return $this->belongsToMany(LmsMaterial::class, 'lms_material_user')
+                    ->withPivot('completed_at')
+                    ->withTimestamps();
+    }
+
     /**
      * Check if user is admin
      */

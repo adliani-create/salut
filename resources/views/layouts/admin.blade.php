@@ -172,6 +172,11 @@
                     </a>
                 </div>
                 
+                <!-- Akademik / Transkrip -->
+                <a href="{{ route('admin.academic.index') }}" class="list-group-item list-group-item-action bg-transparent {{ request()->routeIs('admin.academic.*') ? 'active' : '' }}">
+                    <i class="bi bi-mortarboard-fill me-2"></i>Akademik (Transkrip)
+                </a>
+                
                 <!-- Keuangan Collapsible -->
                 <a href="#submenuKeuangan" data-bs-toggle="collapse" class="list-group-item list-group-item-action bg-transparent d-flex justify-content-between align-items-center" aria-expanded="{{ request()->routeIs('admin.billings.*') ? 'true' : 'false' }}">
                     <span><i class="bi bi-wallet2 me-2"></i>Keuangan</span>

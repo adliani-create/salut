@@ -14,11 +14,37 @@
                     <input type="text" name="title" class="form-control" required>
                 </div>
                 <div class="mb-3">
+                    <label class="form-label">Program Salut (Target Audience)</label>
+                    <div class="card p-3 bg-light">
+                        <div class="row">
+                            @foreach($programs as $program)
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="career_program_ids[]" value="{{ $program->id }}" id="program_{{ $program->id }}">
+                                        <label class="form-check-label" for="program_{{ $program->id }}">
+                                            {{ $program->name }}
+                                        </label>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
                     <label class="form-label">Type</label>
                     <select name="type" class="form-select" required>
                         <option value="video">Video</option>
                         <option value="ebook">E-Book (PDF/Doc)</option>
                     </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Thumbnail (Optional)</label>
+                    <input type="file" name="thumbnail" class="form-control" accept="image/*">
+                    <div class="form-text">Cover image for the material. Max 2MB.</div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Duration / Metadata</label>
+                    <input type="text" name="duration" class="form-control" placeholder='e.g. "10 Menit", "50 Halaman"'>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">File</label>

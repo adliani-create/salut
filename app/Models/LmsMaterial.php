@@ -14,10 +14,19 @@ class LmsMaterial extends Model
         'type',
         'file_path',
         'description',
+        'thumbnail',
+        'duration',
     ];
 
     public function careerPrograms()
     {
         return $this->belongsToMany(CareerProgram::class, 'career_program_lms_material');
+    }
+
+    public function completions()
+    {
+        return $this->belongsToMany(User::class, 'lms_material_user')
+                    ->withPivot('completed_at')
+                    ->withTimestamps();
     }
 }
