@@ -3,15 +3,32 @@
 @section('title', 'Registrasi Mahasiswa')
 
 @section('content')
+@section('content')
 <div class="row">
     <div class="col-md-12">
-        <div class="card shadow-sm border-0 mb-4">
-            <div class="card-header bg-white py-3">
-                <h5 class="mb-0 text-primary fw-bold">Daftar Registrasi Mahasiswa Baru</h5>
+        
+        <!-- Header & Search -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h4 class="fw-bold m-0 text-dark">Registrasi Mahasiswa</h4>
+                <div class="text-muted small">Verifikasi pendaftaran mahasiswa baru.</div>
             </div>
-            <div class="card-body">
+            <div>
+                <form action="{{ route('admin.registrations.index') }}" method="GET">
+                    <div class="input-group shadow-sm rounded-pill overflow-hidden bg-white" style="width: 450px;">
+                        <span class="input-group-text bg-white border-0 ps-3 pe-0"><i class="bi bi-search text-muted"></i></span>
+                        <input type="text" name="q" class="form-control border-0 ps-2" placeholder="Cari Nama atau Email..." value="{{ $search ?? '' }}">
+                        <button class="btn btn-primary px-4 fw-bold" type="submit">Cari</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card shadow-sm border-0 mb-4 rounded-4">
+            <!-- Removed Card Header Title since we have Page Header now -->
+            <div class="card-body p-0">
                 @if(session('success'))
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <div class="alert alert-success alert-dismissible fade show m-3" role="alert">
                         {{ session('success') }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
@@ -66,6 +83,10 @@
                             @endforelse
                         </tbody>
                     </table>
+                </div> <!-- End Table Responsive -->
+
+                <div class="px-4 py-3 border-top">
+                    {{ $registrations->links('vendor.pagination.custom') }}
                 </div>
             </div>
         </div>

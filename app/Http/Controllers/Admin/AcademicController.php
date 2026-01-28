@@ -22,6 +22,7 @@ class AcademicController extends Controller
                 $query->where('name', 'like', "%{$search}%")
                       ->orWhere('nim', 'like', "%{$search}%");
             })
+            ->with('academicRecords')
             ->paginate(10);
 
         return view('admin.academic.index', compact('students', 'search'));
@@ -59,10 +60,25 @@ class AcademicController extends Controller
             // Matches: MATA4112 Aljabar Linear Elementer I 4 A
             // Regex update: Allow for more flexible spacing
             // Matches: Code (4 char + numbers), Name, SKS (digit), Grade (A-E with/without +/-)
-            if (preg_match('/([A-Z]{4}\d{1,6})\s+(.+?)\s+(\d)\s+([A-E][+-]?)/', $line, $matches)) {
-                
-                // Exclude if regex accidentally matched a header like "KODE MATA KULIAH SKS NILAI"
+            $line = trim($line);
+            $line = trim($line);
+            // Regex 1: Standard with spaces
+            // Matches: MATA4112 Aljabar Linear Elementer I 4 A (or 4.0 or 4,0)
+            if (preg_match('/([A-Z]{4}\d{1,6})\s+(.+?)\s+(\d+(?:[.,]\d+)?)\s+([A-E][+-]?)/', $line, $matches)) {
                 if (strlen($matches[2]) > 2 && !str_contains(strtoupper($matches[2]), 'MATA KULIAH')) {
+                     $courses[] = [
+                        'code' => $matches[1],
+                        'name' => trim($matches[2]),
+                        'sks' => $matches[3],
+                        'grade' => $matches[4],
+                    ];
+                }
+            } 
+            // Regex 2: Squeezed SKS/Grade (common in some PDF columns)
+            // Matches: MATA4112 NameOfCourse3A (or similar where name ends, then digit, then grade)
+            // Strategy: Capture Code, then greedy name until last digit followed by Grade
+            elseif (preg_match('/([A-Z]{4}\d{1,6})\s+(.+?)(\d+(?:[.,]\d+)?)\s*([A-E][+-]?)$/', $line, $matches)) {
+                 if (strlen($matches[2]) > 2 && !str_contains(strtoupper($matches[2]), 'MATA KULIAH')) {
                      $courses[] = [
                         'code' => $matches[1],
                         'name' => trim($matches[2]),
@@ -79,6 +95,7 @@ class AcademicController extends Controller
             'pdf_url' => Storage::url($path),
             'pdf_path' => $path, // Pass raw path to store hidden
             'courses' => $courses, // Pre-filled data
+            'total_sks' => $request->total_sks,
             'raw_text' => $text, // Debugging
         ]);
     }
@@ -91,13 +108,13 @@ class AcademicController extends Controller
             'courses' => 'array',
             'courses.*.code' => 'nullable|string',
             'courses.*.name' => 'required|string',
-            'courses.*.sks' => 'required|integer',
+            'courses.*.sks' => 'required|numeric',
             'courses.*.grade' => 'required|string',
         ]);
 
         // Calculate IPK/IPS Logic (Simplified)
         // IPS = Sum(SKS * Point) / Sum(SKS)
-        $totalSks = 0;
+        $calcTotalSks = 0;
         $totalPoints = 0;
         
         $gradeMap = [
@@ -108,21 +125,30 @@ class AcademicController extends Controller
         ];
 
         foreach ($request->courses as $c) {
-            $sks = (int)$c['sks'];
+            $sks = (float)$c['sks']; // Cast to float to interpret 3.0 correctly or decimal SKS
             $grade = strtoupper($c['grade']);
             $point = $gradeMap[$grade] ?? 0.0;
             
-            $totalSks += $sks;
+            $calcTotalSks += $sks;
             $totalPoints += ($sks * $point);
         }
 
-        $ips = $totalSks > 0 ? round($totalPoints / $totalSks, 2) : 0;
+        // Use manual Default SKS if provided, otherwise calculated
+        $finalSks = $request->filled('total_sks') ? (float)$request->total_sks : $calcTotalSks;
+        
+        // IPS Calculation: Points / Calculated SKS (Wait, usually IPS is based on the COURSES sks)
+        // If user manually inputs Total SKS, generally that means the COURSES might be incomplete but they want the Record to say X SKS.
+        // But IPS needs connection to Grade Points. 
+        // Let's stick to: IPS = (Sum(SKS*Grade)) / TotalSKS. 
+        // If we use Manual SKS, we divide by Manual SKS.
+        
+        $ips = $finalSks > 0 ? round($totalPoints / $finalSks, 2) : 0;
 
         // Create/Update Academic Record
         $record = AcademicRecord::updateOrCreate(
             ['user_id' => $user->id, 'semester' => $request->semester],
             [
-                'sks' => $totalSks,
+                'sks' => $finalSks,
                 'ips' => $ips,
                 'ipk' => $ips, // For now assuming IPK = IPS if simple import, or needs full recalc logic
                 'transcript_file' => $request->pdf_path
@@ -145,5 +171,30 @@ class AcademicController extends Controller
         }
 
         return redirect()->route('admin.students.index')->with('success', 'Data akademik berhasil disimpan.');
+    }
+
+    public function uploadKtpu(User $user)
+    {
+        return view('admin.academic.upload_ktpu', compact('user'));
+    }
+
+    public function storeKtpu(Request $request, User $user)
+    {
+        $request->validate([
+            'semester' => 'required',
+            'ktpu_file' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
+        ]);
+
+        $file = $request->file('ktpu_file');
+        $path = $file->store('ktpu_files', 'public');
+
+        AcademicRecord::updateOrCreate(
+            ['user_id' => $user->id, 'semester' => $request->semester],
+            [
+                'ktpu_file' => $path
+            ]
+        );
+
+        return redirect()->route('admin.academic.index')->with('success', 'Kartu Ujian (KTPU) berhasil diupload.');
     }
 }

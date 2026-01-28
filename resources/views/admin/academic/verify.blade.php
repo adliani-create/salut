@@ -23,6 +23,10 @@
         @csrf
         <input type="hidden" name="semester" value="{{ $semester }}">
         <input type="hidden" name="pdf_path" value="{{ $pdf_path }}">
+        <div class="mb-3">
+            <label class="fw-bold">Total SKS (Manual):</label>
+            <input type="number" name="total_sks" class="form-control d-inline-block w-auto ms-2" value="{{ $total_sks ?? '' }}">
+        </div>
 
         <div class="row g-3" style="min-height: 80vh;">
             <!-- Left: PDF Preview -->
@@ -46,7 +50,7 @@
                                     <th style="width: 15%">Kode</th>
                                     <th>Mata Kuliah</th>
                                     <th style="width: 10%">SKS</th>
-                                    <th style="width: 15%">Nilai</th>
+                                    <th style="width: 20%">Nilai</th>
                                     <th style="width: 5%"></th>
                                 </tr>
                             </thead>
@@ -55,7 +59,7 @@
                                 <tr>
                                     <td><input type="text" name="courses[{{$index}}][code]" class="form-control form-control-sm" value="{{ $c['code'] }}"></td>
                                     <td><input type="text" name="courses[{{$index}}][name]" class="form-control form-control-sm" value="{{ $c['name'] }}" required></td>
-                                    <td><input type="number" name="courses[{{$index}}][sks]" class="form-control form-control-sm sks-input" value="{{ $c['sks'] }}" required></td>
+                                    <td><input type="text" inputmode="numeric" name="courses[{{$index}}][sks]" class="form-control form-control-sm sks-input" value="{{ $c['sks'] }}" required></td>
                                     <td>
                                         <select name="courses[{{$index}}][grade]" class="form-select form-select-sm" required>
                                             @foreach(['A','A-','B+','B','B-','C+','C','C-','D','E'] as $g)
@@ -99,7 +103,7 @@
             <tr>
                 <td><input type="text" name="courses[${rowIndex}][code]" class="form-control form-control-sm"></td>
                 <td><input type="text" name="courses[${rowIndex}][name]" class="form-control form-control-sm" required></td>
-                <td><input type="number" name="courses[${rowIndex}][sks]" class="form-control form-control-sm sks-input" value="3" required></td>
+                <td><input type="text" inputmode="numeric" name="courses[${rowIndex}][sks]" class="form-control form-control-sm sks-input" value="3" required></td>
                 <td>
                     <select name="courses[${rowIndex}][grade]" class="form-select form-select-sm" required>
                         <option value="A">A</option>
@@ -109,6 +113,7 @@
                         <option value="B-">B-</option>
                         <option value="C+">C+</option>
                         <option value="C">C</option>
+                        <option value="C-">C-</option>
                         <option value="D">D</option>
                         <option value="E">E</option>
                     </select>

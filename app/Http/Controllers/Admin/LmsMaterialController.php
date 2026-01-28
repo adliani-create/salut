@@ -26,7 +26,8 @@ class LmsMaterialController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string',
-            'type' => 'required|in:video,ebook',
+            'title' => 'required|string',
+            'type' => 'required|in:video,ebook,assignment',
             'file' => 'required|file|mimes:pdf,mp4,mkv,avi,doc,docx|max:20480', // limit 20MB
             'thumbnail' => 'nullable|image|max:2048', // 2MB max for thumbnail
             'duration' => 'nullable|string',
@@ -64,7 +65,8 @@ class LmsMaterialController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string',
-            'type' => 'required|in:video,ebook',
+            'title' => 'required|string',
+            'type' => 'required|in:video,ebook,assignment',
             'file' => 'nullable|file|mimes:pdf,mp4,mkv,avi,doc,docx|max:20480',
             'thumbnail' => 'nullable|image|max:2048',
             'duration' => 'nullable|string',

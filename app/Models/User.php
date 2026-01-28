@@ -77,6 +77,11 @@ class User extends Authenticatable
         return $this->hasMany(AuditLog::class, 'target_id')->where('target_model', 'User');
     }
 
+    public function academicRecords()
+    {
+        return $this->hasMany(AcademicRecord::class);
+    }
+
 
     /**
      * The attributes that should be hidden for serialization.

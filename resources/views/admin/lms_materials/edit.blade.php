@@ -15,8 +15,15 @@
                     <input type="text" name="title" class="form-control" value="{{ $lmsMaterial->title }}" required>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Program Salut (Target Audience)</label>
+                    <label class="form-label">Program Sasaran (Target Audience)</label>
                     <div class="card p-3 bg-light">
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="checkAllPrograms">
+                            <label class="form-check-label fw-bold" for="checkAllPrograms">
+                                ⚪ Semua Program (General)
+                            </label>
+                        </div>
+                        <hr class="my-2">
                         <div class="row">
                             @foreach($programs as $program)
                                 <div class="col-md-6">
@@ -33,10 +40,11 @@
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Type</label>
+                    <label class="form-label">Kategori</label>
                     <select name="type" class="form-select" required>
                         <option value="video" {{ $lmsMaterial->type == 'video' ? 'selected' : '' }}>Video</option>
                         <option value="ebook" {{ $lmsMaterial->type == 'ebook' ? 'selected' : '' }}>E-Book (PDF/Doc)</option>
+                        <option value="assignment" {{ $lmsMaterial->type == 'assignment' ? 'selected' : '' }}>Tugas</option>
                     </select>
                 </div>
                 <div class="mb-3">
@@ -66,4 +74,13 @@
         </div>
     </div>
 </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('checkAllPrograms').addEventListener('change', function() {
+        let checkboxes = document.querySelectorAll('input[name="career_program_ids[]"]');
+        checkboxes.forEach(cb => cb.checked = this.checked);
+    });
+</script>
 @endsection

@@ -16,17 +16,24 @@ class UserController extends Controller
         return view('admin.users.index', compact('users'));
     }
 
-    public function students()
+    public function students(Request $request)
     {
-        // Assuming 'mahasiswa' is the role name or criteria. 
-        // Adapting query to look for users with role 'mahasiswa' or role_id corresponding to it.
-        // Based on previous context, we have a role relationship.
+        $search = $request->get('q');
+        
         $students = \App\Models\User::whereHas('role', function($q) {
             $q->where('name', 'mahasiswa');
         })->where('status', 'active') // Only show active students
-          ->with('registration')->latest()->get();
+          ->when($search, function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                      ->orWhere('nim', 'like', "%{$search}%")
+                      ->orWhere('email', 'like', "%{$search}%");
+                });
+          })
+          ->with('registration')->latest()
+          ->paginate(10);
         
-        return view('admin.users.students', compact('students'));
+        return view('admin.users.students', compact('students', 'search'));
     }
 
     public function create()

@@ -8,14 +8,22 @@ use Illuminate\Http\Request;
 
 class RegistrationController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $search = $request->get('q');
         // Acts as an Inbox: Only show pending registrations
         $registrations = Registration::with('user')
             ->where('status', 'pending')
+            ->when($search, function ($query) use ($search) {
+                $query->whereHas('user', function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                      ->orWhere('email', 'like', "%{$search}%");
+                });
+            })
             ->orderBy('created_at', 'desc')
-            ->get();
-        return view('admin.registrations.index', compact('registrations'));
+            ->paginate(10);
+            
+        return view('admin.registrations.index', compact('registrations', 'search'));
     }
 
     public function show(Registration $registration)

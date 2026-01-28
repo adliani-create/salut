@@ -13,9 +13,10 @@ class AcademicRecord extends Model
         'user_id',
         'semester',
         'sks',
-        'ipk',
+        'ipk', // If separate column
         'ips',
         'transcript_file',
+        'ktpu_file',
     ];
 
     public function user()

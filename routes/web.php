@@ -96,6 +96,10 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
     Route::get('admin/academic/{user}/upload', [App\Http\Controllers\Admin\AcademicController::class, 'upload'])->name('admin.academic.upload');
     Route::post('admin/academic/{user}/parse', [App\Http\Controllers\Admin\AcademicController::class, 'parse'])->name('admin.academic.parse');
     Route::post('admin/academic/{user}/store', [App\Http\Controllers\Admin\AcademicController::class, 'store'])->name('admin.academic.store');
+    
+    // KTPU Routes
+    Route::get('admin/academic/{user}/ktpu/upload', [App\Http\Controllers\Admin\AcademicController::class, 'uploadKtpu'])->name('admin.academic.ktpu.upload');
+    Route::post('admin/academic/{user}/ktpu/store', [App\Http\Controllers\Admin\AcademicController::class, 'storeKtpu'])->name('admin.academic.ktpu.store');
     // Removed old singular webinar/training routes line if duplicated, but sticking to resource above.
 });
 

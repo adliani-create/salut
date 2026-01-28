@@ -16,6 +16,8 @@ class Training extends Model
         'date',
         'time',
         'location',
+        'link',
+        'poster',
         'description',
     ];
 

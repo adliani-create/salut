@@ -147,8 +147,8 @@
                 </div>
                 
                 @if($billings->hasPages())
-                <div class="p-3">
-                    {{ $billings->links() }}
+                <div class="px-4 py-3 border-top">
+                    {{ $billings->links('vendor.pagination.custom') }}
                 </div>
                 @endif
             </div>

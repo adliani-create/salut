@@ -7,11 +7,18 @@
     <h2>Schedule Training</h2>
     <div class="card">
         <div class="card-body">
-            <form action="{{ route('admin.trainings.store') }}" method="POST">
+            <form action="{{ route('admin.trainings.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="mb-3">
-                    <label class="form-label">Program Salut (Target Audience)</label>
+                    <label class="form-label">Program Sasaran (Target Audience)</label>
                     <div class="card p-3 bg-light">
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="checkAllPrograms">
+                            <label class="form-check-label fw-bold" for="checkAllPrograms">
+                                ⚪ Semua Program (General)
+                            </label>
+                        </div>
+                        <hr class="my-2">
                         <div class="row">
                             @foreach($programs as $program)
                                 <div class="col-md-6">
@@ -44,9 +51,19 @@
                         <input type="time" name="time" class="form-control" required>
                     </div>
                 </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Lokasi / Tempat Pelaksanaan</label>
+                        <input type="text" name="location" class="form-control" placeholder="e.g. Zoom Meeting / Aula Utama" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Link Meeting (Optional)</label>
+                        <input type="url" name="link" class="form-control" placeholder="https://zoom.us/...">
+                    </div>
+                </div>
                 <div class="mb-3">
-                    <label class="form-label">Location (Address or Link)</label>
-                    <input type="text" name="location" class="form-control" required>
+                    <label class="form-label">Poster Event (Optional)</label>
+                    <input type="file" name="poster" class="form-control" accept="image/*">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Description</label>
@@ -57,4 +74,22 @@
         </div>
     </div>
 </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('checkAllPrograms').addEventListener('change', function() {
+        let checkboxes = document.querySelectorAll('input[name="career_program_ids[]"]');
+        checkboxes.forEach(cb => cb.checked = this.checked);
+    });
+</script>
+    </div>
+</div>
+
+<script>
+    document.getElementById('checkAllPrograms').addEventListener('change', function() {
+        let checkboxes = document.querySelectorAll('input[name="career_program_ids[]"]');
+        checkboxes.forEach(cb => cb.checked = this.checked);
+    });
+</script>
 @endsection

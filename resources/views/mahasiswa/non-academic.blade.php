@@ -126,7 +126,79 @@
 
                             <!-- Action -->
                             <div class="col-md-3 p-3 d-flex align-items-center justify-content-center">
-                                <button class="btn btn-outline-primary rounded-pill fw-bold w-100">Daftar</button>
+                                <button class="btn btn-outline-primary rounded-pill fw-bold w-100" data-bs-toggle="modal" data-bs-target="#trainingModal{{ $training->id }}">
+                                    Lihat Detail
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detail Modal -->
+                <div class="modal fade" id="trainingModal{{ $training->id }}" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                        <div class="modal-content overflow-hidden rounded-4 border-0">
+                            <div class="row g-0">
+                                <!-- Left: Poster -->
+                                <div class="col-md-5 bg-dark d-flex align-items-center justify-content-center">
+                                    @if($training->poster)
+                                        <img src="{{ asset('storage/' . $training->poster) }}" class="w-100 h-100 object-fit-cover" style="min-height: 400px;" alt="{{ $training->title }}">
+                                    @else
+                                        <div class="text-center text-white opacity-50 p-5">
+                                            <i class="bi bi-image fs-1 mb-3"></i>
+                                            <p class="small">Poster belum tersedia</p>
+                                        </div>
+                                    @endif
+                                </div>
+                                
+                                <!-- Right: Info -->
+                                <div class="col-md-7">
+                                    <div class="modal-header border-0 pb-0">
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body p-4 pt-2">
+                                        <span class="badge bg-primary bg-opacity-10 text-primary mb-2 rounded-pill px-3">Webinar</span>
+                                        <h4 class="fw-bold mb-3">{{ $training->title }}</h4>
+                                        
+                                        <div class="mb-4">
+                                            <div class="d-flex align-items-center mb-2 text-muted">
+                                                <i class="bi bi-person-circle me-3 fs-5 text-primary"></i>
+                                                <div>
+                                                    <small class="d-block fw-bold text-dark">Pembicara</small>
+                                                    <span>{{ $training->instructor ?? 'TBA' }}</span>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center mb-2 text-muted">
+                                                <i class="bi bi-calendar-event me-3 fs-5 text-primary"></i>
+                                                <div>
+                                                    <small class="d-block fw-bold text-dark">Waktu</small>
+                                                    <span>{{ \Carbon\Carbon::parse($training->date)->format('d M Y') }}, {{ $training->time }} WIB</span>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center text-muted">
+                                                <i class="bi bi-geo-alt me-3 fs-5 text-danger"></i>
+                                                <div>
+                                                    <small class="d-block fw-bold text-dark">Tempat</small>
+                                                    <span>{{ $training->location }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <p class="text-muted small mb-4" style="line-height: 1.6;">
+                                            {{ $training->description }}
+                                        </p>
+
+                                        <div class="d-grid">
+                                            @if($training->link)
+                                                <a href="{{ $training->link }}" target="_blank" class="btn btn-primary rounded-pill fw-bold py-2">
+                                                    Daftar Sekarang <i class="bi bi-arrow-right-short fs-5 align-middle"></i>
+                                                </a>
+                                            @else
+                                                <button class="btn btn-secondary rounded-pill fw-bold py-2" disabled>Link Belum Tersedia</button>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
