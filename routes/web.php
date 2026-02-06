@@ -23,7 +23,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::middleware(['auth', 'is_admin'])->group(function () {
     Route::get('/admin/dashboard', function () {
-        return view('admin.home');
+        return 'Admin Dashboard';
     })->name('admin.dashboard');
 
     // Master Data
@@ -34,16 +34,16 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
     Route::resource('admin/semester', App\Http\Controllers\Admin\SemesterController::class, ['as' => 'admin']);
 });
 
-// Yayasan Routes
-Route::middleware(['auth', 'role:yayasan'])->group(function () {
-    Route::get('/yayasan/dashboard', function () {
-        return view('yayasan.home');
-    })->name('yayasan.dashboard');
+// Mitra Routes
+Route::middleware(['auth', 'role:mitra'])->group(function () {
+    Route::get('/mitra/dashboard', function () {
+        return 'Mitra Dashboard';
+    })->name('mitra.dashboard');
 });
 
-// Staff Routes
-Route::middleware(['auth', 'role:staff'])->group(function () {
-    Route::get('/staff/dashboard', function () {
-        return view('staff.home');
-    })->name('staff.dashboard');
+// Affiliator Routes
+Route::middleware(['auth', 'role:affiliator'])->group(function () {
+    Route::get('/affiliator/dashboard', function () {
+        return 'Affiliator Dashboard';
+    })->name('affiliator.dashboard');
 });

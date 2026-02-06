@@ -49,6 +49,22 @@ class User extends Authenticatable
     }
 
     /**
+     * Check if user is mitra
+     */
+    public function isMitra(): bool
+    {
+        return $this->role && $this->role->name === 'mitra';
+    }
+
+    /**
+     * Check if user is affiliator
+     */
+    public function isAffiliator(): bool
+    {
+        return $this->role && $this->role->name === 'affiliator';
+    }
+
+    /**
      * The attributes that should be hidden for serialization.
      *
      * @var array<int, string>

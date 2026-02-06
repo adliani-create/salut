@@ -63,11 +63,17 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        // Get or create the mahasiswa role
+        $mahasiswaRole = \App\Models\Role::firstOrCreate(
+            ['name' => 'mahasiswa'],
+            ['label' => 'Mahasiswa', 'redirect_to' => 'home']
+        );
+
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'role' => 'mahasiswa', // Explicitly set role
+            'role_id' => $mahasiswaRole->id,
         ]);
     }
 }
