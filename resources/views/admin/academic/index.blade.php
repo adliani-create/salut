@@ -30,8 +30,8 @@
                         <!-- 1. Info Mahasiswa -->
                         <div class="col-md-3 d-flex align-items-center border-end-md">
                             <div class="avatar-placeholder bg-light text-primary rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 me-3 shadow-sm" style="width: 50px; height: 50px; font-size: 1.2rem;">
-                                @if($student->avatar)
-                                    <img src="{{ asset('storage/'.$student->avatar) }}" class="w-100 h-100 rounded-circle object-fit-cover" alt="{{ $student->name }}">
+                                @if($student->photo)
+                                    <img src="{{ asset('storage/'.$student->photo) }}" class="w-100 h-100 rounded-circle object-fit-cover" alt="{{ $student->name }}">
                                 @else
                                     <span class="fw-bold">{{ strtoupper(substr($student->name, 0, 2)) }}</span>
                                 @endif

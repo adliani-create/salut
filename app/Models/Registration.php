@@ -19,7 +19,8 @@ class Registration extends Model
         'fakultas',
         'prodi',
         'jalur_pendaftaran',
-        'fokus_karir'
+        'fokus_karir',
+        'address'
     ];
 
     protected $casts = [

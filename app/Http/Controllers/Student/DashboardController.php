@@ -55,16 +55,30 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         
-        $academicRecords = AcademicRecord::where('user_id', $user->id)->get();
-        // Fallback mock
-        if ($academicRecords->isEmpty()) {
-            $academicRecords = [
-                 (object)['semester' => '2024.1', 'sks' => 20, 'ips' => 3.50, 'ipk' => 3.50],
-                 (object)['semester' => '2024.2', 'sks' => 22, 'ips' => 3.80, 'ipk' => 3.65],
-            ];
-        }
+        // Fetch academic records with grades
+        $academicRecords = AcademicRecord::where('user_id', $user->id)
+            ->with('grades') // Eager load grades
+            ->get();
+        
+        // Calculate Summary Stats from Real Data
+        $totalSks = $academicRecords->sum('sks');
+        
+        // Calculate Grand Total Points for IPK
+        $grandTotalPoints = $academicRecords->reduce(function($carry, $sem) {
+             return $carry + $sem->grades->sum(function($course) {
+                 return $course->score * $course->sks;
+             });
+        }, 0);
+        
+        $ipk = $totalSks > 0 ? $grandTotalPoints / $totalSks : 0;
+        
+        // Determine Predicate
+        $predicate = '-';
+        if ($ipk >= 3.51) $predicate = 'Dengan Pujian (Cumlaude)';
+        elseif ($ipk >= 3.00) $predicate = 'Sangat Memuaskan';
+        elseif ($ipk > 0) $predicate = 'Memuaskan';
 
-        return view('mahasiswa.academic', compact('user', 'academicRecords'));
+        return view('mahasiswa.academic', compact('user', 'academicRecords', 'ipk', 'totalSks', 'predicate'));
     }
 
     public function nonAcademic()

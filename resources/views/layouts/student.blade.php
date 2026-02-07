@@ -117,6 +117,30 @@
                 max-width: 120px;
             }
         }
+
+        /* Dropdown Animation */
+        .animate {
+            animation-duration: 0.3s;
+            -webkit-animation-duration: 0.3s;
+            animation-fill-mode: both;
+            -webkit-animation-fill-mode: both;
+        }
+
+        @keyframes slideIn {
+            0% {
+                transform: translateY(1rem);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0rem);
+                opacity: 1;
+            }
+        }
+
+        .slideIn {
+            -webkit-animation-name: slideIn;
+            animation-name: slideIn;
+        }
     </style>
 </head>
 <body>
@@ -189,16 +213,34 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle second-text fw-bold" href="#" id="navbarDropdown"
+                            <a class="nav-link dropdown-toggle second-text fw-bold d-flex align-items-center gap-2" href="#" id="navbarDropdown"
                                 role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-person-circle me-2"></i>{{ Auth::user()->name }}
+                                <span class="d-none d-md-block text-dark">{{ Auth::user()->name }}</span>
+                                @if(Auth::user()->photo)
+                                    <img src="{{ asset('storage/' . Auth::user()->photo) }}?v={{ time() }}" alt="" class="rounded-circle object-fit-cover shadow-sm border" width="40" height="40">
+                                @else
+                                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center shadow-sm border" style="width: 40px; height: 40px; font-size: 1rem;">
+                                        {{ strtoupper(substr(Auth::user()->name ?? 'U', 0, 1)) }}
+                                    </div>
+                                @endif
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Edit Profile</a></li>
+                            <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg p-2 mt-2 rounded-4 animate slideIn" aria-labelledby="navbarDropdown">
                                 <li>
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                                    <div class="px-3 py-2">
+                                        <div class="fw-bold text-dark">{{ Auth::user()->name }}</div>
+                                        <div class="small text-muted text-truncate" style="max-width: 150px;">{{ Auth::user()->email }}</div>
+                                    </div>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item rounded-3 py-2" href="{{ route('profile.edit') }}">
+                                        <i class="bi bi-gear me-2 text-primary"></i> Edit Profil
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item rounded-3 py-2 text-danger" href="{{ route('logout') }}"
                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                        Logout
+                                        <i class="bi bi-box-arrow-right me-2"></i> Logout
                                     </a>
                                 </li>
                             </ul>
