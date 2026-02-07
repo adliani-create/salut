@@ -78,9 +78,7 @@
         <!-- Chart Section -->
         <div class="col-lg-5">
             <div class="card border-0 shadow-sm h-100">
-                <div class="card-header bg-white border-0 py-3">
-                     <h5 class="fw-bold mb-0 text-primary">Sebaran Program Pilihan</h5>
-                </div>
+                     <h5 class="fw-bold mb-0 text-primary">Sebaran Program Karir</h5>
                 <div class="card-body">
                     <div style="height: 300px; position: relative;">
                         <canvas id="programChart"></canvas>

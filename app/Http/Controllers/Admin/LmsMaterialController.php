@@ -28,7 +28,7 @@ class LmsMaterialController extends Controller
             'title' => 'required|string',
             'title' => 'required|string',
             'type' => 'required|in:video,ebook,assignment',
-            'file' => 'required|file|mimes:pdf,mp4,mkv,avi,doc,docx|max:20480', // limit 20MB
+            'file' => 'required|file|mimes:pdf,mp4,mkv,avi,doc,docx|max:1048576', // limit 1GB
             'thumbnail' => 'nullable|image|max:2048', // 2MB max for thumbnail
             'duration' => 'nullable|string',
             'description' => 'nullable|string',
@@ -67,7 +67,7 @@ class LmsMaterialController extends Controller
             'title' => 'required|string',
             'title' => 'required|string',
             'type' => 'required|in:video,ebook,assignment',
-            'file' => 'nullable|file|mimes:pdf,mp4,mkv,avi,doc,docx|max:20480',
+            'file' => 'nullable|file|mimes:pdf,mp4,mkv,avi,doc,docx|max:1048576',
             'thumbnail' => 'nullable|image|max:2048',
             'duration' => 'nullable|string',
             'description' => 'nullable|string',

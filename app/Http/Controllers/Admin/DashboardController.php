@@ -34,11 +34,12 @@ class DashboardController extends Controller
             $q->where('name', 'mahasiswa');
         })->where('status', 'active')->count();
 
-        // 2. Program Pilihan (Group by jalur_pendaftaran from registrations)
+        // 2. Program Pilihan (Group by fokus_karir from registrations)
         // We join with users to ensure we only count registered users
-        $program_distribution = Registration::select('jalur_pendaftaran', DB::raw('count(*) as total'))
-            ->groupBy('jalur_pendaftaran')
-            ->pluck('total', 'jalur_pendaftaran');
+        $program_distribution = Registration::select('fokus_karir', DB::raw('count(*) as total'))
+            ->whereNotNull('fokus_karir')
+            ->groupBy('fokus_karir')
+            ->pluck('total', 'fokus_karir');
 
         // 3. Keuangan Pending (Billing Status Pending)
         $pending_bills_count = Billing::where('status', 'pending')->count();
