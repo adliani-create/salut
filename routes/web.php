@@ -16,9 +16,9 @@ use Illuminate\Support\Facades\Route;
 // Ajax Routes
 Route::get('ajax/fakultas/{id}/prodis', [App\Http\Controllers\AjaxController::class, 'getProdisByFakultas'])->name('ajax.prodis');
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('landing');
+// Public Routes
+Route::get('/', [App\Http\Controllers\PublicController::class, 'index'])->name('landing');
+Route::get('/berita/{slug}', [App\Http\Controllers\PublicController::class, 'showNews'])->name('public.news.show');
 
 // Custom Registration Routes
 Route::get('register', [App\Http\Controllers\Auth\StudentRegisterController::class, 'showLanding'])->name('register');
@@ -101,7 +101,13 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
     // KTPU Routes
     Route::get('admin/academic/{user}/ktpu/upload', [App\Http\Controllers\Admin\AcademicController::class, 'uploadKtpu'])->name('admin.academic.ktpu.upload');
     Route::post('admin/academic/{user}/ktpu/store', [App\Http\Controllers\Admin\AcademicController::class, 'storeKtpu'])->name('admin.academic.ktpu.store');
-    // Removed old singular webinar/training routes line if duplicated, but sticking to resource above.
+    
+    // CMS User Interface
+    Route::get('admin/home-settings', [App\Http\Controllers\Admin\HomeSettingController::class, 'edit'])->name('admin.home-settings.edit');
+    Route::put('admin/home-settings', [App\Http\Controllers\Admin\HomeSettingController::class, 'update'])->name('admin.home-settings.update');
+    Route::resource('admin/news', App\Http\Controllers\Admin\NewsController::class, ['as' => 'admin']);
+    Route::resource('admin/landing-items', App\Http\Controllers\Admin\LandingItemController::class, ['as' => 'admin']);
+
 });
 
 // Yayasan Routes

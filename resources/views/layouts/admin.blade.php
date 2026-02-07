@@ -172,6 +172,26 @@
                     </a>
                 </div>
                 
+                <!-- Akademik / Transkrip --> <!-- Keeping this comment but inserting above or below -->
+                
+                <!-- CMS / Kelola Web Utama -->
+                <a href="#submenuCms" data-bs-toggle="collapse" class="list-group-item list-group-item-action bg-transparent text-primary fw-bold">
+                    <span><i class="bi bi-globe me-2"></i>Kelola Web</span>
+                    <i class="bi bi-chevron-down small"></i>
+                </a>
+                <div class="collapse list-group-submenu {{ request()->routeIs('admin.home-settings.*') || request()->routeIs('admin.news.*') || request()->routeIs('admin.landing-items.*') ? 'show' : '' }}" id="submenuCms">
+                    <a href="{{ route('admin.home-settings.edit') }}" class="list-group-item list-group-item-action bg-transparent {{ request()->routeIs('admin.home-settings.*') && !request()->has('section') ? 'active' : '' }} ps-5">
+                        <small>Edit Beranda & Tentang</small>
+                    </a>
+                    
+                    <a href="{{ route('admin.landing-items.index', ['section' => 'advantage']) }}" class="list-group-item list-group-item-action bg-transparent {{ request()->routeIs('admin.landing-items.*') ? 'active' : '' }} ps-5">
+                       <small>Item Landing Page</small>
+                    </a>
+                    <a href="{{ route('admin.news.index') }}" class="list-group-item list-group-item-action bg-transparent {{ request()->routeIs('admin.news.*') ? 'active' : '' }} ps-5">
+                        <small>Manajemen Berita</small>
+                    </a>
+                </div>
+
                 <!-- Akademik / Transkrip -->
                 <a href="{{ route('admin.academic.index') }}" class="list-group-item list-group-item-action bg-transparent {{ request()->routeIs('admin.academic.*') ? 'active' : '' }}">
                     <i class="bi bi-mortarboard-fill me-2"></i>Akademik (Transkrip)

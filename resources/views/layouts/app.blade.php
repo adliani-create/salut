@@ -17,6 +17,33 @@
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
     <style>
+    /* News Card Effects */
+    .hover-lift {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .hover-lift:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+    }
+    .transition-scale {
+        transition: transform 0.5s ease;
+    }
+    .card:hover .transition-scale {
+        transform: scale(1.05);
+    }
+    .line-clamp-3 {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    .hover-scale {
+        transition: transform 0.3s ease;
+    }
+    .hover-scale:hover {
+        transform: scale(1.05);
+    }
+
         /* Full Screen Overlay Menu for Mobile */
         @media (max-width: 768px) {
             .navbar-collapse {
@@ -129,6 +156,9 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link fw-semibold text-secondary" href="#program-pilihan">Program Pilihan</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link fw-semibold text-secondary" href="#news">Berita</a>
                             </li>
                         @endif
                     </ul>
