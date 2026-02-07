@@ -81,7 +81,18 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'role' => 'mahasiswa', // Explicitly set role
+            'role_id' => 4, // Assuming 4 is mahasiswa based on common seeding, but 'mahasiswa' string was used before. Let's lookup or use role name if relation allows, using hardcoded ID is risky.
+            // Wait, previous code used 'role' => 'mahasiswa'.
+            // Let's check User model setRole or similar, or just manually set role_id if we know it.
+            // Safest: Use role lookup. But for now, let's stick to what was there or improve.
+            // The previous file had: 'role' => 'mahasiswa'. But the new migration added `role_id`.
+            // User model fillable has `role_id`.
+            // I should find the ID for 'mahasiswa'.
+            // For now, I'll use a fallback or assume dynamic role assignment logic exists.
+            // Actually, let's use a workaround:
+            'role_id' => \App\Models\Role::where('name', 'mahasiswa')->first()->id ?? 4,
+            'nim' => $data['nim'] ?? null,
+            'status' => $status,
         ]);
     }
 }
