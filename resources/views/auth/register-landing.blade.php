@@ -21,14 +21,9 @@
                         <p class="text-muted mb-4">
                             Pilih opsi ini jika Anda <strong>belum memiliki NIM</strong> atau baru akan mendaftar ke Universitas Terbuka melalui SALUT.
                         </p>
-                        <ul class="text-start text-muted mb-4 small">
-                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Daftar Akun Baru</li>
-                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Lengkapi Data Diri</li>
-                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Pilih Program Unggulan</li>
-                        </ul>
                     </div>
                     <a href="{{ route('register.new') }}" class="btn btn-primary btn-lg w-100 rounded-pill">
-                        Daftar Maba <i class="bi bi-arrow-right ms-2"></i>
+                        Daftar<i class="bi bi-arrow-right ms-2"></i>
                     </a>
                 </div>
             </div>
@@ -46,11 +41,6 @@
                         <p class="text-muted mb-4">
                             Pilih opsi ini jika Anda <strong>sudah memiliki NIM</strong> dan ingin melakukan aktivasi akun, daftar ulang, atau memilih program unggulan.
                         </p>
-                        <ul class="text-start text-muted mb-4 small">
-                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Verifikasi NIM & Data</li>
-                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Update Kontak</li>
-                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Pilih Program Unggulan</li>
-                        </ul>
                     </div>
                     <a href="{{ route('register.existing') }}" class="btn btn-outline-success btn-lg w-100 rounded-pill">
                         Masuk / Aktivasi <i class="bi bi-arrow-right ms-2"></i>
