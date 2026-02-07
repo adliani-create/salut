@@ -1,7 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.yayasan')
+
+@section('title', 'Yayasan Dashboard')
 
 @section('content')
-<div class="container">
+<div class="container-fluid">
     <div class="row mb-4">
         <div class="col-md-12">
             <div class="card bg-info text-white shadow">

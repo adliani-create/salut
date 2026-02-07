@@ -23,6 +23,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return 'Home Dashboard';
+        // Redirect students to their dashboard if they land here
+        if (auth()->user()->isMahasiswa()) {
+            return redirect()->route('student.dashboard');
+        }
+        
+        return view('home');
     }
 }

@@ -1,7 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.admin')
+
+@section('title', 'Prodi Management')
 
 @section('content')
-<div class="container">
+<div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Program Studi</h2>
         <a href="{{ route('admin.prodi.create') }}" class="btn btn-primary">Add New</a>

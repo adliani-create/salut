@@ -1,35 +1,48 @@
-@extends('layouts.app')
+@extends('layouts.staff')
+
+@section('title', 'Staff Dashboard')
 
 @section('content')
-<div class="container">
+<div class="container-fluid">
     <div class="row mb-4">
         <div class="col-md-12">
-            <div class="card bg-secondary text-white shadow">
-                <div class="card-body p-5">
-                    <h1 class="display-4 fw-bold">Layanan Akademik 🛠️</h1>
-                    <p class="lead">Welcome, {{ Auth::user()->name }}. Staff Operations Panel.</p>
+            <h1 class="display-5 fw-bold">Staff Dashboard 👨‍💼</h1>
+            <p class="lead">Welcome back, {{ $user->name }}.</p>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        {{-- Validation Widget --}}
+        <div class="col-md-6">
+            <div class="card bg-warning text-dark mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Validasi Berkas Maba 📝</h5>
+                    <p class="card-text display-6">{{ $pendingValidations }} Pending</p>
+                    <a href="{{ route('staff.validation.index') }}" class="btn btn-dark">Process Validations</a>
+                </div>
+            </div>
+        </div>
+        
+        {{-- Ticket Widget --}}
+        <div class="col-md-6">
+            <div class="card bg-info text-dark mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Tiket Support 🎫</h5>
+                    <p class="card-text display-6">{{ $openTickets }} Open</p>
+                    <a href="{{ route('staff.tickets.index') }}" class="btn btn-dark">Manage Tickets</a>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <div class="row">
-        <div class="col-md-6">
-            <div class="card mb-3">
-                 <div class="card-header">Student Services</div>
-                 <div class="card-body">
-                    <button class="btn btn-primary me-2"><i class="bi bi-card-checklist"></i> Verify KRS</button>
-                    <button class="btn btn-outline-dark me-2"><i class="bi bi-printer"></i> Print Transcripts</button>
-                 </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card mb-3">
-                 <div class="card-header">Schedule Management</div>
-                 <div class="card-body">
-                    <button class="btn btn-info text-white me-2"><i class="bi bi-calendar-week"></i> Manage Class Schedules</button>
-                    <button class="btn btn-outline-secondary"><i class="bi bi-door-open"></i> Room Booking</button>
-                 </div>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header fw-bold">Pelayanan & Distribusi</div>
+                <div class="card-body">
+                    <a href="{{ route('staff.materials.index') }}" class="btn btn-outline-primary me-2"><i class="bi bi-book"></i> Distribusi Bahan Ajar</a>
+                    <!-- Add more links if needed -->
+                </div>
             </div>
         </div>
     </div>

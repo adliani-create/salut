@@ -13,11 +13,41 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+// Ajax Routes
+Route::get('ajax/fakultas/{id}/prodis', [App\Http\Controllers\AjaxController::class, 'getProdisByFakultas'])->name('ajax.prodis');
+
+// Public Routes
+Route::get('/', [App\Http\Controllers\PublicController::class, 'index'])->name('landing');
+Route::get('/berita/{slug}', [App\Http\Controllers\PublicController::class, 'showNews'])->name('public.news.show');
+
+// Custom Registration Routes
+Route::get('register', [App\Http\Controllers\Auth\StudentRegisterController::class, 'showLanding'])->name('register');
+
+// Option A: Mahasiswa Baru
+Route::get('register/new', [App\Http\Controllers\Auth\StudentRegisterController::class, 'showStep1'])->name('register.new');
+Route::post('register/new', [App\Http\Controllers\Auth\StudentRegisterController::class, 'storeStep1'])->name('register.step1.store');
+
+// Option B: Mahasiswa Aktif
+Route::get('register/existing', [App\Http\Controllers\Auth\StudentRegisterController::class, 'showExistingForm'])->name('register.existing');
+Route::post('register/existing', [App\Http\Controllers\Auth\StudentRegisterController::class, 'storeExistingForm'])->name('register.existing.store');
+
+
+Route::middleware(['auth', 'role:mahasiswa'])->group(function () {
+    Route::get('register/step2', [App\Http\Controllers\Auth\StudentRegisterController::class, 'showStep2'])->name('register.step2');
+    Route::post('register/step2', [App\Http\Controllers\Auth\StudentRegisterController::class, 'storeStep2'])->name('register.step2.store');
+    Route::get('register/step3', [App\Http\Controllers\Auth\StudentRegisterController::class, 'showStep3'])->name('register.step3');
+    Route::post('register/step3', [App\Http\Controllers\Auth\StudentRegisterController::class, 'storeStep3'])->name('register.step3.store');
+    Route::get('api/prodi-by-fakultas', [App\Http\Controllers\Auth\StudentRegisterController::class, 'getProdi'])->name('api.prodi-by-fakultas');
 });
 
-Auth::routes();
+Auth::routes(['register' => false]); // Disable default register routes
+
+// Profile Routes
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile/edit', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+});
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
@@ -32,6 +62,54 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
     Route::resource('admin/fakultas', App\Http\Controllers\Admin\FakultasController::class, ['as' => 'admin']);
     Route::resource('admin/prodi', App\Http\Controllers\Admin\ProdiController::class, ['as' => 'admin']);
     Route::resource('admin/semester', App\Http\Controllers\Admin\SemesterController::class, ['as' => 'admin']);
+
+    // Registration Management
+    Route::get('admin/registrations', [App\Http\Controllers\Admin\RegistrationController::class, 'index'])->name('admin.registrations.index');
+    Route::get('admin/registrations/{registration}', [App\Http\Controllers\Admin\RegistrationController::class, 'show'])->name('admin.registrations.show');
+    Route::put('admin/registrations/{registration}', [App\Http\Controllers\Admin\RegistrationController::class, 'update'])->name('admin.registrations.update');
+    Route::put('admin/registrations/{registration}/approve', [App\Http\Controllers\Admin\RegistrationController::class, 'approve'])->name('admin.registrations.approve');
+    
+    // User Management (Students)
+    Route::get('admin/students', [App\Http\Controllers\Admin\UserController::class, 'students'])->name('admin.students.index');
+
+    // Billing Management
+    Route::get('admin/billings/create-bulk', [App\Http\Controllers\Admin\BillingController::class, 'createBulk'])->name('admin.billings.create-bulk');
+    Route::post('admin/billings/create-bulk', [App\Http\Controllers\Admin\BillingController::class, 'storeBulk'])->name('admin.billings.store-bulk');
+    Route::get('admin/billings/verification', [App\Http\Controllers\Admin\BillingController::class, 'verification'])->name('admin.billings.verification');
+    Route::put('admin/billings/{billing}/approve', [App\Http\Controllers\Admin\BillingController::class, 'approve'])->name('admin.billings.approve');
+    Route::put('admin/billings/{billing}/manual-verify', [App\Http\Controllers\Admin\BillingController::class, 'manualVerify'])->name('admin.billings.manual-verify');
+    Route::put('admin/billings/{billing}/reject', [App\Http\Controllers\Admin\BillingController::class, 'reject'])->name('admin.billings.reject');
+    Route::get('admin/billings/{billing}/print', [App\Http\Controllers\Admin\BillingController::class, 'printInvoice'])->name('admin.billings.print');
+    Route::post('admin/billings/{billing}/send-whatsapp', [App\Http\Controllers\Admin\BillingController::class, 'sendWhatsappNotification'])->name('billing.send-wa');
+    
+    // Ledger / Kartu Kontrol
+    Route::get('admin/students/{user}/ledger', [App\Http\Controllers\Admin\BillingController::class, 'ledger'])->name('admin.students.ledger');
+    
+    Route::resource('admin/billings', App\Http\Controllers\Admin\BillingController::class, ['as' => 'admin']);
+
+    // Non-Academic Modules
+    // Non-Academic Modules
+    Route::get('admin/non-academic', [App\Http\Controllers\Admin\NonAcademicController::class, 'index'])->name('admin.non-academic.index');
+    Route::resource('admin/career-programs', App\Http\Controllers\Admin\CareerProgramController::class, ['as' => 'admin']);
+    Route::resource('admin/lms-materials', App\Http\Controllers\Admin\LmsMaterialController::class, ['as' => 'admin']);
+    Route::resource('admin/trainings', App\Http\Controllers\Admin\TrainingController::class, ['as' => 'admin']);
+    
+    // Academic / Transcript Management
+    Route::get('admin/academic', [App\Http\Controllers\Admin\AcademicController::class, 'index'])->name('admin.academic.index');
+    Route::get('admin/academic/{user}/upload', [App\Http\Controllers\Admin\AcademicController::class, 'upload'])->name('admin.academic.upload');
+    Route::post('admin/academic/{user}/parse', [App\Http\Controllers\Admin\AcademicController::class, 'parse'])->name('admin.academic.parse');
+    Route::post('admin/academic/{user}/store', [App\Http\Controllers\Admin\AcademicController::class, 'store'])->name('admin.academic.store');
+    
+    // KTPU Routes
+    Route::get('admin/academic/{user}/ktpu/upload', [App\Http\Controllers\Admin\AcademicController::class, 'uploadKtpu'])->name('admin.academic.ktpu.upload');
+    Route::post('admin/academic/{user}/ktpu/store', [App\Http\Controllers\Admin\AcademicController::class, 'storeKtpu'])->name('admin.academic.ktpu.store');
+    
+    // CMS User Interface
+    Route::get('admin/home-settings', [App\Http\Controllers\Admin\HomeSettingController::class, 'edit'])->name('admin.home-settings.edit');
+    Route::put('admin/home-settings', [App\Http\Controllers\Admin\HomeSettingController::class, 'update'])->name('admin.home-settings.update');
+    Route::resource('admin/news', App\Http\Controllers\Admin\NewsController::class, ['as' => 'admin']);
+    Route::resource('admin/landing-items', App\Http\Controllers\Admin\LandingItemController::class, ['as' => 'admin']);
+
 });
 
 // Mitra Routes

@@ -49,6 +49,8 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
+            'registration_type' => ['required', 'string', 'in:maba,active'],
+            'nim' => ['nullable', 'string', 'required_if:registration_type,active', 'unique:users'],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
@@ -63,6 +65,12 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $status = 'pending_payment'; // Default for Maba
+        if ($data['registration_type'] === 'active') {
+             // Mock Sync Logic: If active student registers, assume active status for now
+             $status = 'active';
+        }
+
         // Get or create the mahasiswa role
         $mahasiswaRole = \App\Models\Role::firstOrCreate(
             ['name' => 'mahasiswa'],
@@ -73,7 +81,7 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'role_id' => $mahasiswaRole->id,
+            'role' => 'mahasiswa', // Explicitly set role
         ]);
     }
 }

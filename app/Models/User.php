@@ -22,6 +22,15 @@ class User extends Authenticatable
         'email',
         'password',
         'role_id',
+        'photo',
+        'nim',
+        'status',
+        'faculty',
+        'major',
+        'semester',
+        'ipk',
+        'password_myut',
+        'angkatan',
     ];
 
     /**
@@ -30,6 +39,13 @@ class User extends Authenticatable
     public function role()
     {
         return $this->belongsTo(Role::class);
+    }
+
+    public function completedMaterials()
+    {
+        return $this->belongsToMany(LmsMaterial::class, 'lms_material_user')
+                    ->withPivot('completed_at')
+                    ->withTimestamps();
     }
 
     /**
@@ -49,20 +65,23 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user is mitra
+     * Get the student registration record.
      */
-    public function isMitra(): bool
+    public function registration()
     {
-        return $this->role && $this->role->name === 'mitra';
+        return $this->hasOne(Registration::class);
     }
 
-    /**
-     * Check if user is affiliator
-     */
-    public function isAffiliator(): bool
+    public function auditLogs()
     {
-        return $this->role && $this->role->name === 'affiliator';
+        return $this->hasMany(AuditLog::class, 'target_id')->where('target_model', 'User');
     }
+
+    public function academicRecords()
+    {
+        return $this->hasMany(AcademicRecord::class);
+    }
+
 
     /**
      * The attributes that should be hidden for serialization.
