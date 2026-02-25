@@ -1,6 +1,6 @@
 @extends('layouts.affiliator')
 
-@section('title', 'Input Prospek Baru')
+@section('title', 'Input Affiliator Baru')
 
 @section('content')
 <div class="row justify-content-center">
@@ -16,8 +16,8 @@
                     @csrf
                     
                     <div class="mb-4">
-                        <label class="form-label fw-bold">Nama Lengkap Prospek <span class="text-danger">*</span></label>
-                        <input type="text" name="name" class="form-control form-control-lg @error('name') is-invalid @enderror" value="{{ old('name') }}" required placeholder="Contoh: Budi Santoso">
+                        <label class="form-label fw-bold">Nama Lengkap<span class="text-danger">*</span></label>
+                        <input type="text" name="name" class="form-control form-control-lg @error('name') is-invalid @enderror" value="{{ old('name') }}">
                         @error('name') <div class="invalid-feedback">{{ $message }}</div> @enderror
                     </div>
 
@@ -32,19 +32,19 @@
 
                     <div class="mb-4">
                         <label class="form-label fw-bold">Asal Kampus / Pekerjaan <span class="text-muted">(Opsional)</span></label>
-                        <input type="text" name="school_origin" class="form-control form-control-lg @error('school_origin') is-invalid @enderror" value="{{ old('school_origin') }}" placeholder="Contoh: Mahasiswa Kampus X, Freelancer, Karyawan Swasta">
+                        <input type="text" name="school_origin" class="form-control form-control-lg @error('school_origin') is-invalid @enderror" value="{{ old('school_origin') }}">
                         @error('school_origin') <div class="invalid-feedback">{{ $message }}</div> @enderror
                     </div>
 
                     <div class="mb-4">
                         <label class="form-label fw-bold">Nama Instansi <span class="text-muted">(Opsional)</span></label>
-                        <input type="text" name="program_interest" class="form-control form-control-lg @error('program_interest') is-invalid @enderror" value="{{ old('program_interest') }}" placeholder="Contoh: Universitas Indonesia / PT Maju Jaya">
+                        <input type="text" name="program_interest" class="form-control form-control-lg @error('program_interest') is-invalid @enderror" value="{{ old('program_interest') }}">
                         @error('program_interest') <div class="invalid-feedback">{{ $message }}</div> @enderror
                     </div>
 
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-5">
                         <a href="{{ route('affiliator.students.index') }}" class="btn btn-light btn-lg px-4 me-md-2 fw-bold text-secondary">Batal</a>
-                        <button type="submit" class="btn btn-primary btn-lg px-5 fw-bold"><i class="bi bi-save me-2"></i>Simpan Data Prospek</button>
+                        <button type="submit" class="btn btn-primary btn-lg px-5 fw-bold"><i class="bi bi-save me-2"></i>Simpan Data</button>
                     </div>
                 </form>
             </div>

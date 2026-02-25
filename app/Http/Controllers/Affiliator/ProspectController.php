@@ -11,7 +11,7 @@ use App\Models\User;
 class ProspectController extends Controller
 {
     /**
-     * Display the tracking list (Daftar Mahasiswa Saya)
+     * Display the tracking list (Daftar Affiliator)
      */
     public function index()
     {

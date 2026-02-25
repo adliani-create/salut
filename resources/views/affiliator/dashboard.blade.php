@@ -21,7 +21,7 @@
                         
                         <div class="mt-4">
                             <a href="{{ route('affiliator.students.create') }}" class="btn btn-light btn-lg text-primary fw-bold rounded-pill px-4 me-2 shadow-sm">
-                                <i class="bi bi-person-plus-fill me-2"></i> Input Prospek Manual
+                                <i class="bi bi-person-plus-fill me-2"></i> Input Affiliator Manual
                             </a>
                         </div>
                     </div>
@@ -66,7 +66,7 @@
         </div>
     </div>
 
-    <!-- Status: Prospek -->
+    <!-- Status: Affiliator -->
     <div class="col-md-3">
         <div class="card border-0 shadow-sm rounded-4 h-100 border-start border-4 border-secondary">
             <div class="card-body p-4">
@@ -74,7 +74,7 @@
                     <div class="bg-secondary bg-opacity-10 text-secondary py-2 px-3 rounded-3 me-3">
                         <i class="bi bi-person-lines-fill fs-4"></i>
                     </div>
-                    <h6 class="text-muted fw-bold mb-0 text-uppercase" style="font-size: 0.8rem;">Status: Prospek</h6>
+                    <h6 class="text-muted fw-bold mb-0 text-uppercase" style="font-size: 0.8rem;">Status: Affiliator</h6>
                 </div>
                 <h2 class="fw-bold text-dark mb-0 display-6">{{ $prospectsCount }} <span class="fs-6 text-muted fw-normal">Orang</span></h2>
                 <div class="mt-1 small text-muted">Belum mendaftar resmi</div>

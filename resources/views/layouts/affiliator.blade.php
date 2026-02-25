@@ -155,7 +155,7 @@
                 
                 <div class="text-uppercase text-muted small fw-bold px-4 mb-2 mt-4" style="font-size: 0.75rem; letter-spacing: 1px;">Kegiatan Akuisisi</div>
                 <a href="{{ route('affiliator.students.create') }}" class="list-group-item list-group-item-action {{ request()->routeIs('affiliator.students.create') ? 'active' : '' }}">
-                    <i class="bi bi-person-plus-fill me-3"></i>Form Input Prospek
+                    <i class="bi bi-person-plus-fill me-3"></i>Form Input Affiliator
                 </a>
                 <a href="{{ route('affiliator.students.index') }}" class="list-group-item list-group-item-action {{ request()->routeIs('affiliator.students.index') ? 'active' : '' }}">
                     <i class="bi bi-list-check me-3"></i>Pemantauan & Pergerakan Status affiliator

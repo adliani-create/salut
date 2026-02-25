@@ -1,16 +1,16 @@
 @extends('layouts.affiliator')
 
-@section('title', 'Daftar Mahasiswa Saya')
+@section('title', 'Daftar Affiliator')
 
 @section('content')
 <div class="card border-0 shadow-sm rounded-4">
     <div class="card-header bg-white border-0 py-4 d-flex justify-content-between align-items-center">
         <div>
             <h5 class="fw-bold mb-1 text-dark"><i class="bi bi-list-check text-primary me-2"></i>Pemantauan & Pergerakan Status Affiliator</h5>
-            <p class="text-muted small mb-0">Daftar ini adalah gabungan prospek input manual dan pendaftar via link Anda.</p>
+            <p class="text-muted small mb-0">Daftar ini adalah gabungan affiliator input manual dan pendaftar via link Anda.</p>
         </div>
         <a href="{{ route('affiliator.students.create') }}" class="btn btn-primary rounded-pill px-4 fw-bold">
-            <i class="bi bi-plus-circle me-2"></i>Input Prospek Baru
+            <i class="bi bi-plus-circle me-2"></i>Input Affiliator Baru
         </a>
     </div>
 
@@ -29,7 +29,7 @@
                 <thead class="bg-light text-muted small text-uppercase">
                     <tr>
                         <th class="ps-4 py-3">Sumber Data</th>
-                        <th class="py-3">Info Calon Mahasiswa</th>
+                        <th class="py-3">Info Calon Affiliator</th>
                         <th class="py-3">Waktu Input</th>
                         <th class="py-3 text-center">Status</th>
                         <th class="pe-4 py-3 text-center">Aksi</th>
@@ -100,7 +100,7 @@
                     <tr>
                         <td colspan="5" class="text-center py-5 text-muted">
                             <i class="bi bi-person-x fs-1 opacity-25 d-block mb-3"></i>
-                            Belum ada satupun prospek atau mahasiswa yang terdata.<br>
+                            Belum ada satupun affiliator yang terdata.<br>
                             Mulai sebar link referral Anda atau input secara manual sekarang!
                         </td>
                     </tr>
