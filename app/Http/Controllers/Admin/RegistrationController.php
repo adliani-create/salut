@@ -62,6 +62,43 @@ class RegistrationController extends Controller
             'status' => 'active', // Set user as active student
         ]);
 
+        // --- POINT DISTRIBUTION LOGIC ---
+        // 1. Check if student has a referrer (Direct Recruiter: Affiliator or Mitra)
+        if ($user->referred_by) {
+            $directReferrer = \App\Models\User::find($user->referred_by);
+
+            if ($directReferrer && $directReferrer->status === 'active') {
+                // Determine the role for description
+                $roleName = $directReferrer->hasRole('mitra') ? 'Mitra' : 'Affiliator';
+
+                // Give 10 points to the direct recruiter
+                \App\Models\PointLedger::create([
+                    'user_id' => $directReferrer->id,
+                    'type' => 'credit',
+                    'amount' => 10,
+                    'source_id' => $user->id,
+                    'description' => "Komisi Referensi Mahasiswa Baru ($roleName): " . $user->name,
+                ]);
+
+                // 2. Check if the Direct Recruiter has a referrer (Bonus Supervisi for Mitra)
+                // This only happens if the direct recruiter is an Affiliator, and their parent is a Mitra
+                if ($directReferrer->referred_by && $directReferrer->hasRole('affiliator')) {
+                    $mitra = \App\Models\User::find($directReferrer->referred_by);
+
+                    if ($mitra && $mitra->hasRole('mitra') && $mitra->status === 'active') {
+                        \App\Models\PointLedger::create([
+                            'user_id' => $mitra->id,
+                            'type' => 'credit',
+                            'amount' => 2,
+                            'source_id' => $user->id,
+                            'description' => "Bonus Supervisi Jaringan Mahasiswa dari Tim ({$directReferrer->name}): " . $user->name,
+                        ]);
+                    }
+                }
+            }
+        }
+        // --- END POINT DISTRIBUTION LOGIC ---
+
         // Update Registration Status
         $registration->update([
             'status' => 'valid',

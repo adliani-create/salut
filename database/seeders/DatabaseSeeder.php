@@ -36,6 +36,16 @@ class DatabaseSeeder extends Seeder
             ['label' => 'Mahasiswa', 'redirect_to' => '/home']
         );
 
+        Role::firstOrCreate(
+            ['name' => 'affiliator'],
+            ['label' => 'Affiliator', 'redirect_to' => '/affiliator/dashboard']
+        );
+
+        Role::firstOrCreate(
+            ['name' => 'mitra'],
+            ['label' => 'Mitra', 'redirect_to' => '/mitra/dashboard']
+        );
+
         // Create admin user
         User::firstOrCreate(
             ['email' => 'admin@admin.com'],

@@ -30,7 +30,7 @@ class DashboardController extends Controller
         // Filter based on Program Pilihan
         $program = optional($user->registration)->fokus_karir;
 
-        $trainings = \App\Models\Training::where('date', '>=', now())
+        $trainings = \App\Models\Training::whereDate('date', '>=', now())
             ->where(function($q) use ($program) {
                 // If user has a program, check for match OR general content (no tags)
                 if ($program) {
@@ -87,7 +87,7 @@ class DashboardController extends Controller
         $program = optional($user->registration)->fokus_karir;
 
         // Fetch Trainings (Filtered)
-        $trainings = \App\Models\Training::where('date', '>=', now())
+        $trainings = \App\Models\Training::whereDate('date', '>=', now())
             ->where(function($q) use ($program) {
                 if ($program) {
                     $q->whereHas('careerPrograms', function($sq) use ($program) {

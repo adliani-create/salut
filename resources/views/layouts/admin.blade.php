@@ -22,7 +22,7 @@
         
         /* Sidebar Styles */
         #sidebar-wrapper {
-            min-height: 100vh;
+            height: 100vh; /* Fixed height for scrollable area */
             margin-left: -250px;
             transition: margin .25s ease-out;
             width: 250px;
@@ -32,7 +32,23 @@
             z-index: 1000;
             background-color: #ffffff; /* White Background */
             border-right: 1px solid #dee2e6;
-            overflow-y: auto; /* Enable scrolling if content exceeds height */
+            overflow-y: auto; /* Enable vertical scrolling */
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar for Sidebar */
+        #sidebar-wrapper::-webkit-scrollbar {
+            width: 6px;
+        }
+        #sidebar-wrapper::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        #sidebar-wrapper::-webkit-scrollbar-thumb {
+            background: #c1c1c1; 
+            border-radius: 4px;
+        }
+        #sidebar-wrapper::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8; 
         }
         
         #sidebar-wrapper .sidebar-heading {
@@ -231,13 +247,36 @@
                     </a>
                 </div>
                 
+                <!-- Manajemen Mitra & Afiliasi Collapsible -->
+                <a href="#submenuMitra" data-bs-toggle="collapse" class="list-group-item list-group-item-action bg-transparent d-flex justify-content-between align-items-center" aria-expanded="{{ request()->routeIs('admin.mitras.*') || request()->routeIs('admin.affiliators.*') || request()->routeIs('admin.withdrawals.*') ? 'true' : 'false' }}">
+                    <span><i class="bi bi-diagram-3-fill me-2"></i>Mitra & Afiliasi</span>
+                    <i class="bi bi-chevron-down small"></i>
+                </a>
+                <div class="collapse list-group-submenu {{ request()->routeIs('admin.mitras.*') || request()->routeIs('admin.affiliators.*') || request()->routeIs('admin.withdrawals.*') ? 'show' : '' }}" id="submenuMitra">
+                    <a href="{{ route('admin.mitras.index') }}" class="list-group-item list-group-item-action bg-transparent border-0 ps-5 {{ request()->routeIs('admin.mitras.*') ? 'text-primary fw-bold' : '' }}">
+                        Data Mitra
+                    </a>
+                    <a href="{{ route('admin.affiliators.index') }}" class="list-group-item list-group-item-action bg-transparent border-0 ps-5 {{ request()->routeIs('admin.affiliators.*') ? 'text-primary fw-bold' : '' }}">
+                        Data Affiliator
+                    </a>
+                    <a href="{{ route('admin.withdrawals.index') }}" class="list-group-item list-group-item-action bg-transparent border-0 ps-5 {{ request()->routeIs('admin.withdrawals.*') ? 'text-primary fw-bold' : '' }}">
+                        Pencairan Poin
+                        @php
+                            $pendingWd = \App\Models\Withdrawal::where('status', 'pending')->count();
+                        @endphp
+                        @if($pendingWd > 0)
+                            <span class="badge bg-warning text-dark ms-2">{{ $pendingWd }}</span>
+                        @endif
+                    </a>
+                </div>
+
                 <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="list-group-item list-group-item-action bg-transparent text-danger mt-3">
                     <i class="bi bi-box-arrow-right me-2"></i>Logout
                 </a>
             </div>
         </div>
         <!-- /#sidebar-wrapper -->
-
+        
         <!-- Page Content -->
         <div id="page-content-wrapper">
             <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">

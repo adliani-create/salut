@@ -20,6 +20,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'whatsapp',
         'password',
         'role_id',
         'photo',
@@ -31,6 +32,10 @@ class User extends Authenticatable
         'ipk',
         'password_myut',
         'angkatan',
+        'referral_code',
+        'referred_by',
+        'is_affiliator',
+        'bank_account',
     ];
 
     /**
@@ -65,6 +70,22 @@ class User extends Authenticatable
     }
 
     /**
+     * Check if user is affiliator
+     */
+    public function isAffiliator(): bool
+    {
+        return $this->role && $this->role->name === 'affiliator';
+    }
+
+    /**
+     * Check if user is mitra
+     */
+    public function isMitra(): bool
+    {
+        return $this->role && $this->role->name === 'mitra';
+    }
+
+    /**
      * Get the student registration record.
      */
     public function registration()
@@ -80,6 +101,41 @@ class User extends Authenticatable
     public function academicRecords()
     {
         return $this->hasMany(AcademicRecord::class);
+    }
+
+    /**
+     * Affiliate / Mitra relationships
+     */
+    public function referrer()
+    {
+        return $this->belongsTo(User::class, 'referred_by');
+    }
+
+    public function referrals()
+    {
+        return $this->hasMany(User::class, 'referred_by');
+    }
+
+    public function mitraProfile()
+    {
+        return $this->hasOne(MitraProfile::class);
+    }
+
+    public function pointLedgers()
+    {
+        return $this->hasMany(PointLedger::class);
+    }
+
+    public function withdrawals()
+    {
+        return $this->hasMany(Withdrawal::class);
+    }
+
+    public function getTotalPointsAttribute()
+    {
+        $credits = $this->pointLedgers()->where('type', 'credit')->sum('amount');
+        $debits = $this->pointLedgers()->where('type', 'debit')->sum('amount');
+        return $credits - $debits;
     }
 
 

@@ -36,5 +36,21 @@ class RoleSeeder extends Seeder
             'password' => Hash::make('password'),
             'role' => 'staff',
         ]);
+
+        // Affiliator
+        User::create([
+            'name' => 'Affiliator User',
+            'email' => 'affiliator@example.com',
+            'password' => Hash::make('password'),
+            'role' => 'affiliator',
+        ]);
+
+        // Mitra
+        User::create([
+            'name' => 'Mitra User',
+            'email' => 'mitra@example.com',
+            'password' => Hash::make('password'),
+            'role' => 'mitra',
+        ]);
     }
 }

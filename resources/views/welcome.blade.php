@@ -10,7 +10,7 @@
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <h1 class="display-3 fw-bold mb-4 animate__animated animate__fadeInDown">{{ $setting->hero_title }}</h1>
-                <p class="lead mb-5 animate__animated animate__fadeInUp">{{ $setting->hero_subtitle ?? 'Bergabunglah dengan SALUT Indo Global.Kami menghadirkan akses pendidikan tinggi negeri terbaik dari Universitas Terbuka dengan standar layanan prima. Dapatkan kesempatan belajar di Perguruan Tinggi Negeri (PTN) bergengsi dengan skema biaya yang sangat efisien.' }}</p>
+                <p class="lead mb-5 animate__animated animate__fadeInUp">{{ $setting->hero_subtitle ?? 'Mitra resmi Universitas Terbuka. Nikmati kemudahan kuliah di Perguruan Tinggi Negeri (PTN) dengan biaya efisien dan layanan akademik prima, di mana saja dan kapan saja' }}</p>
                 <div class="animate__animated animate__fadeInUp animate__delay-1s">
                     <a href="{{ route('register') }}" class="btn btn-light btn-lg text-primary fw-bold me-3 px-4 rounded-pill">Daftar Sekarang</a>
                     <a href="#about" class="btn btn-outline-light btn-lg px-4 rounded-pill">Pelajari Lebih Lanjut</a>

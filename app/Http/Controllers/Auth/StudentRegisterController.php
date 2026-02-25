@@ -19,24 +19,33 @@ class StudentRegisterController extends Controller
     /**
      * Show Landing Page (Split Option)
      */
-    public function showLanding()
+    public function showLanding(Request $request)
     {
+        if ($request->has('ref')) {
+            session(['referral_code' => $request->ref]);
+        }
         return view('auth.register-landing');
     }
 
     /**
      * Show Step 1: Account Creation (Mahasiswa Baru)
      */
-    public function showStep1()
+    public function showStep1(Request $request)
     {
+        if ($request->has('ref')) {
+            session(['referral_code' => $request->ref]);
+        }
         return view('auth.register');
     }
 
     /**
      * Show Full Form for Existing Student
      */
-    public function showExistingForm()
+    public function showExistingForm(Request $request)
     {
+        if ($request->has('ref')) {
+            session(['referral_code' => $request->ref]);
+        }
         $programs = \App\Models\CareerProgram::all();
         $fakultas = Fakultas::all();
         $prodis = Prodi::all();
@@ -50,7 +59,7 @@ class StudentRegisterController extends Controller
     {
         $request->validate([
             // Identity
-            'nim' => ['required', 'string', 'unique:users,nim'], // Ensure unique or handle claim logic later
+            'nim' => ['required', 'numeric', 'digits:9', 'unique:users,nim'], // Ensure unique and strict 9 digits
             'name' => ['required', 'string', 'max:255'],
             'angkatan' => ['required', 'integer', 'digits:4'],
             
@@ -70,6 +79,15 @@ class StudentRegisterController extends Controller
         $fakultasName = Fakultas::find($request->fakultas_id)->nama;
         $prodiName = Prodi::find($request->prodi_id)->nama;
 
+        // Check for Referral
+        $referredBy = null;
+        if (session()->has('referral_code')) {
+            $referrer = User::where('referral_code', session('referral_code'))->first();
+            if ($referrer) {
+                $referredBy = $referrer->id;
+            }
+        }
+
         // Create User
         $user = User::create([
             'name' => $request->name,
@@ -79,6 +97,7 @@ class StudentRegisterController extends Controller
             'nim' => $request->nim,
             'angkatan' => $request->angkatan,
             'status' => 'active', // Express: Directly active
+            'referred_by' => $referredBy,
         ]);
 
         // Create Registration Data
@@ -115,11 +134,21 @@ class StudentRegisterController extends Controller
             return back()->with('error', 'Role mahasiswa not found. Please contact admin.');
         }
 
+        // Check for Referral
+        $referredBy = null;
+        if (session()->has('referral_code')) {
+            $referrer = User::where('referral_code', session('referral_code'))->first();
+            if ($referrer) {
+                $referredBy = $referrer->id;
+            }
+        }
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role_id' => $role->id,
+            'referred_by' => $referredBy,
         ]);
 
         // Create Draft Registration
