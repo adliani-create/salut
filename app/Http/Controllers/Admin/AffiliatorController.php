@@ -19,7 +19,7 @@ class AffiliatorController extends Controller
         $affiliators = User::whereHas('role', function ($q) {
                 $q->where('name', 'affiliator');
             })
-            ->with(['referrer']) // Load upline (Mitra)
+            ->with(['referrer', 'pointLedgers']) // Load upline (Mitra) and Ledgers for points calculating
             ->withCount(['referrals as students_count' => function ($query) {
                 $query->whereHas('role', function ($q) {
                     $q->where('name', 'mahasiswa');

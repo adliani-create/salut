@@ -24,4 +24,9 @@ class PointLedger extends Model
     {
         return $this->belongsTo(User::class, 'source_id');
     }
+
+    public function sourceUser()
+    {
+        return $this->belongsTo(User::class, 'source_id');
+    }
 }

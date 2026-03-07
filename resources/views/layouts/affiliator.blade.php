@@ -155,10 +155,15 @@
                 
                 <div class="text-uppercase text-muted small fw-bold px-4 mb-2 mt-4" style="font-size: 0.75rem; letter-spacing: 1px;">Kegiatan Akuisisi</div>
                 <a href="{{ route('affiliator.students.create') }}" class="list-group-item list-group-item-action {{ request()->routeIs('affiliator.students.create') ? 'active' : '' }}">
-                    <i class="bi bi-person-plus-fill me-3"></i>Form Input Affiliator
+                    <i class="bi bi-person-plus-fill me-3"></i>Form Input Prospek
                 </a>
                 <a href="{{ route('affiliator.students.index') }}" class="list-group-item list-group-item-action {{ request()->routeIs('affiliator.students.index') ? 'active' : '' }}">
-                    <i class="bi bi-list-check me-3"></i>Pemantauan & Pergerakan Status affiliator
+                    <i class="bi bi-list-check me-3"></i>Daftar Mahasiswa Saya
+                </a>
+
+                <div class="text-uppercase text-muted small fw-bold px-4 mb-2 mt-4" style="font-size: 0.75rem; letter-spacing: 1px;">Keuangan</div>
+                <a href="{{ route('affiliator.finance.commissions') }}" class="list-group-item list-group-item-action {{ request()->routeIs('affiliator.finance.*') ? 'active' : '' }}">
+                    <i class="bi bi-wallet2 me-3"></i>Komisi & Penarikan
                 </a>
 
                 <div class="text-uppercase text-muted small fw-bold px-4 mb-2 mt-4" style="font-size: 0.75rem; letter-spacing: 1px;">Sistem</div>

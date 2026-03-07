@@ -15,13 +15,13 @@
             <div class="card-body p-4 p-md-5 position-relative z-index-1">
                 <div class="row align-items-center">
                     <div class="col-md-7 mb-4 mb-md-0">
-                        <span class="badge bg-white text-primary mb-3 px-3 py-2 rounded-pill fw-bold">Penambahan Tim Jaringan</span>
-                        <h3 class="fw-bold mb-3">Mulai Merekrut Calon Affiliator Baru</h3>
-                        <p class="mb-0 text-white-50 fs-5">Bagikan link ini untuk mencari kandidat Affiliator. Setiap kandidat yang mendaftar dan <strong class="text-white">disetujui (bayar)</strong> akan menambah jaringan Anda & memberikan Anda komisi.</p>
+                        <span class="badge bg-white text-primary mb-3 px-3 py-2 rounded-pill fw-bold">Penambahan Mahasiswa</span>
+                        <h3 class="fw-bold mb-3">Mulai Merekrut Mahasiswa Baru</h3>
+                        <p class="mb-0 text-white-50 fs-5">Bagikan link ini ke calon mahasiswa. Setiap mahasiswa yang mendaftar dan <strong class="text-white">disetujui (bayar)</strong> otomatis memberikan Anda komisi.</p>
                         
                         <div class="mt-4">
                             <a href="{{ route('affiliator.students.create') }}" class="btn btn-light btn-lg text-primary fw-bold rounded-pill px-4 me-2 shadow-sm">
-                                <i class="bi bi-person-plus-fill me-2"></i> Input Affiliator Manual
+                                <i class="bi bi-person-plus-fill me-2"></i> Input Mahasiswa Manual
                             </a>
                         </div>
                     </div>
@@ -74,7 +74,7 @@
                     <div class="bg-secondary bg-opacity-10 text-secondary py-2 px-3 rounded-3 me-3">
                         <i class="bi bi-person-lines-fill fs-4"></i>
                     </div>
-                    <h6 class="text-muted fw-bold mb-0 text-uppercase" style="font-size: 0.8rem;">Status: Affiliator</h6>
+                    <h6 class="text-muted fw-bold mb-0 text-uppercase" style="font-size: 0.8rem;">Status: Prospek</h6>
                 </div>
                 <h2 class="fw-bold text-dark mb-0 display-6">{{ $prospectsCount }} <span class="fs-6 text-muted fw-normal">Orang</span></h2>
                 <div class="mt-1 small text-muted">Belum mendaftar resmi</div>
@@ -118,7 +118,7 @@
 <div class="row">
     <div class="col-12 text-center mt-3 mb-5">
         <a href="{{ route('affiliator.students.index') }}" class="btn btn-outline-primary rounded-pill px-4">
-            <i class="bi bi-list-task me-2"></i> Lihat Daftar Lengkap Affiliator & Prospek Saya
+            <i class="bi bi-list-task me-2"></i> Lihat Daftar Lengkap Mahasiswa & Prospek Saya
         </a>
     </div>
 </div>
@@ -130,10 +130,10 @@
             <div class="card-body p-4 p-md-5">
                 <div class="d-flex align-items-center mb-3">
                     <i class="bi bi-exclamation-triangle-fill text-warning fs-1 me-3"></i>
-                    <h5 class="fw-bold text-dark mb-0">Edukasi Wajib: Aturan Tiket Layanan Bagi Jaringan Anda</h5>
+                    <h5 class="fw-bold text-dark mb-0">Edukasi Wajib: Aturan Tiket Layanan Bagi Mahasiswa Anda</h5>
                 </div>
                 <p class="text-secondary mb-0">
-                    Sebagai perekrut, Anda <strong>wajib mengedukasi</strong> kandidat Affiliator Anda bahwa fitur <strong>"Tiket Layanan"</strong> di sistem akademik mereka <strong>hanya bisa digunakan jika status kemahasiswaan mereka AKTIF</strong> (tidak dalam masa cuti atau menunggak pembayaran semester). Kepatuhan terhadap aturan ini menjaga kelancaran administrasi jaringan Anda.
+                    Sebagai perekrut, Anda <strong>wajib mengedukasi</strong> calon mahasiswa Anda bahwa fitur <strong>"Tiket Layanan"</strong> di sistem akademik mereka <strong>hanya bisa digunakan jika status kemahasiswaan mereka AKTIF</strong> (tidak dalam masa cuti atau menunggak pembayaran semester). Kepatuhan terhadap aturan ini memperlancar jalannya komisi.
                 </p>
             </div>
         </div>

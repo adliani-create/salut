@@ -124,8 +124,14 @@ class StudentRegisterController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'nim' => ['required', 'numeric', 'digits:9', 'unique:users,nim'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ], [
+            'nim.required' => 'NIM wajib diisi.',
+            'nim.digits' => 'NIM harus tepat 9 digit angka.',
+            'nim.unique' => 'NIM ini sudah terdaftar sebelumnya.',
+            'nim.numeric' => 'NIM hanya boleh berisi angka.',
         ]);
 
         // Get Mahasiswa Role
@@ -145,6 +151,7 @@ class StudentRegisterController extends Controller
 
         $user = User::create([
             'name' => $request->name,
+            'nim' => $request->nim,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role_id' => $role->id,
@@ -263,6 +270,18 @@ class StudentRegisterController extends Controller
             'status' => 'pending', // Finalize registration
         ]);
 
-        return redirect()->route('home')->with('status', 'Registrasi berhasil! Data Anda sedang diverifikasi admin.');
+        // Auto-Generate Tagihan Layanan SALUT
+        \App\Models\Billing::create([
+            'user_id' => Auth::id(),
+            'billing_code' => 'INV-' . date('Ym') . '-' . rand(1000, 9999),
+            'category' => 'Layanan SALUT',
+            'amount' => 150000, // Hardcoded default based on prompt
+            'semester' => 1,
+            'due_date' => now()->addDays(30),
+            'status' => 'unpaid',
+            'description' => 'Tagihan Aktivasi Layanan SALUT Mahasiswa Baru',
+        ]);
+
+        return redirect()->route('home')->with('status', 'Registrasi berhasil! Silakan selesaikan pembayaran aktivasi layanan Anda.');
     }
 }

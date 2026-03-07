@@ -15,9 +15,14 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
 
-        // Redirect Maba to Enrollment if status is pending_payment
+        // Redirect Maba to Enrollment if status is pending_payment (Legacy check)
         if ($user->status === 'pending_payment') {
             return redirect()->route('student.enrollment.step1');
+        }
+
+        // Redirect unpaid/inactive students to the Billing page
+        if ($user->status !== 'active') {
+            return redirect()->route('student.billing.index')->with('warning', 'Akun Anda belum aktif. Selesaikan pembayaran Layanan SALUT untuk membuka akses penuh ke Dashboard.');
         }
 
         // 1. BILLING INFO (Overview)

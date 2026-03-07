@@ -69,6 +69,24 @@ class ProfileController extends Controller
             }
         }
 
+        if ($user->isAffiliator() || $user->isMitra()) {
+            $request->validate([
+                'bank_name' => 'nullable|string|max:255',
+                'bank_account' => 'nullable|string|max:255',
+                'bank_account_owner' => 'nullable|string|max:255',
+            ]);
+            
+            if ($request->has('bank_name')) {
+                $user->bank_name = $request->bank_name;
+            }
+            if ($request->has('bank_account')) {
+                $user->bank_account = $request->bank_account;
+            }
+            if ($request->has('bank_account_owner')) {
+                $user->bank_account_owner = $request->bank_account_owner;
+            }
+        }
+
         if ($request->filled('password')) {
             $user->password = Hash::make($request->password);
         }

@@ -129,7 +129,7 @@ class BillingController extends Controller
             'verified_at' => now(),
         ]);
         
-        // Audit log could go here
+        $this->processLayananSalutActivation($billing);
         
         return back()->with('success', 'Pembayaran diterima.');
     }
@@ -156,7 +156,53 @@ class BillingController extends Controller
             'rejection_reason' => null,
         ]);
 
+        $this->processLayananSalutActivation($billing);
+
         return back()->with('success', 'Pembayaran berhasil diverifikasi secara manual.');
+    }
+
+    /**
+     * Helper to activate student if billing is Layanan SALUT
+     */
+    private function processLayananSalutActivation(Billing $billing)
+    {
+        if ($billing->category === 'Layanan SALUT') {
+            $user = $billing->user;
+            
+            if ($user) {
+                // 1. Activate the user if not already active
+                if ($user->status !== 'active') {
+                    $user->update(['status' => 'active']);
+                }
+                
+                // 2. Also update the Registration model status to valid
+                if ($user->registration && $user->registration->status !== 'valid') {
+                    $user->registration->update(['status' => 'valid']);
+                }
+
+                // 3. Distribute 50 points commission to the referrer
+                if ($user->referred_by) {
+                    $alreadyGiven = \App\Models\PointLedger::where('user_id', $user->referred_by)
+                        ->where('description', 'like', '%' . $user->name . '%')
+                        ->where('type', 'credit')
+                        ->exists();
+
+                    if (!$alreadyGiven) {
+                        $referrer = User::find($user->referred_by);
+                        if ($referrer) {
+                            \App\Models\PointLedger::create([
+                                'user_id' => $referrer->id,
+                                'amount' => 50,
+                                'type' => 'credit',
+                                'source_id' => $user->id,
+                                'description' => 'Komisi pendaftaran Layanan SALUT mahasiswa: ' . $user->name,
+                            ]);
+                            // Do not increment missing total_points column
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public function reject(Request $request, Billing $billing)

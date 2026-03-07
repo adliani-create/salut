@@ -33,15 +33,15 @@ class ProspectController extends Controller
                 ];
             });
 
-        // 2. Get Link Registrants (Draft/Pending/Active - Affiliator Recruits)
+        // 2. Get Link Registrants (Draft/Pending/Active - Mahasiswa Recruits)
         $linkRegistrants = User::where('referred_by', $affiliator->id)
-            ->whereHas('role', function($q){ $q->where('name', 'affiliator'); })
+            ->whereHas('role', function($q){ $q->where('name', 'mahasiswa'); })
             ->with('registration')
             ->get()
             ->map(function ($user) {
                 $statusLabel = 'TERDAFTAR';
                 $statusColor = 'primary';
-                $program = 'Program Afiliasi';
+                $program = $user->registration->fokus_karir ?? 'Belum Pilih Program';
 
                 // Map registration and user status to simplified tracking status
                 if ($user->status === 'active') {

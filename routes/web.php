@@ -163,6 +163,10 @@ Route::middleware(['auth', 'role:staff'])->group(function () {
 Route::middleware(['auth', 'role:affiliator'])->prefix('affiliator')->name('affiliator.')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Affiliator\DashboardController::class, 'index'])->name('dashboard');
     Route::resource('students', App\Http\Controllers\Affiliator\ProspectController::class)->only(['index', 'create', 'store']);
+    
+    // Finance
+    Route::get('/finance/commissions', [App\Http\Controllers\Affiliator\FinanceController::class, 'commissions'])->name('finance.commissions');
+    Route::post('/finance/withdraw', [App\Http\Controllers\Affiliator\FinanceController::class, 'withdraw'])->name('finance.withdraw');
 });
 
 // Mitra Routes

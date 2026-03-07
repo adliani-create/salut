@@ -111,6 +111,37 @@
                              </div>
                          </div>
 
+                        <!-- Section: Data Rekening Bank (Only for Affiliator & Mitra) -->
+                        @if($user->isAffiliator() || $user->isMitra())
+                        <div class="col-12 mt-4">
+                            <h6 class="text-primary fw-bold border-bottom pb-2 mb-0">Informasi Rekening Pencairan Komisi</h6>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="bank_name" class="form-label text-muted small fw-bold">Nama Bank / E-Wallet</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white border-end-0 text-primary"><i class="bi bi-bank"></i></span>
+                                <input id="bank_name" type="text" class="form-control border-start-0 ps-0" name="bank_name" value="{{ old('bank_name', $user->bank_name ?? '') }}" placeholder="Contoh: BCA, BSI, DANA">
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="bank_account" class="form-label text-muted small fw-bold">Nomor Rekening / No. HP</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white border-end-0 text-success"><i class="bi bi-123"></i></span>
+                                <input id="bank_account" type="text" class="form-control border-start-0 ps-0" name="bank_account" value="{{ old('bank_account', $user->bank_account ?? '') }}" placeholder="Contoh: 08123456789">
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="bank_account_owner" class="form-label text-muted small fw-bold">Nama Pemilik Rekening</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white border-end-0 text-secondary"><i class="bi bi-person-badge"></i></span>
+                                <input id="bank_account_owner" type="text" class="form-control border-start-0 ps-0" name="bank_account_owner" value="{{ old('bank_account_owner', $user->bank_account_owner ?? '') }}" placeholder="Sesuai buku tabungan">
+                            </div>
+                        </div>
+                        @endif
+
 
                         <!-- Section: Data Akademik (Disabled/Read-only) -->
                         <div class="col-12 mt-4">

@@ -5,12 +5,13 @@
 @section('content')
 <div class="card border-0 shadow-sm rounded-4">
     <div class="card-header bg-white border-0 py-4 d-flex justify-content-between align-items-center">
+    <div class="card-header bg-white border-0 py-4 d-flex justify-content-between align-items-center">
         <div>
-            <h5 class="fw-bold mb-1 text-dark"><i class="bi bi-list-check text-primary me-2"></i>Pemantauan & Pergerakan Status Affiliator</h5>
-            <p class="text-muted small mb-0">Daftar ini adalah gabungan affiliator input manual dan pendaftar via link Anda.</p>
+            <h5 class="fw-bold mb-1 text-dark"><i class="bi bi-list-check text-primary me-2"></i>Pemantauan & Pergerakan Status Mahasiswa</h5>
+            <p class="text-muted small mb-0">Daftar ini adalah gabungan prospek input manual dan pendaftar via link Anda.</p>
         </div>
         <a href="{{ route('affiliator.students.create') }}" class="btn btn-primary rounded-pill px-4 fw-bold">
-            <i class="bi bi-plus-circle me-2"></i>Input Affiliator Baru
+            <i class="bi bi-plus-circle me-2"></i>Input Prospek Baru
         </a>
     </div>
 
@@ -29,7 +30,7 @@
                 <thead class="bg-light text-muted small text-uppercase">
                     <tr>
                         <th class="ps-4 py-3">Sumber Data</th>
-                        <th class="py-3">Info Calon Affiliator</th>
+                        <th class="py-3">Info Calon Mahasiswa</th>
                         <th class="py-3">Waktu Input</th>
                         <th class="py-3 text-center">Status</th>
                         <th class="pe-4 py-3 text-center">Aksi</th>
@@ -55,7 +56,7 @@
                                     <span class="d-block small mt-1">
                                         <i class="bi bi-whatsapp text-success me-1"></i>{{ $student->whatsapp }}
                                     </span>
-                                    <span class="d-block small text-muted">Instansi: {{ $student->program }}</span>
+                                    <span class="d-block small text-muted">Minta: {{ $student->program }}</span>
                                 </div>
                             </div>
                         </td>
@@ -78,12 +79,12 @@
                             @php
                                 $waNumber = preg_replace('/^0/', '62', preg_replace('/[^0-9]/', '', $student->whatsapp));
                                 $affName = Auth::user()->name;
-                                $refLink = url('/register/affiliator?ref=' . Auth::user()->referral_code);
+                                $refLink = url('/register?ref=' . Auth::user()->referral_code);
                                 
                                 if($student->status_label === 'PROSPEK') {
-                                    $waText = urlencode("Halo {$student->name}, saya {$affName}. Berikut adalah link pendaftaran resmi untuk bergabung menjadi tim Affiliator SALUT Indo Global:\n\n{$refLink}");
+                                    $waText = urlencode("Halo {$student->name}, saya {$affName}. Berikut adalah link pendaftaran resmi kampus untuk Anda:\n\n{$refLink}");
                                 } else {
-                                    $waText = urlencode("Halo {$student->name}, saya {$affName}. Kami melihat Anda sudah terdaftar di sistem. Mohon untuk segera menyelesaikan proses registrasi/pembayaran agar akun Anda dapat segera diaktifkan oleh Admin.");
+                                    $waText = urlencode("Halo {$student->name}, saya {$affName}. Kami melihat Anda sudah mulai mendaftar. Mohon segera selesaikan registrasi akun dan tagihan pembayaran Anda supaya bisa mulai kuliah & mengakses materi!");
                                 }
                             @endphp
 
@@ -100,8 +101,8 @@
                     <tr>
                         <td colspan="5" class="text-center py-5 text-muted">
                             <i class="bi bi-person-x fs-1 opacity-25 d-block mb-3"></i>
-                            Belum ada satupun affiliator yang terdata.<br>
-                            Mulai sebar link referral Anda atau input secara manual sekarang!
+                            Belum ada satupun Mahasiswa/Prospek terdata.<br>
+                            Mulai sebar link referral Anda atau catat nama prospek secara manual sekarang!
                         </td>
                     </tr>
                     @endforelse

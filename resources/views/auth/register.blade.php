@@ -24,6 +24,16 @@
                         </div>
 
                         <div class="mb-3">
+                            <label for="nim" class="form-label fw-bold">{{ __('NIM (Nomor Induk Mahasiswa)') }}</label>
+                            <input id="nim" type="text" class="form-control @error('nim') is-invalid @enderror" name="nim" value="{{ old('nim') }}" required autocomplete="nim" placeholder="Masukkan 9 digit angka NIM Anda">
+                            @error('nim')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+
+                        <div class="mb-3">
                             <label for="email" class="form-label fw-bold">{{ __('Email Address') }}</label>
                             <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" placeholder="contoh@email.com">
                             @error('email')
