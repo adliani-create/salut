@@ -1,6 +1,6 @@
 @extends('layouts.affiliator')
 
-@section('title', 'Input Affiliator Baru')
+@section('title', 'Input Mahasiswa Baru')
 
 @section('content')
 <div class="row justify-content-center">

@@ -167,6 +167,10 @@ Route::middleware(['auth', 'role:affiliator'])->prefix('affiliator')->name('affi
     // Finance
     Route::get('/finance/commissions', [App\Http\Controllers\Affiliator\FinanceController::class, 'commissions'])->name('finance.commissions');
     Route::post('/finance/withdraw', [App\Http\Controllers\Affiliator\FinanceController::class, 'withdraw'])->name('finance.withdraw');
+
+    // Profile Settings
+    Route::get('/profile', [App\Http\Controllers\Affiliator\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [App\Http\Controllers\Affiliator\ProfileController::class, 'update'])->name('profile.update');
 });
 
 // Mitra Routes

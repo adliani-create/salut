@@ -29,7 +29,7 @@
             position: fixed;
             top: 0;
             left: 0;
-            z-index: 1000;
+            z-index: 1040;
             background-color: #ffffff; /* White Background */
             border-right: 1px solid #dee2e6;
             overflow-y: auto;
@@ -86,6 +86,33 @@
         /* Toggled State for Mobile */
         body.sb-sidenav-toggled #sidebar-wrapper {
             margin-left: 0;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+
+        /* Overlay for mobile */
+        #sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            backdrop-filter: blur(2px);
+            transition: opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        body.sb-sidenav-toggled #sidebar-overlay {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Hamburger Toggle on top of sidebar */
+        #sidebarToggleTop {
+            position: relative;
+            z-index: 1050;
         }
         
         /* Navbar */
@@ -144,6 +171,9 @@
     </style>
 </head>
 <body>
+    <!-- Mobile Sidebar Overlay -->
+    <div id="sidebar-overlay"></div>
+
     <div class="d-flex" id="wrapper">
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
@@ -262,6 +292,7 @@
     <script>
         var el = document.getElementById("wrapper");
         var sidebarToggleTop = document.getElementById("sidebarToggleTop");
+        var overlay = document.getElementById("sidebar-overlay");
 
         function toggleMenu() {
             el.classList.toggle("toggled");
@@ -271,6 +302,12 @@
         if(sidebarToggleTop) {
             sidebarToggleTop.onclick = function(e) {
                 e.preventDefault();
+                toggleMenu();
+            };
+        }
+        
+        if(overlay) {
+            overlay.onclick = function(e) {
                 toggleMenu();
             };
         }

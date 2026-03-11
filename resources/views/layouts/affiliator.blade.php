@@ -29,7 +29,7 @@
             position: fixed;
             top: 0;
             left: 0;
-            z-index: 1000;
+            z-index: 1040;
             background-color: #ffffff; /* White Background */
             border-right: 1px solid #dee2e6;
             overflow-y: auto;
@@ -94,7 +94,37 @@
             #page-content-wrapper { margin-left: 250px; }
         }
         
-        body.sb-sidenav-toggled #sidebar-wrapper { margin-left: 0; }
+        /* Toggled State for Mobile */
+        body.sb-sidenav-toggled #sidebar-wrapper {
+            margin-left: 0;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+
+        /* Overlay for mobile */
+        #sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            backdrop-filter: blur(2px);
+            transition: opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        body.sb-sidenav-toggled #sidebar-overlay {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Hamburger Toggle on top of sidebar */
+        #sidebarToggleTop {
+            position: relative;
+            z-index: 1050;
+        }
         
         .navbar {
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
@@ -139,6 +169,9 @@
     </style>
 </head>
 <body>
+    <!-- Mobile Sidebar Overlay -->
+    <div id="sidebar-overlay"></div>
+
     <div class="d-flex" id="wrapper">
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
@@ -167,7 +200,7 @@
                 </a>
 
                 <div class="text-uppercase text-muted small fw-bold px-4 mb-2 mt-4" style="font-size: 0.75rem; letter-spacing: 1px;">Sistem</div>
-                <a href="{{ route('profile.edit') }}" class="list-group-item list-group-item-action">
+                <a href="{{ route('affiliator.profile.edit') }}" class="list-group-item list-group-item-action {{ request()->routeIs('affiliator.profile.edit') ? 'active' : '' }}">
                     <i class="bi bi-gear-fill me-3"></i>Pengaturan Profil
                 </a>
                 <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="list-group-item list-group-item-action text-danger mt-2">
@@ -206,7 +239,7 @@
                                 </div>
                             </li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item rounded-3 py-2" href="{{ route('profile.edit') }}"><i class="bi bi-person me-2 text-primary"></i>Profil Saya</a></li>
+                            <li><a class="dropdown-item rounded-3 py-2" href="{{ route('affiliator.profile.edit') }}"><i class="bi bi-person me-2 text-primary"></i>Profil Saya</a></li>
                             <li>
                                 <a class="dropdown-item rounded-3 py-2 text-danger" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     <i class="bi bi-box-arrow-right me-2"></i>Keluar Sistem
@@ -230,13 +263,19 @@
     <script>
         var sidebarToggleTop = document.getElementById("sidebarToggleTop");
         var wrapper = document.getElementById("wrapper");
+        var overlay = document.getElementById("sidebar-overlay");
+
+        function toggleSidebar(e) {
+            e.preventDefault();
+            document.body.classList.toggle("sb-sidenav-toggled");
+        }
 
         if(sidebarToggleTop) {
-             sidebarToggleTop.onclick = function(e) {
-                 e.preventDefault();
-                 wrapper.classList.toggle("toggled");
-                 document.body.classList.toggle("sb-sidenav-toggled");
-             };
+             sidebarToggleTop.onclick = toggleSidebar;
+        }
+        
+        if(overlay) {
+             overlay.onclick = toggleSidebar;
         }
     </script>
     @stack('scripts')

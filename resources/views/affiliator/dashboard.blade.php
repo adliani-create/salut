@@ -3,16 +3,41 @@
 @section('title', 'Dashboard Affiliator')
 
 @section('content')
+
+<!-- Recent Transfer Notifications -->
+@if(isset($recentTransfers) && $recentTransfers->count() > 0)
+    <div class="row mb-4">
+        <div class="col-12">
+            @foreach($recentTransfers as $transfer)
+            <div class="alert alert-success border-0 shadow-sm rounded-4 d-flex align-items-center mb-2 alert-dismissible fade show" role="alert">
+                <div class="bg-success text-white rounded-circle p-2 me-3 shadow-sm d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                    <i class="bi bi-cash-coin fs-4"></i>
+                </div>
+                <div>
+                    <h6 class="alert-heading fw-bold mb-1">Pencairan Transfer Berhasil!</h6>
+                    <p class="mb-0 small">
+                        Dana sebesar <strong>Rp {{ number_format($transfer->amount, 0, ',', '.') }}</strong> 
+                        telah berhasil ditransfer oleh Admin ke rekening <strong>{{ $transfer->bank_name }}</strong> Anda pada {{ $transfer->updated_at->format('d M Y, H:i') }}.
+                    </p>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            @endforeach
+        </div>
+    </div>
+@endif
+
 <!-- Referral Copy Section -->
 <div class="row mb-4">
     <div class="col-12">
         <div class="card bg-primary text-white border-0 shadow-sm rounded-4 overflow-hidden position-relative">
             <!-- Background Decoration -->
-            <div class="position-absolute end-0 top-0 opacity-10 h-100" style="margin-right: -20px; margin-top: -20px;">
-                <i class="bi bi-briefcase-fill" style="font-size: 15rem;"></i>
+            <div class="position-absolute end-0 top-0 h-100 text-white opacity-10" style="margin-right: -20px; margin-top: -20px; pointer-events: none; z-index: 0;">
+                <i class="bi bi-briefcase-fill d-none d-md-block" style="font-size: 15rem;"></i>
+                <i class="bi bi-briefcase-fill d-block d-md-none" style="font-size: 8rem; margin-top: 1rem;"></i>
             </div>
             
-            <div class="card-body p-4 p-md-5 position-relative z-index-1">
+            <div class="card-body p-4 p-md-5 position-relative" style="z-index: 1;">
                 <div class="row align-items-center">
                     <div class="col-md-7 mb-4 mb-md-0">
                         <span class="badge bg-white text-primary mb-3 px-3 py-2 rounded-pill fw-bold">Penambahan Mahasiswa</span>
@@ -60,7 +85,7 @@
                 <div class="d-flex align-items-center mb-2">
                     <h6 class="text-success fw-bold mb-0 text-uppercase" style="font-size: 0.8rem;">Estimasi Komisi Pribadi</h6>
                 </div>
-                <h2 class="fw-bold text-dark mb-0">{{ number_format($totalPoints, 0, ',', '.') }} <span class="fs-6 text-muted fw-normal">Poin</span></h2>
+                <h2 class="fw-bold text-dark mb-0">Rp {{ number_format($totalPoints, 0, ',', '.') }}</h2>
                 <div class="mt-2 text-muted small"><i class="bi bi-info-circle me-1"></i> Didapat saat anggota Aktif</div>
             </div>
         </div>
@@ -123,22 +148,6 @@
     </div>
 </div>
 
-<!-- Aturan Edukasi Section -->
-<div class="row mb-5">
-    <div class="col-12">
-        <div class="card border-0 bg-warning bg-opacity-10 rounded-4">
-            <div class="card-body p-4 p-md-5">
-                <div class="d-flex align-items-center mb-3">
-                    <i class="bi bi-exclamation-triangle-fill text-warning fs-1 me-3"></i>
-                    <h5 class="fw-bold text-dark mb-0">Edukasi Wajib: Aturan Tiket Layanan Bagi Mahasiswa Anda</h5>
-                </div>
-                <p class="text-secondary mb-0">
-                    Sebagai perekrut, Anda <strong>wajib mengedukasi</strong> calon mahasiswa Anda bahwa fitur <strong>"Tiket Layanan"</strong> di sistem akademik mereka <strong>hanya bisa digunakan jika status kemahasiswaan mereka AKTIF</strong> (tidak dalam masa cuti atau menunggak pembayaran semester). Kepatuhan terhadap aturan ini memperlancar jalannya komisi.
-                </p>
-            </div>
-        </div>
-    </div>
-</div>
 
 @push('scripts')
 <script>

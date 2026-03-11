@@ -75,9 +75,9 @@
                     <div class="bg-success bg-opacity-10 text-success py-2 px-3 rounded-3 me-3">
                         <i class="bi bi-wallet2 fs-3"></i>
                     </div>
-                    <h6 class="text-muted fw-bold mb-0 text-uppercase" style="font-size: 0.8rem;">Saldo Poin<br>Pribadi</h6>
+                    <h6 class="text-muted fw-bold mb-0 text-uppercase" style="font-size: 0.8rem;">Estimasi Komisi<br>Pribadi</h6>
                 </div>
-                <h2 class="fw-bold text-dark mb-0">{{ number_format($totalPoints, 0, ',', '.') }} <span class="fs-6 text-muted fw-normal">Poin</span></h2>
+                <h2 class="fw-bold text-dark mb-0">Rp {{ number_format($totalPoints, 0, ',', '.') }}</h2>
             </div>
         </div>
     </div>

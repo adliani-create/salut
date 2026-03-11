@@ -124,14 +124,8 @@ class StudentRegisterController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'nim' => ['required', 'numeric', 'digits:9', 'unique:users,nim'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ], [
-            'nim.required' => 'NIM wajib diisi.',
-            'nim.digits' => 'NIM harus tepat 9 digit angka.',
-            'nim.unique' => 'NIM ini sudah terdaftar sebelumnya.',
-            'nim.numeric' => 'NIM hanya boleh berisi angka.',
         ]);
 
         // Get Mahasiswa Role
@@ -151,7 +145,6 @@ class StudentRegisterController extends Controller
 
         $user = User::create([
             'name' => $request->name,
-            'nim' => $request->nim,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role_id' => $role->id,

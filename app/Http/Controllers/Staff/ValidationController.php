@@ -37,13 +37,13 @@ class ValidationController extends Controller
                 if ($referrer) {
                     \App\Models\PointLedger::create([
                         'user_id' => $referrerId,
-                        'amount' => 50,
+                        'amount' => 50000,
                         'type' => 'credit',
                         'description' => 'Komisi pendaftaran valid mahasiswa: ' . $registration->user->name
                     ]);
 
                     // Update total points cache if exists
-                    $referrer->increment('total_points', 50);
+                    $referrer->increment('total_points', 50000);
                 }
             }
         }

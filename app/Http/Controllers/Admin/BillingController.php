@@ -180,7 +180,7 @@ class BillingController extends Controller
                     $user->registration->update(['status' => 'valid']);
                 }
 
-                // 3. Distribute 50 points commission to the referrer
+                // 3. Distribute 50000 points commission to the referrer
                 if ($user->referred_by) {
                     $alreadyGiven = \App\Models\PointLedger::where('user_id', $user->referred_by)
                         ->where('description', 'like', '%' . $user->name . '%')
@@ -192,7 +192,7 @@ class BillingController extends Controller
                         if ($referrer) {
                             \App\Models\PointLedger::create([
                                 'user_id' => $referrer->id,
-                                'amount' => 50,
+                                'amount' => 50000,
                                 'type' => 'credit',
                                 'source_id' => $user->id,
                                 'description' => 'Komisi pendaftaran Layanan SALUT mahasiswa: ' . $user->name,

@@ -44,8 +44,15 @@ class DashboardController extends Controller
             return $ledger->type === 'credit' ? $ledger->amount : -$ledger->amount;
         });
 
+        // 4. Get recently approved withdrawals (e.g. within last 7 days) to show notification
+        $recentTransfers = \App\Models\Withdrawal::where('user_id', $user->id)
+            ->where('status', 'approved')
+            ->where('updated_at', '>=', now()->subDays(7))
+            ->latest()
+            ->get();
+
         return view('affiliator.dashboard', compact(
-            'referralLink', 'prospectsCount', 'registeredStudentsCount', 'activeStudentsCount', 'totalPoints'
+            'referralLink', 'prospectsCount', 'registeredStudentsCount', 'activeStudentsCount', 'totalPoints', 'recentTransfers'
         ));
     }
 }

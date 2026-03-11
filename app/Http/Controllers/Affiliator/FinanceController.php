@@ -31,7 +31,7 @@ class FinanceController extends Controller
     public function withdraw(Request $request)
     {
         $request->validate([
-            'amount' => 'required|numeric|min:100', // Minimum 100 points to withdraw
+            'amount' => 'required|numeric|min:50000', // Minimum 50000 points (Rp) to withdraw
         ]);
 
         $affiliator = Auth::user();

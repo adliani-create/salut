@@ -45,7 +45,7 @@
                             <th class="py-3">Upline (Mitra)</th>
                             <th class="py-3">Kode Referral</th>
                             <th class="py-3 text-center">Total Perekrutan</th>
-                            <th class="py-3 text-end">Total Poin</th>
+                            <th class="py-3 text-end">Total Komisi</th>
                             <th class="py-3 text-center">Status</th>
                             <th class="pe-4 py-3 text-center">Aksi</th>
                         </tr>
@@ -82,7 +82,7 @@
                                 <span class="badge bg-info rounded-pill px-3 py-2">{{ $affiliator->students_count }} Maba</span>
                             </td>
                             <td class="py-3 text-end">
-                                <span class="fw-bold fs-5 text-success">{{ number_format($affiliator->total_points, 0, ',', '.') }}</span>
+                                <span class="fw-bold fs-5 text-success">Rp {{ number_format($affiliator->total_points, 0, ',', '.') }}</span>
                             </td>
                             <td class="py-3 text-center">
                                 @if($affiliator->status === 'active')
