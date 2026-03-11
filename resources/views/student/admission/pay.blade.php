@@ -78,11 +78,11 @@
                                             <i class="bi bi-bank fs-3 text-secondary"></i>
                                         </div>
                                         <div>
-                                            <h6 class="fw-bold mb-0 text-dark">Bank BRI</h6>
-                                            <p class="mb-0 font-monospace fs-5">0123-4567-8910</p>
+                                            <h6 class="fw-bold mb-0 text-dark">Bank BTN</h6>
+                                            <p class="mb-0 font-monospace fs-5">5480-1880-0002-12</p>
                                         </div>
                                     </div>
-                                    <p class="small text-muted mb-0">A.n. <strong>PT Indoglobal Salut</strong></p>
+                                    <p class="small text-muted mb-0">A.n. <strong>Salut Indo Global</strong></p>
                                 </div>
                             </div>
 
