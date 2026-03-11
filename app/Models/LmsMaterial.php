@@ -13,6 +13,8 @@ class LmsMaterial extends Model
         'title',
         'type',
         'file_path',
+        'url',
+        'source_type',
         'description',
         'thumbnail',
         'duration',

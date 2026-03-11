@@ -142,7 +142,8 @@ Route::middleware(['auth', 'role:mahasiswa', 'ensure_registration_complete'])->g
     // Main student areas locked behind admission payment
     Route::middleware(['check_admission_payment'])->group(function () {
         Route::get('/mahasiswa/dashboard', [App\Http\Controllers\Student\DashboardController::class, 'index'])->name('student.dashboard');
-    Route::get('/mahasiswa/academic', [App\Http\Controllers\Student\DashboardController::class, 'academic'])->name('student.academic');
+        Route::get('/student/admission/receipt', [App\Http\Controllers\Student\AdmissionReceiptController::class, 'download'])->name('student.admission.receipt');
+        Route::get('/mahasiswa/academic', [App\Http\Controllers\Student\DashboardController::class, 'academic'])->name('student.academic');
     Route::get('/mahasiswa/non-academic', [App\Http\Controllers\Student\DashboardController::class, 'nonAcademic'])->name('student.non-academic');
     Route::get('/mahasiswa/lms/{material}/view', [App\Http\Controllers\Student\LmsController::class, 'view'])->name('student.lms.view');
     

@@ -124,10 +124,11 @@
             REGISTRASI SALUT INDO GLOBAL
         </div>
         <div class="logo-section">
-            <h2 style="margin:0; color:#0d6efd;">SALUT</h2>
-            <small>Sentra Layanan UT</small><br>
-            <strong>SALUT INDO GLOBAL</strong><br>
-            Kota Tasikmalaya
+            @if(!empty($logo_base64))
+                <img src="{{ $logo_base64 }}" alt="Logo SALUT" style="max-height: 85px; max-width: 250px; object-fit: contain; margin-bottom: 5px;">
+            @else
+                <h2 style="margin:0; color:#0d6efd;">SALUT</h2>
+            @endif
         </div>
     </div>
 
@@ -198,15 +199,16 @@
 
     <!-- Footer -->
     <div class="footer-section">
-        <div class="signature">
-            Hormat kami,<br>
-            <strong>Kepala SALUT Indo Global</strong>
-            
-            <div style="height: 80px; margin-top:10px; margin-bottom:5px;">
-                  <br><br><br>
-            </div>
-
-            <div style="font-weight: bold; text-decoration: underline;">Willy Ramadhan, S.Pd.</div>
+        <div class="signature" style="text-align: right; width: 40%">
+            @if(!empty($signature_base64))
+                <div style="margin-top: 10px; margin-bottom: 5px;">
+                    <img src="{{ $signature_base64 }}" alt="Tanda Tangan" style="max-height: 160px; max-width: 280px; object-fit: contain;">
+                </div>
+            @else
+                <div style="height: 80px; margin-top:10px; margin-bottom:5px;">
+                    <br><br><br>
+                </div>
+            @endif
         </div>
         <div class="due-date">
             Tenggat Pembayaran: <span style="color: #d9534f;">{{ $billing->due_date ? $billing->due_date->format('d F Y') : '-' }}</span>

@@ -222,9 +222,29 @@ class BillingController extends Controller
         // Ensure relation is loaded
         $billing->load('user', 'user.registration');
 
+        // Encode Logo to Base64 for DOMPDF
+        $logoPath = public_path('images/logo-salut-full.png');
+        $logoBase64 = '';
+        if (file_exists($logoPath)) {
+            $logoData = file_get_contents($logoPath);
+            $logoType = pathinfo($logoPath, PATHINFO_EXTENSION);
+            $logoBase64 = 'data:image/' . $logoType . ';base64,' . base64_encode($logoData);
+        }
+
+        // Encode Signature to Base64
+        $sigPath = public_path('images/signature.jpg');
+        $signatureBase64 = '';
+        if (file_exists($sigPath)) {
+            $sigData = file_get_contents($sigPath);
+            $sigType = pathinfo($sigPath, PATHINFO_EXTENSION);
+            $signatureBase64 = 'data:image/' . $sigType . ';base64,' . base64_encode($sigData);
+        }
+
         $data = [
             'billing' => $billing,
             'title' => $billing->status == 'paid' ? 'Kuitansi Pembayaran' : 'Invoice Tagihan',
+            'logo_base64' => $logoBase64,
+            'signature_base64' => $signatureBase64
         ];
 
         $pdf = Pdf::loadView('admin.billings.invoice_pdf', $data);

@@ -19,7 +19,12 @@ class LmsController extends Controller
             Auth::user()->completedMaterials()->attach($material->id, ['completed_at' => now()]);
         }
 
-        // Return the file path to open/download
+        // Redirect to external URL (YouTube/Drive) if available
+        if ($material->url) {
+            return redirect()->away($material->url);
+        }
+
+        // Fallback for legacy files
         return redirect(asset('storage/' . $material->file_path));
     }
 }

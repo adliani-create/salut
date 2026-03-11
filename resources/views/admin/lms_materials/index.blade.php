@@ -20,7 +20,8 @@
                     <tr>
                         <th>Title</th>
                         <th>Type</th>
-                        <th>File</th>
+                        <th>Link</th>
+                        <th>Source</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -36,7 +37,16 @@
                             @endif
                         </td>
                         <td>
-                            <a href="{{ asset('storage/' . $material->file_path) }}" target="_blank" class="btn btn-sm btn-outline-secondary">Download/View</a>
+                            @if($material->url)
+                                <a href="{{ $material->url }}" target="_blank" class="btn btn-sm btn-outline-primary">Visit Link</a>
+                            @elseif($material->file_path)
+                                <a href="{{ asset('storage/' . $material->file_path) }}" target="_blank" class="btn btn-sm btn-outline-secondary">Download (Legacy)</a>
+                            @else
+                                <span class="text-muted">No Link</span>
+                            @endif
+                        </td>
+                        <td>
+                            <span class="badge bg-secondary text-uppercase">{{ $material->source_type ?? 'Local' }}</span>
                         </td>
                         <td>
                             <a href="{{ route('admin.lms-materials.edit', $material->id) }}" class="btn btn-sm btn-warning">Edit</a>

@@ -52,6 +52,30 @@
         </div>
     </div>
 
+    <!-- Download Admission Receipt Banner -->
+    @if(Auth::user()->status === 'active')
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-success shadow-sm rounded-4 overflow-hidden" style="border-width: 2px;">
+                <div class="card-body p-4 d-flex align-items-center justify-content-between flex-column flex-md-row bg-light">
+                    <div class="d-flex align-items-center mb-3 mb-md-0">
+                        <div class="bg-success bg-opacity-10 p-3 rounded-circle me-3">
+                            <i class="bi bi-file-earmark-pdf-fill text-success fs-2"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold text-dark mb-1">Bukti Pembayaran Admisi Berhasil diverifikasi</h5>
+                            <p class="text-muted small mb-0">Klik tombol di samping untuk mengunduh bukti lunas admisi Anda.</p>
+                        </div>
+                    </div>
+                    <a href="{{ route('student.admission.receipt') }}" class="btn btn-success btn-lg rounded-pill fw-bold shadow-sm px-4">
+                        <i class="bi bi-download me-2"></i> Unduh Kuitansi
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
     <!-- Overview Widgets -->
     <div class="row g-4 mb-4">
         <!-- Billing Widget -->
