@@ -149,6 +149,7 @@ class StudentRegisterController extends Controller
             'password' => Hash::make($request->password),
             'role_id' => $role->id,
             'referred_by' => $referredBy,
+            'status' => 'unpaid', // Force Admission Payment Gate
         ]);
 
         // Create Draft Registration
@@ -268,13 +269,13 @@ class StudentRegisterController extends Controller
             'user_id' => Auth::id(),
             'billing_code' => 'INV-' . date('Ym') . '-' . rand(1000, 9999),
             'category' => 'Layanan SALUT',
-            'amount' => 150000, // Hardcoded default based on prompt
+            'amount' => 500000, // Updated amount
             'semester' => 1,
             'due_date' => now()->addDays(30),
             'status' => 'unpaid',
             'description' => 'Tagihan Aktivasi Layanan SALUT Mahasiswa Baru',
         ]);
 
-        return redirect()->route('home')->with('status', 'Registrasi berhasil! Silakan selesaikan pembayaran aktivasi layanan Anda.');
+        return redirect()->route('student.dashboard')->with('status', 'Registrasi berhasil! Silakan selesaikan pembayaran aktivasi layanan Anda.');
     }
 }

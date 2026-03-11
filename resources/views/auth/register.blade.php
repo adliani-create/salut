@@ -13,9 +13,9 @@
                     <form method="POST" action="{{ route('register.step1.store') }}">
                         @csrf
 
-                        <div class="mb-3">
+                        <div class="mb-4">
                             <label for="name" class="form-label fw-bold">{{ __('Nama Lengkap') }}</label>
-                            <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus placeholder="Masukkan nama lengkap sesuai ijazah">
+                            <input id="name" type="text" class="form-control form-control-lg bg-light border-0 @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus placeholder="Masukkan nama lengkap sesuai ijazah">
                             @error('name')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -23,11 +23,9 @@
                             @enderror
                         </div>
 
-                        </div>
-
-                        <div class="mb-3">
+                        <div class="mb-4">
                             <label for="email" class="form-label fw-bold">{{ __('Email Address') }}</label>
-                            <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" placeholder="contoh@email.com">
+                            <input id="email" type="email" class="form-control form-control-lg bg-light border-0 @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" placeholder="contoh@email.com">
                             @error('email')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -35,10 +33,10 @@
                             @enderror
                         </div>
 
-                        <div class="row mb-3">
-                            <div class="col-md-6">
+                        <div class="row mb-4">
+                            <div class="col-md-6 mb-3 mb-md-0">
                                 <label for="password" class="form-label fw-bold">{{ __('Password') }}</label>
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+                                <input id="password" type="password" class="form-control form-control-lg bg-light border-0 @error('password') is-invalid @enderror" name="password" required autocomplete="new-password" placeholder="Minimal 8 karakter">
                                 @error('password')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -47,7 +45,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="password-confirm" class="form-label fw-bold">{{ __('Confirm Password') }}</label>
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+                                <input id="password-confirm" type="password" class="form-control form-control-lg bg-light border-0" name="password_confirmation" required autocomplete="new-password" placeholder="Ulangi password">
                             </div>
                         </div>
 

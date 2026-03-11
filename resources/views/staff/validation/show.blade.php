@@ -9,7 +9,20 @@
             <div class="card mb-3">
                 <div class="card-header fw-bold">Registration Details: {{ $registration->user->name }}</div>
                 <div class="card-body">
-                    <h5>Uploaded Files</h5>
+                    <!-- Admission Receipt Feature -->
+                    @if($registration->user->admission_receipt)
+                        <div class="mb-4">
+                            <h6 class="fw-bold text-success"><i class="bi bi-wallet2 me-2"></i>Bukti Transfer Tagihan Admisi (Rp 100.000)</h6>
+                            <a href="{{ asset('storage/' . $registration->user->admission_receipt) }}" target="_blank">
+                                <img src="{{ asset('storage/' . $registration->user->admission_receipt) }}" class="img-thumbnail rounded mt-2 shadow-sm" style="max-height: 200px; object-fit: cover;" alt="Bukti Transfer Admisi">
+                            </a>
+                            <p class="small text-muted mt-2">Status Mahasiswa: <strong class="text-uppercase">{{ $registration->user->status }}</strong></p>
+                        </div>
+                        <hr>
+                    @endif
+
+                    <!-- Additional Files (if any) -->
+                    <h5>Berkas Pendukung Lainnya</h5>
                     {{-- Assuming files is an array of paths or similar, ad-hoc implementation --}}
                     <ul>
                         @foreach($registration->files ?? [] as $file)

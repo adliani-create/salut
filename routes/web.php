@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Student\AdmissionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,6 +69,12 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
     Route::get('admin/registrations/{registration}', [App\Http\Controllers\Admin\RegistrationController::class, 'show'])->name('admin.registrations.show');
     Route::put('admin/registrations/{registration}', [App\Http\Controllers\Admin\RegistrationController::class, 'update'])->name('admin.registrations.update');
     Route::put('admin/registrations/{registration}/approve', [App\Http\Controllers\Admin\RegistrationController::class, 'approve'])->name('admin.registrations.approve');
+
+    // Admissions Verification
+    Route::get('admin/admissions', [App\Http\Controllers\Admin\AdmissionApprovalController::class, 'index'])->name('admin.admissions.index');
+    Route::get('admin/admissions/{user}', [App\Http\Controllers\Admin\AdmissionApprovalController::class, 'show'])->name('admin.admissions.show');
+    Route::post('admin/admissions/{user}/approve', [App\Http\Controllers\Admin\AdmissionApprovalController::class, 'approve'])->name('admin.admissions.approve');
+    Route::post('admin/admissions/{user}/reject', [App\Http\Controllers\Admin\AdmissionApprovalController::class, 'reject'])->name('admin.admissions.reject');
     
     // User Management (Students)
     Route::get('admin/students', [App\Http\Controllers\Admin\UserController::class, 'students'])->name('admin.students.index');
@@ -128,7 +135,13 @@ Route::middleware(['auth', 'role:yayasan'])->group(function () {
 
 // Student Routes
 Route::middleware(['auth', 'role:mahasiswa', 'ensure_registration_complete'])->group(function () {
-    Route::get('/mahasiswa/dashboard', [App\Http\Controllers\Student\DashboardController::class, 'index'])->name('student.dashboard');
+    // Admission Routes (Exempt from check_admission_payment)
+    Route::get('/student/admission/pay', [AdmissionController::class, 'pay'])->name('student.admission.pay');
+    Route::post('/student/admission/upload', [AdmissionController::class, 'upload'])->name('student.admission.upload');
+
+    // Main student areas locked behind admission payment
+    Route::middleware(['check_admission_payment'])->group(function () {
+        Route::get('/mahasiswa/dashboard', [App\Http\Controllers\Student\DashboardController::class, 'index'])->name('student.dashboard');
     Route::get('/mahasiswa/academic', [App\Http\Controllers\Student\DashboardController::class, 'academic'])->name('student.academic');
     Route::get('/mahasiswa/non-academic', [App\Http\Controllers\Student\DashboardController::class, 'nonAcademic'])->name('student.non-academic');
     Route::get('/mahasiswa/lms/{material}/view', [App\Http\Controllers\Student\LmsController::class, 'view'])->name('student.lms.view');
@@ -145,8 +158,10 @@ Route::middleware(['auth', 'role:mahasiswa', 'ensure_registration_complete'])->g
     Route::get('/mahasiswa/billing', [App\Http\Controllers\Student\BillingController::class, 'index'])->name('student.billing.index');
     Route::post('/mahasiswa/billing/{id}/upload', [App\Http\Controllers\Student\BillingController::class, 'upload'])->name('student.billing.upload');
     Route::get('/mahasiswa/invoice/{id}/print', [App\Http\Controllers\Student\BillingController::class, 'print'])->name('student.invoice.print');
-});
-            
+    
+    }); // End check_admission_payment middleware
+}); // End role:mahasiswa middleware
+
 // Staff Routes
 Route::middleware(['auth', 'role:staff'])->group(function () {
     Route::get('/staff/dashboard', [App\Http\Controllers\Staff\DashboardController::class, 'index'])->name('staff.dashboard');

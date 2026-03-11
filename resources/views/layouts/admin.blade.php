@@ -175,13 +175,22 @@
                 </div>
 
                 <!-- Data Mahasiswa Collapsible -->
-                <a href="#submenuMahasiswa" data-bs-toggle="collapse" class="list-group-item list-group-item-action bg-transparent d-flex justify-content-between align-items-center" aria-expanded="{{ request()->routeIs('admin.registrations.*') || request()->routeIs('admin.students.*') ? 'true' : 'false' }}">
+                <a href="#submenuMahasiswa" data-bs-toggle="collapse" class="list-group-item list-group-item-action bg-transparent d-flex justify-content-between align-items-center" aria-expanded="{{ request()->routeIs('admin.registrations.*') || request()->routeIs('admin.students.*') || request()->routeIs('admin.admissions.*') ? 'true' : 'false' }}">
                     <span><i class="bi bi-people-fill me-2"></i>Mahasiswa</span>
                     <i class="bi bi-chevron-down small"></i>
                 </a>
-                <div class="collapse list-group-submenu {{ request()->routeIs('admin.registrations.*') || request()->routeIs('admin.students.*') ? 'show' : '' }}" id="submenuMahasiswa">
+                <div class="collapse list-group-submenu {{ request()->routeIs('admin.registrations.*') || request()->routeIs('admin.students.*') || request()->routeIs('admin.admissions.*') ? 'show' : '' }}" id="submenuMahasiswa">
                     <a href="{{ route('admin.registrations.index') }}" class="list-group-item list-group-item-action bg-transparent border-0 ps-5 {{ request()->routeIs('admin.registrations.*') ? 'text-primary fw-bold' : '' }}">
                         Registrasi
+                    </a>
+                    <a href="{{ route('admin.admissions.index') }}" class="list-group-item list-group-item-action bg-transparent border-0 ps-5 {{ request()->routeIs('admin.admissions.*') ? 'text-primary fw-bold' : '' }}">
+                        Persetujuan Admisi
+                        @php
+                            $pendingAdmissionsCount = \App\Models\User::whereHas('role', function($q){ $q->where('name', 'mahasiswa'); })->where('status', 'pending_verification')->count();
+                        @endphp
+                        @if($pendingAdmissionsCount > 0)
+                            <span class="badge bg-danger ms-2 rounded-pill">{{ $pendingAdmissionsCount }}</span>
+                        @endif
                     </a>
                     <a href="{{ route('admin.students.index') }}" class="list-group-item list-group-item-action bg-transparent border-0 ps-5 {{ request()->routeIs('admin.students.*') ? 'text-primary fw-bold' : '' }}">
                         Data Mahasiswa
