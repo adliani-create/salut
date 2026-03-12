@@ -35,7 +35,7 @@ class CareerProgramController extends Controller
             'description' => 'nullable|string',
         ]);
 
-        CareerProgram::create($request->all());
+        CareerProgram::create($request->except('_token'));
 
         return redirect()->route('admin.career-programs.index')
             ->with('success', 'Program berhasil ditambahkan.');
