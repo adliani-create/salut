@@ -69,11 +69,6 @@
                                 <a href="{{ route('admin.academic.upload', $student->id) }}" class="btn btn-outline-primary rounded-pill px-3 fw-bold btn-sm d-flex align-items-center">
                                     <i class="bi bi-upload me-2"></i> Upload Transkrip
                                 </a>
-                                
-                                <!-- Upload Kartu Ujian (Orange Outline) -->
-                                <a href="{{ route('admin.academic.ktpu.upload', $student->id) }}" class="btn btn-outline-warning text-dark rounded-pill px-3 fw-bold btn-sm d-flex align-items-center" title="Upload KTPU">
-                                    <i class="bi bi-card-heading me-2"></i> Upload KTPU
-                                </a>
                             </div>
                         </div>
 

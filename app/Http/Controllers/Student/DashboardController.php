@@ -37,23 +37,107 @@ class DashboardController extends Controller
 
         $trainings = \App\Models\Training::whereDate('date', '>=', now())
             ->where(function ($q) use ($program) {
-                // If user has a program, check for match OR general content (no tags)
                 if ($program) {
                     $q->whereHas('careerPrograms', function ($sq) use ($program) {
                         $sq->where('name', $program);
                     })
                         ->orWhere('program', $program) // Legacy fallback
                         ->orWhereDoesntHave('careerPrograms'); // General content
-                } else {
-                    // If user has no program, maybe show all or just general? 
-                    // Let's show all for now to avoid empty dashboard for old users
                 }
             })
             ->orderBy('date', 'asc')
             ->take(3)
             ->get();
 
-        return view('mahasiswa.dashboard', compact('user', 'totalUnpaid', 'trainings'));
+        // 4. ALERTS (H-1 Deadlines)
+        $upcomingDeadlines = collect();
+        $academicSchedules = collect();
+        if ($user->status === 'active') {
+            $userSemester = $user->semester;
+            $program = optional($user->registration)->fokus_karir;
+            
+            // Lookup Prodi ID if a program name string is set
+            $prodiId = null;
+            if ($program) {
+                $prodiModel = \App\Models\Prodi::where('nama', $program)->first();
+                if ($prodiModel) {
+                    $prodiId = $prodiModel->id;
+                }
+            }
+            
+            $upcomingDeadlines = \App\Models\AcademicSchedule::whereNotNull('deadline')
+                ->whereDate('deadline', '<=', now()->addDay()->toDateString())
+                ->whereDate('deadline', '>=', now()->toDateString())
+                ->where(function ($query) use ($user, $prodiId, $userSemester) {
+                    // Schedules targeted specifically to this student
+                    $query->where('user_id', $user->id)
+                          // Or schedules meant for everyone matching program & semester
+                          ->orWhere(function ($q) use ($prodiId, $userSemester) {
+                              $q->whereNull('user_id')
+                                ->where(function ($sq) use ($prodiId) {
+                                    if ($prodiId) {
+                                        $sq->where('prodi_id', $prodiId)
+                                           ->orWhereNull('prodi_id');
+                                    } else {
+                                        $sq->whereNull('prodi_id');
+                                    }
+                                })
+                                ->where(function ($sq) use ($userSemester) {
+                                    if ($userSemester) {
+                                        $sq->where('target_semester', $userSemester)
+                                           ->orWhereNull('target_semester');
+                                    } else {
+                                        $sq->whereNull('target_semester');
+                                    }
+                                });
+                          });
+                })
+                ->orderBy('deadline', 'asc')
+                ->get();
+                
+            // Fetch Upcoming Academic Schedules
+            $academicSchedules = \App\Models\AcademicSchedule::whereDate('date', '>=', now()->toDateString())
+                ->where(function ($query) use ($user, $prodiId, $userSemester) {
+                    // Schedules targeted specifically to this student
+                    $query->where('user_id', $user->id)
+                          // Or schedules meant for everyone matching program & semester
+                          ->orWhere(function ($q) use ($prodiId, $userSemester) {
+                              $q->whereNull('user_id')
+                                ->where(function ($sq) use ($prodiId) {
+                                    if ($prodiId) {
+                                        $sq->where('prodi_id', $prodiId)
+                                           ->orWhereNull('prodi_id');
+                                    } else {
+                                        $sq->whereNull('prodi_id');
+                                    }
+                                })
+                                ->where(function ($sq) use ($userSemester) {
+                                    if ($userSemester) {
+                                        $sq->where('target_semester', $userSemester)
+                                           ->orWhereNull('target_semester');
+                                    } else {
+                                        $sq->whereNull('target_semester');
+                                    }
+                                });
+                          });
+                })
+                ->orderBy('date', 'asc')
+                ->orderBy('time', 'asc')
+                ->take(5)
+                ->get();
+                
+            // Handle Admission Receipt One-time display
+            if (!$user->has_seen_admission_receipt && $user->admission_receipt) {
+                // Determine if they just got activated, we show it once, then set to true so next visit it's hidden.
+                // We'll pass a flag to the view to show it, and update the DB here.
+                $showAdmissionReceiptToast = true;
+                $user->update(['has_seen_admission_receipt' => true]);
+            }
+        }
+
+        $showAdmissionReceiptToast = $showAdmissionReceiptToast ?? false;
+
+        return view('mahasiswa.dashboard', compact('user', 'totalUnpaid', 'trainings', 'upcomingDeadlines', 'academicSchedules', 'showAdmissionReceiptToast'));
     }
 
     public function academic()
@@ -89,7 +173,56 @@ class DashboardController extends Controller
         return view('mahasiswa.academic', compact('user', 'academicRecords', 'ipk', 'totalSks', 'predicate'));
     }
 
-    public function nonAcademic()
+    public function schedules()
+    {
+        $user = Auth::user();
+        
+        // Fetch Academic Schedules for this view
+        $program = optional($user->registration)->fokus_karir;
+        $userSemester = $user->semester;
+        
+        // Lookup Prodi ID if a program name string is set
+        $prodiId = null;
+        if ($program) {
+            $prodiModel = \App\Models\Prodi::where('nama', $program)->first();
+            if ($prodiModel) {
+                $prodiId = $prodiModel->id;
+            }
+        }
+        
+        $academicSchedules = \App\Models\AcademicSchedule::whereDate('date', '>=', now()->toDateString())
+                ->where(function ($query) use ($user, $prodiId, $userSemester) {
+                    // Schedules targeted specifically to this student
+                    $query->where('user_id', $user->id)
+                          // Or schedules meant for everyone matching program & semester
+                          ->orWhere(function ($q) use ($prodiId, $userSemester) {
+                              $q->whereNull('user_id')
+                                ->where(function ($sq) use ($prodiId) {
+                                    if ($prodiId) {
+                                        $sq->where('prodi_id', $prodiId)
+                                           ->orWhereNull('prodi_id');
+                                    } else {
+                                        $sq->whereNull('prodi_id');
+                                    }
+                                })
+                                ->where(function ($sq) use ($userSemester) {
+                                    if ($userSemester) {
+                                        $sq->where('target_semester', $userSemester)
+                                           ->orWhereNull('target_semester');
+                                    } else {
+                                        $sq->whereNull('target_semester');
+                                    }
+                                });
+                          });
+                })
+            ->orderBy('date', 'asc')
+            ->orderBy('time', 'asc')
+            ->get();
+
+        return view('mahasiswa.schedules', compact('user', 'academicSchedules'));
+    }
+
+    public function training()
     {
         $user = Auth::user();
         $program = optional($user->registration)->fokus_karir;
@@ -108,6 +241,14 @@ class DashboardController extends Controller
             ->orderBy('date', 'asc')
             ->get();
 
+        return view('mahasiswa.non-academic.training', compact('user', 'trainings'));
+    }
+
+    public function lms()
+    {
+        $user = Auth::user();
+        $program = optional($user->registration)->fokus_karir;
+
         // Fetch LMS Materials (Filtered)
         $materials = \App\Models\LmsMaterial::latest()
             ->where(function ($q) use ($program) {
@@ -125,7 +266,7 @@ class DashboardController extends Controller
             ])
             ->get();
 
-        return view('mahasiswa.non-academic', compact('user', 'trainings', 'materials'));
+        return view('mahasiswa.non-academic.lms', compact('user', 'materials'));
     }
 
     public function printInvoice($id)

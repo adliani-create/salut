@@ -197,8 +197,7 @@
                     </a>
                 </div>
                 
-                <!-- Akademik / Transkrip --> <!-- Keeping this comment but inserting above or below -->
-                
+
                 <!-- CMS / Kelola Web Utama -->
                 <a href="#submenuCms" data-bs-toggle="collapse" class="list-group-item list-group-item-action bg-transparent text-primary fw-bold">
                     <span><i class="bi bi-globe me-2"></i>Kelola Web</span>
@@ -217,10 +216,22 @@
                     </a>
                 </div>
 
-                <!-- Akademik / Transkrip -->
-                <a href="{{ route('admin.academic.index') }}" class="list-group-item list-group-item-action bg-transparent {{ request()->routeIs('admin.academic.*') ? 'active' : '' }}">
-                    <i class="bi bi-mortarboard-fill me-2"></i>Akademik (Transkrip)
+                <!-- Akademik Collapsible -->
+                <a href="#submenuAkademik" data-bs-toggle="collapse" class="list-group-item list-group-item-action bg-transparent d-flex justify-content-between align-items-center" aria-expanded="{{ request()->routeIs('admin.academic.*') || request()->routeIs('admin.academic-schedules.*') ? 'true' : 'false' }}">
+                    <span><i class="bi bi-mortarboard-fill me-2"></i>Akademik</span>
+                    <i class="bi bi-chevron-down small"></i>
                 </a>
+                <div class="collapse list-group-submenu {{ request()->routeIs('admin.academic.*') || request()->routeIs('admin.academic-schedules.*') ? 'show' : '' }}" id="submenuAkademik">
+                    <a href="{{ route('admin.academic-schedules.index') }}" class="list-group-item list-group-item-action bg-transparent border-0 ps-5 {{ request()->routeIs('admin.academic-schedules.*') ? 'text-primary fw-bold' : '' }}">
+                        Jadwal Tugas/Ujian
+                    </a>
+                    <a href="{{ route('admin.academic.index') }}" class="list-group-item list-group-item-action bg-transparent border-0 ps-5 {{ request()->routeIs('admin.academic.*') && !request()->routeIs('admin.academic-schedules.*') ? 'text-primary fw-bold' : '' }}">
+                        Transkrip Nilai
+                    </a>
+                    <a href="{{ route('admin.documents.index') }}" class="list-group-item list-group-item-action bg-transparent border-0 ps-5 {{ request()->routeIs('admin.documents.*') ? 'text-primary fw-bold' : '' }}">
+                        Dokumen Pusat (KTPU/KTM)
+                    </a>
+                </div>
                 
                 <!-- Keuangan Collapsible -->
                 <a href="#submenuKeuangan" data-bs-toggle="collapse" class="list-group-item list-group-item-action bg-transparent d-flex justify-content-between align-items-center" aria-expanded="{{ request()->routeIs('admin.billings.*') ? 'true' : 'false' }}">
@@ -361,6 +372,7 @@
             };
         }
     </script>
+    @stack('modals')
     @stack('scripts')
 </body>
 </html>
