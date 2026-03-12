@@ -19,12 +19,15 @@ Route::get('ajax/fakultas/{id}/prodis', [App\Http\Controllers\AjaxController::cl
 
 // Public Routes
 Route::get('/', [App\Http\Controllers\PublicController::class, 'index'])->name('landing');
+Route::get('/kemitraan', [App\Http\Controllers\Public\KemitraanController::class, 'index'])->name('kemitraan.landing');
 Route::get('/berita/{slug}', [App\Http\Controllers\PublicController::class, 'showNews'])->name('public.news.show');
 
 // Custom Registration Routes
 Route::get('register', [App\Http\Controllers\Auth\StudentRegisterController::class, 'showLanding'])->name('register');
 Route::get('register/affiliator', [App\Http\Controllers\Auth\AffiliateRegisterController::class, 'showRegistrationForm'])->name('register.affiliate');
 Route::post('register/affiliator', [App\Http\Controllers\Auth\AffiliateRegisterController::class, 'register'])->name('register.affiliate.store');
+Route::get('register/mitra', [App\Http\Controllers\Auth\MitraRegisterController::class, 'showRegistrationForm'])->name('register.mitra');
+Route::post('register/mitra', [App\Http\Controllers\Auth\MitraRegisterController::class, 'register'])->name('register.mitra.store');
 
 // Option A: Mahasiswa Baru
 Route::get('register/new', [App\Http\Controllers\Auth\StudentRegisterController::class, 'showStep1'])->name('register.new');
@@ -75,7 +78,7 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
     Route::get('admin/admissions/{user}', [App\Http\Controllers\Admin\AdmissionApprovalController::class, 'show'])->name('admin.admissions.show');
     Route::post('admin/admissions/{user}/approve', [App\Http\Controllers\Admin\AdmissionApprovalController::class, 'approve'])->name('admin.admissions.approve');
     Route::post('admin/admissions/{user}/reject', [App\Http\Controllers\Admin\AdmissionApprovalController::class, 'reject'])->name('admin.admissions.reject');
-    
+
     // User Management (Students)
     Route::get('admin/students', [App\Http\Controllers\Admin\UserController::class, 'students'])->name('admin.students.index');
 
@@ -88,10 +91,10 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
     Route::put('admin/billings/{billing}/reject', [App\Http\Controllers\Admin\BillingController::class, 'reject'])->name('admin.billings.reject');
     Route::get('admin/billings/{billing}/print', [App\Http\Controllers\Admin\BillingController::class, 'printInvoice'])->name('admin.billings.print');
     Route::post('admin/billings/{billing}/send-whatsapp', [App\Http\Controllers\Admin\BillingController::class, 'sendWhatsappNotification'])->name('billing.send-wa');
-    
+
     // Ledger / Kartu Kontrol
     Route::get('admin/students/{user}/ledger', [App\Http\Controllers\Admin\BillingController::class, 'ledger'])->name('admin.students.ledger');
-    
+
     Route::resource('admin/billings', App\Http\Controllers\Admin\BillingController::class, ['as' => 'admin']);
 
     // Non-Academic Modules
@@ -100,14 +103,15 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
     Route::resource('admin/career-programs', App\Http\Controllers\Admin\CareerProgramController::class, ['as' => 'admin']);
     Route::resource('admin/lms-materials', App\Http\Controllers\Admin\LmsMaterialController::class, ['as' => 'admin']);
     Route::resource('admin/trainings', App\Http\Controllers\Admin\TrainingController::class, ['as' => 'admin']);
+    Route::post('admin/mitras/{user}/approve', [App\Http\Controllers\Admin\MitraController::class, 'approve'])->name('admin.mitras.approve');
     Route::resource('admin/mitras', App\Http\Controllers\Admin\MitraController::class, ['as' => 'admin'])->parameters(['mitras' => 'user']);
     Route::resource('admin/affiliators', App\Http\Controllers\Admin\AffiliatorController::class, ['as' => 'admin'])->parameters(['affiliators' => 'affiliator']);
-    
+
     // Withdrawals Management (Admin)
     Route::get('admin/withdrawals', [App\Http\Controllers\Admin\WithdrawalController::class, 'index'])->name('admin.withdrawals.index');
     Route::post('admin/withdrawals/{withdrawal}/approve', [App\Http\Controllers\Admin\WithdrawalController::class, 'approve'])->name('admin.withdrawals.approve');
     Route::post('admin/withdrawals/{withdrawal}/reject', [App\Http\Controllers\Admin\WithdrawalController::class, 'reject'])->name('admin.withdrawals.reject');
-    
+
     // Academic / Transcript Management
     Route::resource('admin/academic-schedules', App\Http\Controllers\Admin\AcademicScheduleController::class, ['as' => 'admin']);
     Route::get('admin/academic', [App\Http\Controllers\Admin\AcademicController::class, 'index'])->name('admin.academic.index');
@@ -180,7 +184,7 @@ Route::middleware(['auth', 'role:mahasiswa', 'ensure_registration_complete'])->g
 // Staff Routes
 Route::middleware(['auth', 'role:staff'])->group(function () {
     Route::get('/staff/dashboard', [App\Http\Controllers\Staff\DashboardController::class, 'index'])->name('staff.dashboard');
-    
+
     // Modules
     Route::resource('staff/validation', App\Http\Controllers\Staff\ValidationController::class, ['as' => 'staff']);
     Route::resource('staff/tickets', App\Http\Controllers\Staff\TicketController::class, ['as' => 'staff']);
@@ -193,7 +197,7 @@ Route::middleware(['auth', 'role:staff'])->group(function () {
 Route::middleware(['auth', 'role:affiliator'])->prefix('affiliator')->name('affiliator.')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Affiliator\DashboardController::class, 'index'])->name('dashboard');
     Route::resource('students', App\Http\Controllers\Affiliator\ProspectController::class)->only(['index', 'create', 'store']);
-    
+
     // Finance
     Route::get('/finance/commissions', [App\Http\Controllers\Affiliator\FinanceController::class, 'commissions'])->name('finance.commissions');
     Route::post('/finance/withdraw', [App\Http\Controllers\Affiliator\FinanceController::class, 'withdraw'])->name('finance.withdraw');
@@ -207,9 +211,9 @@ Route::middleware(['auth', 'role:affiliator'])->prefix('affiliator')->name('affi
 Route::middleware(['auth', 'role:mitra'])->prefix('mitra')->name('mitra.')->group(function () {
     // Dashboard
     Route::get('/dashboard', [App\Http\Controllers\Mitra\DashboardController::class, 'index'])->name('dashboard');
-    
+
     Route::get('/network/affiliators', [App\Http\Controllers\Mitra\NetworkController::class, 'affiliators'])->name('network.affiliators');
-    
+
     // Finance
     Route::get('/finance/commissions', [App\Http\Controllers\Mitra\FinanceController::class, 'commissions'])->name('finance.commissions');
     Route::post('/finance/withdraw', [App\Http\Controllers\Mitra\FinanceController::class, 'withdraw'])->name('finance.withdraw');

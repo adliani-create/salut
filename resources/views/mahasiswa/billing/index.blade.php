@@ -1,9 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.student')
 
 @section('title', 'Billing & Keuangan')
 
 @section('content')
-<div class="container py-4">
+<div class="container-fluid py-2">
     <div class="row justify-content-center">
         <div class="col-md-10">
             <h3 class="fw-bold mb-4 text-primary"><i class="bi bi-wallet2 me-2"></i>Kartu Kontrol Pembayaran</h3>
@@ -186,7 +186,6 @@
             </div>
             
             <div class="mt-4 text-center">
-                <a href="{{ route('student.dashboard') }}" class="btn btn-link text-decoration-none text-muted"> <i class="bi bi-arrow-left me-1"></i> Kembali ke Dashboard</a>
             </div>
         </div>
     </div>

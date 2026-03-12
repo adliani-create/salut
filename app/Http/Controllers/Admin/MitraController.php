@@ -16,9 +16,29 @@ class MitraController extends Controller
     {
         $mitras = User::whereHas('role', function ($q) {
             $q->where('name', 'mitra');
-        })->with('mitraProfile')->paginate(10);
+        })->with('mitraProfile')->orderByRaw("CASE WHEN status = 'pending' THEN 0 ELSE 1 END")->orderBy('created_at', 'desc')->paginate(10);
 
         return view('admin.mitras.index', compact('mitras'));
+    }
+
+    public function approve(User $user)
+    {
+        if (!$user->isMitra() || $user->status !== 'pending') {
+            abort(404);
+        }
+
+        // Generate unique referral code
+        $referralCode = 'MTR-' . strtoupper(Str::random(6));
+        while (User::where('referral_code', $referralCode)->exists()) {
+            $referralCode = 'MTR-' . strtoupper(Str::random(6));
+        }
+
+        $user->update([
+            'status' => 'active',
+            'referral_code' => $referralCode
+        ]);
+
+        return redirect()->back()->with('success', 'Mitra berhasil disetujui. Kode Referral: ' . $referralCode);
     }
 
     public function create()
@@ -41,7 +61,10 @@ class MitraController extends Controller
             'bank_account_name' => 'nullable|string|max:255',
         ]);
 
-        $mitraRole = Role::where('name', 'mitra')->firstOrFail();
+        $mitraRole = Role::firstOrCreate(
+            ['name' => 'mitra'],
+            ['label' => 'Mitra', 'redirect_to' => '/mitra/dashboard']
+        );
 
         // Generate unique referral code
         $referralCode = 'MTR-' . strtoupper(Str::random(6));
@@ -88,7 +111,7 @@ class MitraController extends Controller
         if (!$user->isMitra()) {
             abort(404);
         }
-        
+
         $user->load('mitraProfile');
         return view('admin.mitras.edit', compact('user'));
     }
