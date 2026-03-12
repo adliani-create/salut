@@ -37,7 +37,7 @@
                             @php
                                 $totalMahasiswa = 0;
                                 foreach($user->referrals as $affiliator) {
-                                    $totalMahasiswa += User::where('referred_by', $affiliator->id)->whereHas('role', function($q){ $q->where('name', 'mahasiswa'); })->count();
+                                    $totalMahasiswa += \App\Models\User::where('referred_by', $affiliator->id)->whereHas('role', function($q){ $q->where('name', 'mahasiswa'); })->count();
                                 }
                             @endphp
                             <h4 class="fw-bold mb-0">{{ $totalMahasiswa }}</h4>
@@ -98,9 +98,9 @@
         </div>
         <div class="card-body p-0">
             <div class="accordion accordion-flush" id="affiliateTree">
-                @forelse($user->referrals as $index => $affiliator)
+                @foreach($user->referrals as $index => $affiliator)
                 @php
-                    $mahasiswaList = User::where('referred_by', $affiliator->id)
+                    $mahasiswaList = \App\Models\User::where('referred_by', $affiliator->id)
                                          ->whereHas('role', function($q){ $q->where('name', 'mahasiswa'); })
                                          ->get();
                 @endphp
@@ -123,32 +123,32 @@
                         </button>
                     </h2>
                     <div id="collapse{{ $index }}" class="accordion-collapse collapse" aria-labelledby="heading{{ $index }}" data-bs-parent="#affiliateTree">
-                        <div class="accordion-body p-0 bg-light">
-                            @if($mahasiswaList->isNotEmpty())
-                                <ul class="list-group list-group-flush border-top border-bottom">
-                                    @foreach($mahasiswaList as $mhs)
-                                    <li class="list-group-item bg-transparent border-0 d-flex justify-content-between align-items-center py-2 px-5 position-relative">
-                                        <!-- tree branch UI line -->
-                                        <div class="position-absolute border-start border-bottom border-secondary" style="width: 20px; height: 30px; top: -10px; left: 35px; opacity: 0.3;"></div>
-                                        
-                                        <div>
-                                            <span class="fw-bold ms-2">{{ $mhs->name }}</span>
-                                            <small class="text-muted ms-2">({{ $mhs->nim ?? 'NIM belum ada' }})</small>
-                                        </div>
-                                        <div>
-                                            <span class="badge {{ $mhs->status === 'active' ? 'bg-success' : 'bg-warning' }} rounded-pill">{{ ucfirst($mhs->status) }}</span>
-                                            <small class="text-muted ms-3">{{ $mhs->created_at->format('d M Y') }}</small>
-                                        </div>
-                                    </li>
-                                    @endforeach
-                                </ul>
-                            @else
+                                <div class="accordion-body p-0 bg-light">
+                                    @if($mahasiswaList->isNotEmpty())
+                                        <ul class="list-group list-group-flush border-top border-bottom">
+                                            @foreach($mahasiswaList as $mhs)
+                                            <li class="list-group-item bg-transparent border-0 d-flex justify-content-between align-items-center py-2 px-5 position-relative">
+                                                <!-- tree branch UI line -->
+                                                <div class="position-absolute border-start border-bottom border-secondary" style="width: 20px; height: 30px; top: -10px; left: 35px; opacity: 0.3;"></div>
+                                                
+                                                <div>
+                                                    <span class="fw-bold ms-2">{{ $mhs->name }}</span>
+                                                    <small class="text-muted ms-2">({{ $mhs->nim ?? 'NIM belum ada' }})</small>
+                                                </div>
+                                                <div>
+                                                    <span class="badge {{ $mhs->status === 'active' ? 'bg-success' : 'bg-warning' }} rounded-pill">{{ ucfirst($mhs->status) }}</span>
+                                                    <small class="text-muted ms-3">{{ $mhs->created_at->format('d M Y') }}</small>
+                                                </div>
+                                            </li>
+                                            @endforeach
+                                        </ul>
+                                    @else
                                 <div class="py-3 px-5 text-muted small"><i class="bi bi-info-circle me-1"></i> Afiliator ini belum mendaftarkan mahasiswa.</div>
                             @endif
                         </div>
                     </div>
                 </div>
-                @endforelse
+                @endforeach
 
                 @if($user->referrals->isEmpty())
                 <div class="text-center py-5 text-muted">
