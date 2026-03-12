@@ -57,7 +57,45 @@
         </div>
     </div>
 
-    <!-- 2. Semester List (Accordion) -->
+    <!-- 2. Dokumen Akademik Ujian -->
+    <h5 class="fw-bold text-dark mb-3">Persyaratan Ujian Semester</h5>
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-5">
+        <div class="card-body p-4 position-relative">
+            <div class="position-absolute end-0 top-0 p-4 opacity-10" style="z-index: 0;">
+                <i class="bi bi-file-earmark-medical text-danger" style="font-size: 6rem;"></i>
+            </div>
+            
+            <div class="position-relative z-1 d-flex flex-column w-100">
+                <div class="d-flex align-items-center mb-2">
+                    <h5 class="fw-bold text-dark mb-0 me-3">Kartu Tanda Peserta Ujian (KTPU)</h5>
+                    @if(Auth::user()->ktpu_status === 'tersedia' && Auth::user()->ktpu_file)
+                        <span class="badge bg-success rounded-pill px-2 py-1"><i class="bi bi-check-circle me-1"></i>Tersedia</span>
+                    @else
+                        <span class="badge bg-warning text-dark rounded-pill px-2 py-1"><i class="bi bi-clock-history me-1"></i>Menunggu Verifikasi Pusat</span>
+                    @endif
+                </div>
+                <p class="text-muted small mb-3">Kartu ini memuat jadwal, waktu, dan lokasi ujian untuk seluruh mata kuliah yang Anda registrasikan semester ini. Wajib diunduh dan dibawa saat Ujian Akhir Semester.</p>
+                
+                <div class="mt-3 d-flex flex-wrap gap-2">
+                    @if(Auth::user()->ktpu_status === 'tersedia' && Auth::user()->ktpu_file)
+                        <a href="{{ route('student.documents.ktpu') }}" class="btn btn-danger rounded-pill fw-bold shadow-sm px-4">
+                            <i class="bi bi-download me-2"></i> Unduh KTPU
+                        </a>
+                        <!-- Modal Trigger Button -->
+                        <button type="button" class="btn btn-outline-danger rounded-pill fw-bold shadow-sm px-4" data-bs-toggle="modal" data-bs-target="#ktpuModal">
+                            <i class="bi bi-eye-fill me-2"></i> Lihat Pratinjau
+                        </button>
+                    @else
+                        <button class="btn btn-secondary rounded-pill fw-bold px-4" disabled>
+                            <i class="bi bi-lock-fill me-2"></i> KTPU Belum Tersedia
+                        </button>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Semester List (Accordion) -->
     <h5 class="fw-bold text-dark mb-3">Riwayat Studi Per Semester</h5>
     <div class="accordion custom-accordion" id="accordionTranscript">
         @forelse($academicRecords as $index => $record)
@@ -143,6 +181,43 @@
             </div>
         @endforelse
     </div>
+
+
+
+    <!-- 3. Agenda & Jadwal Terdekat (Academic Schedules) Removed to separate view -->
+
+    <!-- KTPU Preview Modal -->
+    @if(Auth::user()->ktpu_status === 'tersedia' && Auth::user()->ktpu_file)
+    <div class="modal fade" id="ktpuModal" tabindex="-1" aria-labelledby="ktpuModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h5 class="modal-title fw-bold text-dark" id="ktpuModalLabel">
+                        <i class="bi bi-file-earmark-medical text-danger me-2"></i>Pratinjau KTPU
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4 pt-3">
+                    <div class="border rounded-4 overflow-hidden bg-light shadow-sm position-relative" style="height: 75vh; width: 100%;">
+                        <div class="position-absolute top-50 start-50 translate-middle text-muted text-center" style="z-index: 0;">
+                            <div class="spinner-border spinner-border-sm text-primary mb-2" role="status">
+                                <span class="visually-hidden">Memuat PDF...</span>
+                            </div>
+                            <div>Menyiapkan Pratinjau KTPU...</div>
+                        </div>
+                        <iframe src="{{ asset('storage/' . Auth::user()->ktpu_file) }}#toolbar=0" width="100%" height="100%" frameborder="0" style="position: relative; z-index: 1;"></iframe>
+                    </div>
+                </div>
+                <div class="modal-footer border-top-0 pt-0">
+                    <button type="button" class="btn btn-secondary rounded-pill px-4 fw-bold" data-bs-dismiss="modal">Tutup</button>
+                    <a href="{{ route('student.documents.ktpu') }}" class="btn btn-danger rounded-pill fw-bold shadow-sm px-4">
+                        <i class="bi bi-download me-2"></i> Unduh KTPU
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
 
     <style>
         .accordion-button:not(.collapsed) {
