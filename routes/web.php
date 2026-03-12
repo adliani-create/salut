@@ -109,14 +109,22 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
     Route::post('admin/withdrawals/{withdrawal}/reject', [App\Http\Controllers\Admin\WithdrawalController::class, 'reject'])->name('admin.withdrawals.reject');
     
     // Academic / Transcript Management
+    Route::resource('admin/academic-schedules', App\Http\Controllers\Admin\AcademicScheduleController::class, ['as' => 'admin']);
     Route::get('admin/academic', [App\Http\Controllers\Admin\AcademicController::class, 'index'])->name('admin.academic.index');
     Route::get('admin/academic/{user}/upload', [App\Http\Controllers\Admin\AcademicController::class, 'upload'])->name('admin.academic.upload');
     Route::post('admin/academic/{user}/parse', [App\Http\Controllers\Admin\AcademicController::class, 'parse'])->name('admin.academic.parse');
     Route::post('admin/academic/{user}/store', [App\Http\Controllers\Admin\AcademicController::class, 'store'])->name('admin.academic.store');
     
-    // KTPU Routes
+    // KTPU Routes (Legacy)
     Route::get('admin/academic/{user}/ktpu/upload', [App\Http\Controllers\Admin\AcademicController::class, 'uploadKtpu'])->name('admin.academic.ktpu.upload');
     Route::post('admin/academic/{user}/ktpu/store', [App\Http\Controllers\Admin\AcademicController::class, 'storeKtpu'])->name('admin.academic.ktpu.store');
+    
+    // Document Management (KTPU & KTM)
+    Route::get('admin/documents', [App\Http\Controllers\Admin\DocumentController::class, 'index'])->name('admin.documents.index');
+    Route::post('admin/documents/{user}/upload-ktpu', [App\Http\Controllers\Admin\DocumentController::class, 'uploadKtpu'])->name('admin.documents.upload-ktpu');
+    Route::post('admin/documents/{user}/upload-ktm', [App\Http\Controllers\Admin\DocumentController::class, 'uploadKtm'])->name('admin.documents.upload-ktm');
+    Route::post('admin/documents/{user}/toggle-status', [App\Http\Controllers\Admin\DocumentController::class, 'toggleKtpuStatus'])->name('admin.documents.toggle-status');
+    Route::get('admin/documents/{user}/generate-ktm', [App\Http\Controllers\Admin\DocumentController::class, 'generateKtm'])->name('admin.documents.generate-ktm');
     
     // CMS User Interface
     Route::get('admin/home-settings', [App\Http\Controllers\Admin\HomeSettingController::class, 'edit'])->name('admin.home-settings.edit');
@@ -144,8 +152,14 @@ Route::middleware(['auth', 'role:mahasiswa', 'ensure_registration_complete'])->g
         Route::get('/mahasiswa/dashboard', [App\Http\Controllers\Student\DashboardController::class, 'index'])->name('student.dashboard');
         Route::get('/student/admission/receipt', [App\Http\Controllers\Student\AdmissionReceiptController::class, 'download'])->name('student.admission.receipt');
         Route::get('/mahasiswa/academic', [App\Http\Controllers\Student\DashboardController::class, 'academic'])->name('student.academic');
-    Route::get('/mahasiswa/non-academic', [App\Http\Controllers\Student\DashboardController::class, 'nonAcademic'])->name('student.non-academic');
-    Route::get('/mahasiswa/lms/{material}/view', [App\Http\Controllers\Student\LmsController::class, 'view'])->name('student.lms.view');
+        Route::get('/mahasiswa/schedules', [App\Http\Controllers\Student\DashboardController::class, 'schedules'])->name('student.schedules');
+        Route::get('/mahasiswa/lms', [App\Http\Controllers\Student\DashboardController::class, 'lms'])->name('student.lms');
+        Route::get('/mahasiswa/pelatihan', [App\Http\Controllers\Student\DashboardController::class, 'training'])->name('student.training');
+        Route::get('/mahasiswa/lms/{material}/view', [App\Http\Controllers\Student\LmsController::class, 'view'])->name('student.lms.view');
+        
+        // Documents (KTM & KTPU)
+        Route::get('/mahasiswa/documents/ktm', [App\Http\Controllers\Student\DocumentController::class, 'downloadKtm'])->name('student.documents.ktm');
+        Route::get('/mahasiswa/documents/ktpu', [App\Http\Controllers\Student\DocumentController::class, 'downloadKtpu'])->name('student.documents.ktpu');
     
     // Enrollment Routes for Maba
     Route::get('/mahasiswa/enrollment/step1', [App\Http\Controllers\Student\EnrollmentController::class, 'step1'])->name('student.enrollment.step1');

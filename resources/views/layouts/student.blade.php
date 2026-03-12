@@ -195,9 +195,12 @@
                     <span><i class="bi bi-book-half me-2"></i> Akademik</span>
                      <i class="bi bi-chevron-down small"></i>
                 </a>
-                <div class="collapse list-group-submenu {{ request()->routeIs('student.academic') ? 'show' : '' }}" id="submenuAkademik">
+                <div class="collapse list-group-submenu {{ request()->routeIs('student.academic') || request()->routeIs('student.schedules') ? 'show' : '' }}" id="submenuAkademik">
                     <a href="{{ route('student.academic') }}" class="list-group-item list-group-item-action bg-transparent border-0 ps-5 {{ request()->routeIs('student.academic') ? 'text-primary fw-bold' : '' }}">
                         Transkrip & KHS
+                    </a>
+                    <a href="{{ route('student.schedules') }}" class="list-group-item list-group-item-action bg-transparent border-0 ps-5 {{ request()->routeIs('student.schedules') ? 'text-primary fw-bold' : '' }}">
+                        Jadwal Terdekat
                     </a>
                 </div>
                 
@@ -205,9 +208,12 @@
                     <span><i class="bi bi-collection-play-fill me-2"></i> Non-Akademik</span>
                      <i class="bi bi-chevron-down small"></i>
                 </a>
-                <div class="collapse list-group-submenu {{ request()->routeIs('student.non-academic') ? 'show' : '' }}" id="submenuNonAkademik">
-                     <a href="{{ route('student.non-academic') }}" class="list-group-item list-group-item-action bg-transparent border-0 ps-5 {{ request()->routeIs('student.non-academic') ? 'text-primary fw-bold' : '' }}">
-                        LMS & Pelatihan
+                <div class="collapse list-group-submenu {{ request()->routeIs('student.lms') || request()->routeIs('student.training') || request()->routeIs('student.lms.view') ? 'show' : '' }}" id="submenuNonAkademik">
+                     <a href="{{ route('student.lms') }}" class="list-group-item list-group-item-action bg-transparent border-0 ps-5 {{ request()->routeIs('student.lms') || request()->routeIs('student.lms.view') ? 'text-primary fw-bold' : '' }}">
+                        Materi Belajar (LMS)
+                    </a>
+                     <a href="{{ route('student.training') }}" class="list-group-item list-group-item-action bg-transparent border-0 ps-5 {{ request()->routeIs('student.training') ? 'text-primary fw-bold' : '' }}">
+                        Jadwal Pelatihan
                     </a>
                 </div>
 
