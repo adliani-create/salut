@@ -60,7 +60,7 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
     // Master Data
     Route::resource('admin/roles', App\Http\Controllers\Admin\RoleController::class, ['as' => 'admin']);
     Route::resource('admin/users', App\Http\Controllers\Admin\UserController::class, ['as' => 'admin']);
-    Route::resource('admin/fakultas', App\Http\Controllers\Admin\FakultasController::class, ['as' => 'admin']);
+    Route::resource('admin/fakultas', App\Http\Controllers\Admin\FakultasController::class, ['as' => 'admin'])->parameters(['fakultas' => 'fakultas']);
     Route::resource('admin/prodi', App\Http\Controllers\Admin\ProdiController::class, ['as' => 'admin']);
     Route::resource('admin/semester', App\Http\Controllers\Admin\SemesterController::class, ['as' => 'admin']);
 
