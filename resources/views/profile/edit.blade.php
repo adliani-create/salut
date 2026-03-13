@@ -1,4 +1,4 @@
-@extends('layouts.student')
+@extends($layout)
 
 @section('content')
 <div class="row justify-content-center">
@@ -81,11 +81,12 @@
                             <label for="whatsapp" class="form-label text-muted small fw-bold">Nomor WhatsApp</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-white border-end-0 text-success"><i class="bi bi-whatsapp"></i></span>
-                                <input id="whatsapp" type="text" class="form-control border-start-0 ps-0" name="whatsapp" value="{{ old('whatsapp', $user->registration->whatsapp ?? '') }}" placeholder="08...">
+                                <input id="whatsapp" type="text" class="form-control border-start-0 ps-0" name="whatsapp" value="{{ old('whatsapp', $user->whatsapp ?? $user->registration->whatsapp ?? '') }}" placeholder="08...">
                             </div>
                         </div>
-                        
-                         <!-- Alamat Domisili (Active) -->
+
+                        @if($user->isMahasiswa())
+                         <!-- Alamat Domisili (Active - Mahasiswa Only) -->
                          <div class="col-12">
                             <label for="address" class="form-label text-muted small fw-bold">Alamat Domisili</label>
                             <div class="input-group">
@@ -93,6 +94,7 @@
                                 <textarea id="address" class="form-control border-start-0 ps-0" name="address" rows="2" placeholder="Masukkan alamat lengkap domisili Anda...">{{ old('address', $user->registration->address ?? '') }}</textarea>
                             </div>
                         </div>
+                        @endif
 
                          <!-- Password (Active) -->
                          <div class="col-12 mt-4">
@@ -143,6 +145,18 @@
                         @endif
 
 
+                        @if(!$user->isMahasiswa())
+                        <!-- Nama Lengkap (Editable for non-students) -->
+                        <div class="col-12 mt-2">
+                            <label for="name" class="form-label text-muted small fw-bold">Nama Lengkap</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white border-end-0 text-primary"><i class="bi bi-person"></i></span>
+                                <input id="name" type="text" class="form-control border-start-0 ps-0" name="name" value="{{ old('name', $user->name) }}">
+                            </div>
+                        </div>
+                        @endif
+
+                        @if($user->isMahasiswa())
                         <!-- Section: Data Akademik (Disabled/Read-only) -->
                         <div class="col-12 mt-4">
                              <h6 class="text-secondary fw-bold border-bottom pb-2 mb-0">Data Akademik (Terkunci)</h6>
@@ -187,6 +201,7 @@
                             <label class="form-label text-muted small fw-bold">Angkatan</label>
                             <input type="text" class="form-control bg-light text-muted border-0 text-center" value="{{ $user->angkatan ?? '2021' }}" readonly disabled>
                         </div>
+                        @endif
 
                     </div>
 

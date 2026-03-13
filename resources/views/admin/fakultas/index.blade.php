@@ -3,7 +3,7 @@
 @section('title', 'Fakultas Management')
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid p-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Fakultas</h2>
         <a href="{{ route('admin.fakultas.create') }}" class="btn btn-primary">Add New</a>

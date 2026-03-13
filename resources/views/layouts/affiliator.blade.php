@@ -211,12 +211,12 @@
         
         <!-- Page Content -->
         <div id="page-content-wrapper">
-            <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom py-3 px-4">
+            <nav class="navbar navbar-expand-lg  navbar-light bg-white border-bottom py-3 px-4">
                 <div class="d-flex align-items-center">
                     <button id="sidebarToggleTop" class="btn btn-light rounded-circle me-3 d-md-none">
                         <i class="bi bi-list fs-4 text-dark"></i>
                     </button>
-                    <h4 class="m-0 fw-bold text-gray-800">@yield('title', 'Dashboard')</h4>
+                    <h4 class="m-0 fw-bold text-gray-800 fs-6 fs-md-4">@yield('title', 'Dashboard')</h4>
                 </div>
 
                 <div class="ms-auto d-flex align-items-center">

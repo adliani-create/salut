@@ -3,20 +3,11 @@
 @section('title', 'Persetujuan Admisi Pendaftaran Baru')
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid p-4">
     <div class="row mb-4 align-items-center">
         <div class="col-8">
             <h1 class="h3 mb-0 text-gray-800"><i class="bi bi-wallet2 me-2"></i>Persetujuan Pembayaran Admisi</h1>
             <p class="text-muted mt-2">Daftar Mahasiswa Baru yang telah mengunggah bukti transfer Admisi Rp 100.000 dan menunggu sah dari Admin.</p>
-        </div>
-        <div class="col-4 text-end">
-            <!-- Breadcrumbs -->
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb justify-content-end mb-0 bg-transparent">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Admisi</li>
-                </ol>
-            </nav>
         </div>
     </div>
 

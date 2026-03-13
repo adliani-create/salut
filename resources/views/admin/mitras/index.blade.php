@@ -63,20 +63,31 @@
                                 <span class="fw-bold text-primary fs-5">{{ number_format($mitra->total_points, 0, ',', '.') }}</span>
                             </td>
                             <td class="py-3">
-                                @if($mitra->status === 'active')
+                                @if($mitra->status === 'pending')
+                                    <span class="badge bg-warning bg-opacity-10 text-warning rounded-pill px-3 py-2"><i class="bi bi-clock-history me-1"></i>Pending</span>
+                                @elseif($mitra->status === 'active')
                                     <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2">Aktif</span>
                                 @else
                                     <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3 py-2">Suspended</span>
                                 @endif
                             </td>
                             <td class="pe-4 py-3 text-end">
-                                <div class="btn-group">
-                                    <a href="{{ route('admin.mitras.show', $mitra) }}" class="btn btn-sm btn-info text-white" title="Lihat Jaringan">
-                                        <i class="bi bi-diagram-3"></i>
+                                <div class="d-flex gap-1 justify-content-end flex-wrap">
+                                    @if($mitra->status === 'pending')
+                                        <form action="{{ route('admin.mitras.approve', $mitra) }}" method="POST" class="d-inline" onsubmit="return confirm('Setujui pendaftaran mitra ini?');">
+                                            @csrf
+                                            <button type="submit" class="btn btn-sm btn-success" title="Approve Mitra">
+                                                <i class="bi bi-check-lg me-1"></i> Approve
+                                            </button>
+                                        </form>
+                                    @endif
+                                    <a href="{{ route('admin.mitras.show', $mitra) }}" class="btn btn-sm btn-info text-white" title="Review Data">
+                                        <i class="bi bi-eye"></i>
                                     </a>
                                     <a href="{{ route('admin.mitras.edit', $mitra) }}" class="btn btn-sm btn-warning" title="Edit Profil">
                                         <i class="bi bi-pencil"></i>
                                     </a>
+                                    @if($mitra->status !== 'pending')
                                     <form action="{{ route('admin.mitras.destroy', $mitra) }}" method="POST" onsubmit="return confirm('Suspend mitra ini?');" class="d-inline">
                                         @csrf
                                         @method('DELETE')
@@ -84,6 +95,7 @@
                                             <i class="bi bi-slash-circle"></i>
                                         </button>
                                     </form>
+                                    @endif
                                 </div>
                             </td>
                         </tr>

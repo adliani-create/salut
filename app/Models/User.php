@@ -36,6 +36,8 @@ class User extends Authenticatable
         'referred_by',
         'is_affiliator',
         'bank_account',
+        'bank_name',
+        'bank_account_owner',
         'ktpu_file',
         'ktpu_status',
         'ktm_file',

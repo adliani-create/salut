@@ -18,9 +18,12 @@ class AcademicController extends Controller
         $students = User::whereHas('role', function ($q) {
                 $q->where('name', 'mahasiswa');
             })
+            ->where('status', 'active')
             ->when($search, function ($query) use ($search) {
-                $query->where('name', 'like', "%{$search}%")
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
                       ->orWhere('nim', 'like', "%{$search}%");
+                });
             })
             ->with('academicRecords')
             ->paginate(10);

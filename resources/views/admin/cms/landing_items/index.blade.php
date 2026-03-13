@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="card border-0 shadow-sm">
+<div class="card border-0 shadow-sm py-4">
     <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
         <div>
             <h5 class="mb-0 fw-bold">Kelola Konten: {{ $sectionLabels[$section] ?? ucfirst($section) }}</h5>

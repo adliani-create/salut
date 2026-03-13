@@ -118,13 +118,29 @@
 
                     <div class="mb-3">
                         <div class="d-flex justify-content-between">
-                            <label for="bank_account" class="form-label text-muted fw-bold small text-uppercase">No. Rekening & Bank</label>
+                            <label class="form-label text-muted fw-bold small text-uppercase">Rekening Pencairan Komisi</label>
                             <span class="small text-primary fst-italic">Digunakan untuk pencairan komisi</span>
                         </div>
-                        <input id="bank_account" type="text" class="form-control @error('bank_account') is-invalid @enderror" name="bank_account" value="{{ old('bank_account') }}" required placeholder="BCA 12345678 a.n Nama Lengkap">
-                        @error('bank_account')
-                            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-                        @enderror
+                        <div class="row g-2">
+                            <div class="col-md-4">
+                                <input id="bank_name" type="text" class="form-control @error('bank_name') is-invalid @enderror" name="bank_name" value="{{ old('bank_name') }}" required placeholder="Nama Bank">
+                                @error('bank_name')
+                                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                                @enderror
+                            </div>
+                            <div class="col-md-4">
+                                <input id="bank_account" type="text" class="form-control @error('bank_account') is-invalid @enderror" name="bank_account" value="{{ old('bank_account') }}" required placeholder="No. Rekening">
+                                @error('bank_account')
+                                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                                @enderror
+                            </div>
+                            <div class="col-md-4">
+                                <input id="bank_account_owner" type="text" class="form-control @error('bank_account_owner') is-invalid @enderror" name="bank_account_owner" value="{{ old('bank_account_owner') }}" required placeholder="Atas Nama">
+                                @error('bank_account_owner')
+                                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                                @enderror
+                            </div>
+                        </div>
                     </div>
 
                     <div class="row">

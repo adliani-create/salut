@@ -306,7 +306,7 @@
                         <i class="bi bi-list fs-2 text-primary"></i>
                     </button>
                     
-                    <h2 class="fs-4 m-0 text-muted">@yield('title', 'Admin Dashboard')</h2>
+                    <h2 class="fs-6 fs-md-4 m-0 text-muted">@yield('title', 'Admin Dashboard')</h2>
                 </div>
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -337,7 +337,7 @@
                 </div>
             </nav>
 
-            <div class="container-fluid px-4">
+            <div class="container-fluid p-4">
                 @yield('content')
             </div>
         </div>

@@ -14,7 +14,7 @@ class DocumentController extends Controller
     {
         $query = User::whereHas('role', function ($q) {
             $q->where('name', 'mahasiswa');
-        });
+        })->where('status', 'active');
 
         // Search by name or nim
         if ($request->filled('search')) {

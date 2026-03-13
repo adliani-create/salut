@@ -1,6 +1,6 @@
 @extends('layouts.affiliator')
 
-@section('title', 'Riwayat Komisi & Tarik Dana')
+@section('title', 'Komisi & Penarikan')
 
 @section('content')
 <div class="row g-4 mb-4">

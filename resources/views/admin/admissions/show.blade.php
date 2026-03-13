@@ -3,7 +3,7 @@
 @section('title', 'Tinjau Persetujuan Admisi')
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid p-4">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800"><i class="bi bi-search me-2"></i>Review Pembayaran Admisi</h1>
         <a href="{{ route('admin.admissions.index') }}" class="d-none d-sm-inline-block btn btn-sm btn-outline-secondary shadow-sm">
@@ -61,18 +61,14 @@
                         <small class="text-muted">({{ $user->updated_at->diffForHumans() }})</small>
                     </div>
 
-                    <hr>
-                    
-                    <div class="p-3 bg-light rounded-3 mb-4 border">
+                    <div class="p-3 bg-light rounded-3 mb-3 border">
                         <label class="small text-muted fw-bold text-uppercase mb-2"><i class="bi bi-diagram-3-fill me-1"></i> Referal Pengajak</label>
                         @if($user->referred_by)
                             @php $referrer = \App\Models\User::find($user->referred_by); @endphp
                             @if($referrer)
                                 <div class="fw-bold text-primary mb-1">{{ $referrer->name }}</div>
-                                <span class="badge bg-info text-dark mb-2">Ref: {{ $referrer->referral_code }}</span>
-                                <div class="alert alert-warning py-2 mb-0 border-warning small">
-                                    <i class="bi bi-gift-fill me-1"></i> Jika <strong>Disahkan</strong>, Affiliator ini otomatis menerima komisi +50 Poin (Rp 50.000).
-                                </div>
+                                <span class="badge bg-info text-dark">Ref: {{ $referrer->referral_code }}</span>
+                                <div class="small text-muted mt-1"><i class="bi bi-gift me-1"></i>Komisi Rp 50.000 otomatis saat disetujui</div>
                             @else
                                 <div class="text-muted fst-italic">Organik (Tanpa Referal)</div>
                             @endif
@@ -81,11 +77,43 @@
                         @endif
                     </div>
 
-                    <!-- Approval Buttons -->
-                    <form action="{{ route('admin.admissions.approve', $user->id) }}" method="POST" class="mb-3" onsubmit="return confirm('Sahkan pembayaran ini? Mahasiswa akan menjadi aktif dan komisi akan dibagikan.');">
+                    <hr>
+
+                    <!-- Data Akademik - Diisi Admin Saat Approve -->
+                    <div class="mb-3">
+                        <h6 class="fw-bold text-primary mb-3"><i class="bi bi-mortarboard me-1"></i> Data Akademik Mahasiswa</h6>
+                        <div class="alert alert-info py-2 small mb-3 border-0">
+                            <i class="bi bi-info-circle me-1"></i> Isi data berikut sebelum menyetujui. NIM wajib diisi.
+                        </div>
+                    </div>
+
+                    <!-- Approval Form with NIM -->
+                    <form action="{{ route('admin.admissions.approve', $user->id) }}" method="POST" onsubmit="return confirm('Sahkan pembayaran dan aktifkan mahasiswa dengan NIM ini?');">
                         @csrf
-                        <button type="submit" class="btn btn-success btn-lg w-100 fw-bold shadow-sm rounded-pill">
-                            <i class="bi bi-check-circle-fill me-2"></i> Sahkan Pembayaran (Approve)
+
+                        <div class="mb-3">
+                            <label for="nim" class="form-label fw-bold small">NIM <span class="text-danger">*</span></label>
+                            <input type="text" name="nim" id="nim" class="form-control fw-bold" placeholder="Contoh: 123456789" required>
+                            @error('nim') <small class="text-danger">{{ $message }}</small> @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="faculty" class="form-label fw-bold small">Fakultas <span class="text-danger">*</span></label>
+                            <input type="text" name="faculty" id="faculty" class="form-control" value="{{ $user->registration->fakultas ?? '' }}" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="major" class="form-label fw-bold small">Jurusan / Prodi <span class="text-danger">*</span></label>
+                            <input type="text" name="major" id="major" class="form-control" value="{{ $user->registration->prodi ?? '' }}" required>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="semester" class="form-label fw-bold small">Semester <span class="text-danger">*</span></label>
+                            <input type="number" name="semester" id="semester" class="form-control" value="1" min="1" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-success btn-lg w-100 fw-bold shadow-sm rounded-pill mb-3">
+                            <i class="bi bi-check-circle-fill me-2"></i> Sahkan & Berikan NIM
                         </button>
                     </form>
 

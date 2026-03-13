@@ -144,7 +144,7 @@
             <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
                 <div class="d-flex align-items-center">
                     <i class="bi bi-list fs-2 me-3" id="menu-toggle" style="cursor: pointer; color: #0d6efd;"></i>
-                    <h2 class="fs-4 m-0 text-muted">@yield('title', 'Staff Dashboard')</h2>
+                    <h2 class="fs-6 fs-md-4 m-0 text-muted">@yield('title', 'Staff Dashboard')</h2>
                 </div>
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"

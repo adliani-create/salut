@@ -34,6 +34,8 @@ class AdmissionApprovalController extends Controller
             return redirect()->route('admin.admissions.index')->with('error', 'Mahasiswa ini tidak dalam status menunggu verifikasi admisi.');
         }
 
+        $user->load('registration');
+
         return view('admin.admissions.show', compact('user'));
     }
 
@@ -46,27 +48,58 @@ class AdmissionApprovalController extends Controller
             return back()->with('error', 'Status tidak valid untuk disetujui.');
         }
 
-        // 1. Activate Student
+        $request->validate([
+            'nim' => 'required|string|unique:users,nim,' . $user->id,
+            'faculty' => 'required|string|max:255',
+            'major' => 'required|string|max:255',
+            'semester' => 'required|integer|min:1',
+        ]);
+
+        // 1. Activate Student + Assign Academic Data
         $user->status = 'active';
+        $user->nim = $request->nim;
+        $user->faculty = $request->faculty;
+        $user->major = $request->major;
+        $user->semester = $request->semester;
         $user->save();
 
-        // 2. Grant 50 Poin (Rp 50.000) to Referrer if exists
+        // 2. Update registration status to valid
+        if ($user->registration) {
+            $user->registration->update(['status' => 'valid']);
+        }
+
+        // 3. Grant Komisi to Referrer if exists
         $referrerId = $user->referred_by;
         if ($referrerId) {
             $referrer = User::find($referrerId);
-            if ($referrer) {
+            if ($referrer && $referrer->status === 'active') {
+                $roleName = $referrer->hasRole('mitra') ? 'Mitra' : 'Affiliator';
+
                 PointLedger::create([
                     'user_id' => $referrerId,
                     'amount' => 50000,
                     'type' => 'credit',
-                    'description' => 'Komisi pendaftaran valid mahasiswa: ' . $user->name,
+                    'source_id' => $user->id,
+                    'description' => "Komisi Admisi Mahasiswa Baru ($roleName): " . $user->name,
                 ]);
 
-                // Do not increment missing total_points column
+                // 4. Bonus Supervisi Mitra (if recruiter is affiliator under a mitra)
+                if ($referrer->referred_by && $referrer->hasRole('affiliator')) {
+                    $mitra = User::find($referrer->referred_by);
+                    if ($mitra && $mitra->hasRole('mitra') && $mitra->status === 'active') {
+                        PointLedger::create([
+                            'user_id' => $mitra->id,
+                            'amount' => 10000,
+                            'type' => 'credit',
+                            'source_id' => $user->id,
+                            'description' => "Bonus Supervisi Admisi dari Tim ({$referrer->name}): " . $user->name,
+                        ]);
+                    }
+                }
             }
         }
 
-        return redirect()->route('admin.admissions.index')->with('success', 'Pembayaran Admisi disetujui. Mahasiswa sekarang berstatus Aktif.');
+        return redirect()->route('admin.admissions.index')->with('success', 'Pembayaran Admisi disetujui. NIM ' . $request->nim . ' telah diberikan. Mahasiswa sekarang berstatus Aktif.');
     }
 
     /**

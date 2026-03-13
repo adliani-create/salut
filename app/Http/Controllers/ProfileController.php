@@ -23,9 +23,27 @@ class ProfileController extends Controller
 
     public function edit()
     {
+        $user = Auth::user();
+        $layout = $this->getLayoutForRole($user);
+
         return view('profile.edit', [
-            'user' => Auth::user()
+            'user' => $user,
+            'layout' => $layout,
         ]);
+    }
+
+    /**
+     * Get the layout name based on user role.
+     */
+    private function getLayoutForRole($user)
+    {
+        if ($user->isAdmin()) return 'layouts.admin';
+        if ($user->isMitra()) return 'layouts.mitra';
+        if ($user->isAffiliator()) return 'layouts.affiliator';
+        if ($user->isMahasiswa()) return 'layouts.student';
+        if ($user->role && $user->role->name === 'staff') return 'layouts.staff';
+        if ($user->role && $user->role->name === 'yayasan') return 'layouts.yayasan';
+        return 'layouts.app';
     }
 
     /**
@@ -44,7 +62,6 @@ class ProfileController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
             'password' => 'nullable|string|min:8|confirmed',
-            'photo' => 'nullable|image|max:2048',
             'photo' => 'nullable|image|max:2048',
         ]);
 

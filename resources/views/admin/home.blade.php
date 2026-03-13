@@ -4,7 +4,7 @@
 
 @section('content')
     {{-- Key Metrics Cards --}}
-    <div class="row g-4 mb-4">
+    <div class="row g-4 mb-4 p-4">
         <!-- Active Students -->
         <div class="col-md-6 col-lg-3">
             <div class="card border-0 shadow-sm h-100 bg-primary bg-gradient text-white">
@@ -74,11 +74,11 @@
         </div>
     </div>
 
-    <div class="row g-4 mb-4">
+    <div class="row g-4 mb-4 p-4">
         <!-- Chart Section -->
         <div class="col-lg-5">
             <div class="card border-0 shadow-sm h-100">
-                     <h5 class="fw-bold mb-0 text-primary">Sebaran Program Karir</h5>
+                     <h5 class="fw-bold mb-0 text-primary p-4">Sebaran Program Karir</h5>
                 <div class="card-body">
                     <div style="height: 300px; position: relative;">
                         <canvas id="programChart"></canvas>

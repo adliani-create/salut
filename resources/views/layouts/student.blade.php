@@ -231,57 +231,49 @@
         <!-- Page Content -->
         <div id="page-content-wrapper">
             <!-- Navbar -->
-            <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
+            <nav class="navbar navbar-light bg-transparent py-3 px-4">
                 <div class="d-flex align-items-center">
-                    <button id="sidebarToggleTop" class="btn btn-link rounded-circle me-3">
+                    <button id="sidebarToggleTop" class="btn btn-link rounded-circle me-3 d-md-none p-0">
                         <i class="bi bi-list fs-2 text-primary"></i>
                     </button>
                     
-                    <h2 class="fs-4 m-0 text-muted">@yield('title', 'Student Dashboard')</h2>
+                    <h2 class="fs-6 fs-md-4 m-0 text-muted">@yield('title', 'Student Dashboard')</h2>
                 </div>
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle second-text fw-bold d-flex align-items-center gap-2" href="#" id="navbarDropdown"
-                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <span class="d-none d-md-block text-dark">{{ Auth::user()->name }}</span>
-                                @if(Auth::user()->photo)
-                                    <img src="{{ asset('storage/' . Auth::user()->photo) }}?v={{ time() }}" alt="" class="rounded-circle object-fit-cover shadow-sm border" width="40" height="40">
-                                @else
-                                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center shadow-sm border" style="width: 40px; height: 40px; font-size: 1rem;">
-                                        {{ strtoupper(substr(Auth::user()->name ?? 'U', 0, 1)) }}
-                                    </div>
-                                @endif
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg p-2 mt-2 rounded-4 animate slideIn" aria-labelledby="navbarDropdown">
-                                <li>
-                                    <div class="px-3 py-2">
-                                        <div class="fw-bold text-dark">{{ Auth::user()->name }}</div>
-                                        <div class="small text-muted text-truncate" style="max-width: 150px;">{{ Auth::user()->email }}</div>
-                                    </div>
-                                </li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li>
-                                    <a class="dropdown-item rounded-3 py-2" href="{{ route('profile.edit') }}">
-                                        <i class="bi bi-gear me-2 text-primary"></i> Edit Profil
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item rounded-3 py-2 text-danger" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                        <i class="bi bi-box-arrow-right me-2"></i> Logout
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
+                <div class="ms-auto">
+                    <div class="dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center gap-2 p-0" href="#" id="navbarDropdown"
+                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="d-none d-md-block text-dark fw-bold">{{ Auth::user()->name }}</span>
+                            @if(Auth::user()->photo)
+                                <img src="{{ asset('storage/' . Auth::user()->photo) }}?v={{ time() }}" alt="" class="rounded-circle object-fit-cover shadow-sm border" width="36" height="36">
+                            @else
+                                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center shadow-sm border" style="width: 36px; height: 36px; font-size: 0.9rem;">
+                                    {{ strtoupper(substr(Auth::user()->name ?? 'U', 0, 1)) }}
+                                </div>
+                            @endif
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg p-2 mt-2 rounded-4 animate slideIn" aria-labelledby="navbarDropdown">
+                            <li>
+                                <div class="px-3 py-2">
+                                    <div class="fw-bold text-dark">{{ Auth::user()->name }}</div>
+                                    <div class="small text-muted text-truncate" style="max-width: 150px;">{{ Auth::user()->email }}</div>
+                                </div>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item rounded-3 py-2" href="{{ route('profile.edit') }}">
+                                    <i class="bi bi-gear me-2 text-primary"></i> Edit Profil
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item rounded-3 py-2 text-danger" href="{{ route('logout') }}"
+                                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <i class="bi bi-box-arrow-right me-2"></i> Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </nav>
 

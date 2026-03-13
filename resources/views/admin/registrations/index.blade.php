@@ -3,9 +3,8 @@
 @section('title', 'Registrasi Mahasiswa')
 
 @section('content')
-@section('content')
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 p-4">
         
         <!-- Header & Search -->
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -42,7 +41,6 @@
                                 <th>Jurusan</th>
                                 <th>Program</th>
                                 <th>Status</th>
-                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -60,22 +58,10 @@
                                         <span class="badge bg-danger rounded-pill px-3">Invalid</span>
                                     @endif
                                 </td>
-                                <td>
-                                    <div class="d-flex gap-2">
-                                        <a href="{{ route('admin.registrations.show', $reg->id) }}" class="btn btn-sm btn-outline-info" title="Lihat Detail">
-                                            <i class="bi bi-eye"></i>
-                                        </a>
-                                        @if($reg->status == 'pending')
-                                            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#approveModal{{ $reg->id }}">
-                                                <i class="bi bi-check-circle"></i> Approve
-                                            </button>
-                                        @endif
-                                    </div>
-                                </td>
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="5" class="text-center py-5 text-muted">
+                                <td colspan="4" class="text-center py-5 text-muted">
                                     <i class="bi bi-check-circle-fill fs-1 d-block mb-3 text-success"></i>
                                     Tidak ada registrasi baru yang pending.
                                 </td>
@@ -93,73 +79,4 @@
     </div>
 </div>
 
-<!-- Modals outside the table -->
-@foreach($registrations as $reg)
-    @if($reg->status == 'pending')
-    <div class="modal fade" id="approveModal{{ $reg->id }}" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <form action="{{ route('admin.registrations.approve', $reg->id) }}" method="POST">
-                    @csrf
-                    @method('PUT')
-                    <div class="modal-header bg-success text-white">
-                        <h5 class="modal-title">Approval & Lengkapi Data Mahasiswa</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="form-label">Nama Lengkap</label>
-                                <input type="text" class="form-control" value="{{ $reg->user->name }}" readonly>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Email</label>
-                                <input type="email" class="form-control" value="{{ $reg->user->email }}" readonly>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Nomor WhatsApp</label>
-                                <input type="text" class="form-control" value="{{ $reg->whatsapp }}" readonly>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">NIM (Nomor Induk Mahasiswa)</label>
-                                <input type="text" name="nim" class="form-control" required placeholder="Masukkan NIM Baru">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Fakultas</label>
-                                <input type="text" name="faculty" class="form-control" value="{{ $reg->fakultas }}" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Jurusan / Prodi</label>
-                                <input type="text" name="major" class="form-control" value="{{ $reg->prodi }}" required>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label">Semester</label>
-                                <input type="number" name="semester" class="form-control" value="1" required>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label">Jenjang</label>
-                                <input type="text" class="form-control" value="{{ $reg->jenjang }}" readonly>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label">Jalur</label>
-                                <input type="text" class="form-control" value="{{ $reg->jalur_pendaftaran }}" readonly>
-                            </div>
-                        </div>
-                        <div class="alert alert-info mt-3 mb-0">
-                            <i class="bi bi-info-circle me-1"></i>
-                            Data ini akan disimpan ke profil pengguna dan status akan berubah menjadi <strong>Active</strong>.
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-success">
-                            Simpan & Terima Mahasiswa
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    @endif
-@endforeach
 @endsection

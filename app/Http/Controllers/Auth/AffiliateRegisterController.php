@@ -41,7 +41,9 @@ class AffiliateRegisterController extends Controller
             'nim' => ['required', 'numeric', 'digits:9', 'unique:users,nim'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'whatsapp' => ['required', 'string', 'max:20'],
-            'bank_account' => ['required', 'string', 'max:255'],
+            'bank_name' => ['required', 'string', 'max:100'],
+            'bank_account' => ['required', 'string', 'max:100'],
+            'bank_account_owner' => ['required', 'string', 'max:255'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'ref' => ['required', 'string', 'exists:users,referral_code'],
         ], [
@@ -51,6 +53,9 @@ class AffiliateRegisterController extends Controller
             'nim.numeric' => 'NIM hanya boleh berisi angka.',
             'ref.required' => 'Kode Referensi Rekrutmen wajib diisi.',
             'ref.exists' => 'Kode Referensi Rekrutmen tidak valid atau tidak ditemukan.',
+            'bank_name.required' => 'Nama Bank wajib diisi.',
+            'bank_account.required' => 'No. Rekening wajib diisi.',
+            'bank_account_owner.required' => 'Atas Nama wajib diisi.',
         ]);
 
         // Find referring Upline (Mitra or Affiliator)
@@ -70,7 +75,10 @@ class AffiliateRegisterController extends Controller
             return back()->withInput()->withErrors(['ref' => 'Pendaftaran Affiliator wajib menggunakan tautan undangan/referral.']);
         }
 
-        $affiliatorRole = Role::where('name', 'affiliator')->first();
+        $affiliatorRole = Role::firstOrCreate(
+            ['name' => 'affiliator'],
+            ['label' => 'Affiliator', 'redirect_to' => '/affiliator/dashboard']
+        );
 
         $user = User::create([
             'name' => $request->name,
@@ -89,7 +97,9 @@ class AffiliateRegisterController extends Controller
 
         // Penerapan Aturan 4: Auto-generate new referral code for this Affiliate
         $user->referral_code = $this->generateReferralCode($user);
+        $user->bank_name = $request->bank_name;
         $user->bank_account = $request->bank_account;
+        $user->bank_account_owner = $request->bank_account_owner;
         $user->save();
 
         event(new Registered($user));

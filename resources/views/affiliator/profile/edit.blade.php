@@ -1,6 +1,6 @@
 @extends('layouts.affiliator')
 
-@section('title', 'Tengaturan Profil')
+@section('title', 'Pengaturan Profil')
 
 @section('content')
 <div class="row">

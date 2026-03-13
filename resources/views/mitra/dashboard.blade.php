@@ -3,57 +3,107 @@
 @section('title', 'Dashboard Overview')
 
 @section('content')
-<!-- Referral Copy Section -->
+
+@if(Auth::user()->status === 'pending')
+{{-- ============================================================ --}}
+{{-- PENDING MITRA VIEW - Shown when account is awaiting approval --}}
+{{-- ============================================================ --}}
+<div class="row justify-content-center py-5">
+    <div class="col-md-8 col-lg-7">
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+            <div class="bg-warning text-dark text-center p-5">
+                <i class="bi bi-hourglass-split display-2 mb-3 d-block opacity-75"></i>
+                <h3 class="fw-bold">Pendaftaran Mitra Sedang Ditinjau</h3>
+                <p class="mb-0 opacity-75">Terima kasih telah mendaftar sebagai Mitra SALUT!</p>
+            </div>
+            <div class="card-body p-5">
+                <p class="text-muted mb-4">
+                    Pengajuan Mitra Anda sedang dalam proses <strong>peninjauan oleh Admin</strong>. Biasanya proses ini memerlukan <strong>1–2 hari kerja</strong>. Kami akan menghubungi Anda melalui WhatsApp atau Email yang terdaftar jika pengajuan disetujui atau memerlukan informasi tambahan.
+                </p>
+                <div class="bg-light rounded-4 p-4 mb-4">
+                    <h6 class="fw-bold text-dark mb-3"><i class="bi bi-person-vcard me-2 text-primary"></i>Data Pendaftaran Anda</h6>
+                    <div class="row g-2 small">
+                        <div class="col-6 text-muted">Nama</div>
+                        <div class="col-6 fw-bold text-dark">{{ Auth::user()->name }}</div>
+                        <div class="col-6 text-muted">Email</div>
+                        <div class="col-6 fw-bold text-dark">{{ Auth::user()->email }}</div>
+                        <div class="col-6 text-muted">WhatsApp</div>
+                        <div class="col-6 fw-bold text-dark">{{ Auth::user()->whatsapp ?? '-' }}</div>
+                        <div class="col-6 text-muted">Status</div>
+                        <div class="col-6">
+                            <span class="badge bg-warning text-dark px-3 py-1 rounded-pill fw-bold">
+                                <i class="bi bi-clock-history me-1"></i> Menunggu Persetujuan
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('pending-logout-form').submit();" class="btn btn-outline-secondary rounded-pill px-4">
+                        <i class="bi bi-box-arrow-right me-2"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<form id="pending-logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>
+
+@else
+{{-- ============================================================ --}}
+{{-- ACTIVE MITRA DASHBOARD - Normal view for approved mitras     --}}
+{{-- ============================================================ --}}
+
+
 <div class="row mb-4">
     <div class="col-12">
         <div class="card bg-primary text-white border-0 shadow-sm rounded-4 overflow-hidden position-relative">
             <!-- Background Decoration -->
-            <div class="position-absolute end-0 top-0 opacity-10 h-100" style="margin-right: -20px; margin-top: -20px;">
-                <i class="bi bi-bullseye" style="font-size: 15rem;"></i>
+            <div class="position-absolute end-0 top-0 h-100 d-none d-lg-block" style="margin-right: -20px; margin-top: -20px; pointer-events: none;">
+                <i class="bi bi-bullseye text-white opacity-10" style="font-size: 15rem;"></i>
             </div>
             
-            <div class="card-body p-4 p-md-5 position-relative z-index-1">
+            <div class="card-body p-3 p-md-4 p-lg-5 position-relative" style="z-index: 1;">
                 <div class="row align-items-center">
-                    <div class="col-md-5 mb-4 mb-md-0">
-                        <span class="badge bg-white text-primary mb-3 px-3 py-2 rounded-pill fw-bold">Pusat Pemasaran & Rekrutmen</span>
-                        <h3 class="fw-bold mb-3">Kembangkan Jaringan Anda</h3>
-                        <p class="mb-0 text-white-50 fs-6">Bagikan link di bawah ini sesuai dengan target rekrutmen Anda. Link bersifat permanen menggunakan kode <strong class="text-white">{{ Auth::user()->referral_code }}</strong>.</p>
+                    <div class="col-lg-5 mb-3 mb-lg-0">
+                        <span class="badge bg-white text-primary mb-2 px-3 py-2 rounded-pill fw-bold" style="font-size: 0.7rem;">Pusat Pemasaran & Rekrutmen</span>
+                        <h4 class="fw-bold mb-2 fs-5">Kembangkan Jaringan Anda</h4>
+                        <p class="mb-0 text-white-50 small">Bagikan link di bawah ini sesuai dengan target rekrutmen Anda. Kode: <strong class="text-white">{{ Auth::user()->referral_code }}</strong></p>
                     </div>
-                    <div class="col-md-7">
-                        <ul class="nav nav-pills mb-3 border-bottom border-white border-opacity-25 pb-2" id="pills-tab" role="tablist">
+                    <div class="col-lg-7">
+                        <ul class="nav nav-pills mb-2 border-bottom border-white border-opacity-25 pb-2 flex-nowrap" id="pills-tab" role="tablist">
                           <li class="nav-item" role="presentation">
-                            <button class="nav-link active text-white fw-bold rounded-pill" id="pills-affiliator-tab" data-bs-toggle="pill" data-bs-target="#pills-affiliator" type="button" role="tab" aria-controls="pills-affiliator" aria-selected="true" style="background-color: rgba(255,255,255,0.1);">
-                                <i class="bi bi-person-badge me-2"></i>Rekrut Affiliator (Tim)
+                            <button class="nav-link active text-white fw-bold rounded-pill py-1 px-2 px-md-3 small" id="pills-affiliator-tab" data-bs-toggle="pill" data-bs-target="#pills-affiliator" type="button" role="tab" style="background-color: rgba(255,255,255,0.1); font-size: 0.75rem;">
+                                <i class="bi bi-person-badge me-1"></i>Rekrut Affiliator
                             </button>
                           </li>
-                          <li class="nav-item ms-2" role="presentation">
-                            <button class="nav-link text-white fw-bold rounded-pill" id="pills-maba-tab" data-bs-toggle="pill" data-bs-target="#pills-maba" type="button" role="tab" aria-controls="pills-maba" aria-selected="false" style="background-color: rgba(255,255,255,0.1);">
-                                <i class="bi bi-mortarboard me-2"></i>Rekrut Mahasiswa
+                          <li class="nav-item ms-1" role="presentation">
+                            <button class="nav-link text-white fw-bold rounded-pill py-1 px-2 px-md-3 small" id="pills-maba-tab" data-bs-toggle="pill" data-bs-target="#pills-maba" type="button" role="tab" style="background-color: rgba(255,255,255,0.1); font-size: 0.75rem;">
+                                <i class="bi bi-mortarboard me-1"></i>Rekrut Mahasiswa
                             </button>
                           </li>
                         </ul>
                         <div class="tab-content" id="pills-tabContent">
                           <!-- Tab Affiliator -->
-                          <div class="tab-pane fade show active" id="pills-affiliator" role="tabpanel" aria-labelledby="pills-affiliator-tab" tabindex="0">
-                              <div class="bg-dark bg-opacity-25 rounded-4 p-3 border border-white border-opacity-25 mt-2">
-                                  <label class="small text-white-50 mb-2 fw-bold d-block"><i class="bi bi-link-45deg me-1"></i>Link Pendaftaran Affiliator Baru</label>
-                                  <div class="input-group input-group-lg">
-                                      <input type="text" id="affiliateLinkInput" class="form-control bg-white text-dark fw-bold border-0 fs-6" value="{{ $affiliateReferralLink }}" readonly>
-                                      <button class="btn btn-warning fw-bold px-3 px-md-4" type="button" onclick="copyDynamicLink('affiliateLinkInput', this)">
-                                          <i class="bi bi-copy me-1 me-md-2"></i><span class="d-none d-md-inline">Salin</span>
+                          <div class="tab-pane fade show active" id="pills-affiliator" role="tabpanel" tabindex="0">
+                              <div class="bg-dark bg-opacity-25 rounded-3 p-2 p-md-3 border border-white border-opacity-25 mt-1">
+                                  <label class="text-white-50 mb-1 fw-bold d-block" style="font-size: 0.65rem;"><i class="bi bi-link-45deg me-1"></i>Link Pendaftaran Affiliator Baru</label>
+                                  <div class="input-group">
+                                      <input type="text" id="affiliateLinkInput" class="form-control bg-white text-dark fw-bold border-0 py-2 small" value="{{ $affiliateReferralLink }}" readonly style="min-width: 0;">
+                                      <button class="btn btn-warning fw-bold px-2 px-md-3 flex-shrink-0" type="button" onclick="copyDynamicLink('affiliateLinkInput', this)">
+                                          <i class="bi bi-copy"></i><span class="d-none d-md-inline ms-1">Salin</span>
                                       </button>
                                   </div>
                               </div>
                           </div>
                           
                           <!-- Tab Mahasiswa -->
-                          <div class="tab-pane fade" id="pills-maba" role="tabpanel" aria-labelledby="pills-maba-tab" tabindex="0">
-                              <div class="bg-dark bg-opacity-25 rounded-4 p-3 border border-white border-opacity-25 mt-2">
-                                  <label class="small text-white-50 mb-2 fw-bold d-block"><i class="bi bi-link-45deg me-1"></i>Link Pendaftaran Mahasiswa Baru</label>
-                                  <div class="input-group input-group-lg">
-                                      <input type="text" id="mabaLinkInput" class="form-control bg-white text-dark fw-bold border-0 fs-6" value="{{ $referralLink }}" readonly>
-                                      <button class="btn btn-warning fw-bold px-3 px-md-4" type="button" onclick="copyDynamicLink('mabaLinkInput', this)">
-                                          <i class="bi bi-copy me-1 me-md-2"></i><span class="d-none d-md-inline">Salin</span>
+                          <div class="tab-pane fade" id="pills-maba" role="tabpanel" tabindex="0">
+                              <div class="bg-dark bg-opacity-25 rounded-3 p-2 p-md-3 border border-white border-opacity-25 mt-1">
+                                  <label class="text-white-50 mb-1 fw-bold d-block" style="font-size: 0.65rem;"><i class="bi bi-link-45deg me-1"></i>Link Pendaftaran Mahasiswa Baru</label>
+                                  <div class="input-group">
+                                      <input type="text" id="mabaLinkInput" class="form-control bg-white text-dark fw-bold border-0 py-2 small" value="{{ $referralLink }}" readonly style="min-width: 0;">
+                                      <button class="btn btn-warning fw-bold px-2 px-md-3 flex-shrink-0" type="button" onclick="copyDynamicLink('mabaLinkInput', this)">
+                                          <i class="bi bi-copy"></i><span class="d-none d-md-inline ms-1">Salin</span>
                                       </button>
                                   </div>
                               </div>
@@ -226,21 +276,36 @@
     function copyDynamicLink(inputId, btn) {
         var copyText = document.getElementById(inputId);
         copyText.select();
-        copyText.setSelectionRange(0, 99999); /* For mobile devices */
-        navigator.clipboard.writeText(copyText.value);
+        copyText.setSelectionRange(0, 99999);
         
-        // Change button text temporarily
+        // Fallback for HTTP (non-HTTPS) environments
+        var copied = false;
+        try {
+            copied = document.execCommand('copy');
+        } catch(e) {
+            copied = false;
+        }
+        
+        if (!copied && navigator.clipboard) {
+            navigator.clipboard.writeText(copyText.value).catch(function(){});
+        }
+        
+        // Visual feedback
         var originalHTML = btn.innerHTML;
-        btn.innerHTML = '<i class="bi bi-check-lg"></i> <span class="d-none d-md-inline ms-1">Tersalin!</span>';
+        btn.innerHTML = '<i class="bi bi-check-lg"></i><span class="d-none d-md-inline ms-1">Tersalin!</span>';
         btn.classList.remove('btn-warning');
-        btn.classList.add('btn-success');
+        btn.classList.add('btn-success', 'text-white');
         
         setTimeout(function() {
             btn.innerHTML = originalHTML;
-            btn.classList.remove('btn-success');
+            btn.classList.remove('btn-success', 'text-white');
             btn.classList.add('btn-warning');
         }, 3000);
     }
 </script>
 @endpush
+
+@endif {{-- End @if(status === 'pending') --}}
+
 @endsection
+

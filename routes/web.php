@@ -21,6 +21,11 @@ Route::get('ajax/fakultas/{id}/prodis', [App\Http\Controllers\AjaxController::cl
 Route::get('/', [App\Http\Controllers\PublicController::class, 'index'])->name('landing');
 Route::get('/berita/{slug}', [App\Http\Controllers\PublicController::class, 'showNews'])->name('public.news.show');
 
+// Kemitraan (Partnership) Routes
+Route::get('/kemitraan', [App\Http\Controllers\Public\KemitraanController::class, 'index'])->name('kemitraan.landing');
+Route::get('/register/mitra', [App\Http\Controllers\Auth\MitraRegisterController::class, 'showRegistrationForm'])->name('register.mitra');
+Route::post('/register/mitra', [App\Http\Controllers\Auth\MitraRegisterController::class, 'register'])->name('register.mitra.store');
+
 // Custom Registration Routes
 Route::get('register', [App\Http\Controllers\Auth\StudentRegisterController::class, 'showLanding'])->name('register');
 Route::get('register/affiliator', [App\Http\Controllers\Auth\AffiliateRegisterController::class, 'showRegistrationForm'])->name('register.affiliate');
@@ -101,6 +106,7 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
     Route::resource('admin/lms-materials', App\Http\Controllers\Admin\LmsMaterialController::class, ['as' => 'admin']);
     Route::resource('admin/trainings', App\Http\Controllers\Admin\TrainingController::class, ['as' => 'admin']);
     Route::resource('admin/mitras', App\Http\Controllers\Admin\MitraController::class, ['as' => 'admin'])->parameters(['mitras' => 'user']);
+    Route::post('admin/mitras/{user}/approve', [App\Http\Controllers\Admin\MitraController::class, 'approve'])->name('admin.mitras.approve');
     Route::resource('admin/affiliators', App\Http\Controllers\Admin\AffiliatorController::class, ['as' => 'admin'])->parameters(['affiliators' => 'affiliator']);
     
     // Withdrawals Management (Admin)
