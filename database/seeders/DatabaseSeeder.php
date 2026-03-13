@@ -46,17 +46,9 @@ class DatabaseSeeder extends Seeder
             ['label' => 'Mitra', 'redirect_to' => '/mitra/dashboard']
         );
 
-        // Create admin user
-        User::firstOrCreate(
-            ['email' => 'admin@admin.com'],
-            [
-                'name' => 'Administrator',
-                'password' => Hash::make('password'),
-                'role_id' => $adminRole->id,
-            ]
-        );
-
         $this->call([
+            AdminUserSeeder::class,
+            CareerProgramSeeder::class,
             FacultyProdiSeeder::class,
         ]);
     }
