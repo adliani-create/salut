@@ -42,6 +42,7 @@ class HomeSettingController extends Controller
             'instagram_url' => 'nullable|url|max:255',
             'tiktok_url' => 'nullable|url|max:255',
             'google_maps_link' => 'nullable|url|max:500',
+            'admission_fee' => 'required|numeric|min:0',
         ]);
 
         $setting->hero_title = $request->hero_title;
@@ -57,6 +58,7 @@ class HomeSettingController extends Controller
         $setting->instagram_url = $request->instagram_url;
         $setting->tiktok_url = $request->tiktok_url;
         $setting->google_maps_link = $request->google_maps_link;
+        $setting->admission_fee = $request->admission_fee;
 
         if ($request->hasFile('banner_image')) {
             if ($setting->banner_path && Storage::disk('public')->exists($setting->banner_path)) {

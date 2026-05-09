@@ -7,7 +7,7 @@
     <div class="row mb-4 align-items-center">
         <div class="col-8">
             <h1 class="h3 mb-0 text-gray-800"><i class="bi bi-wallet2 me-2"></i>Persetujuan Pembayaran Admisi</h1>
-            <p class="text-muted mt-2">Daftar Mahasiswa Baru yang telah mengunggah bukti transfer Admisi Rp 100.000 dan menunggu sah dari Admin.</p>
+            <p class="text-muted mt-2">Daftar Mahasiswa Baru yang telah mengunggah bukti transfer Admisi Rp {{ number_format(\App\Models\HomeSetting::first()->admission_fee ?? 100000, 0, ',', '.') }} dan menunggu sah dari Admin.</p>
         </div>
     </div>
 

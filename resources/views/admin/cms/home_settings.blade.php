@@ -77,6 +77,20 @@
 
                     <hr class="my-5">
 
+                    <h5 class="fw-bold mb-4 text-primary"><i class="bi bi-wallet2 me-2"></i>Pengaturan Biaya Admisi</h5>
+
+                    <div class="mb-4">
+                        <label for="admission_fee" class="form-label fw-semibold">Biaya Admisi Pendaftaran (Rupiah)</label>
+                        <div class="input-group">
+                            <span class="input-group-text fw-bold">Rp</span>
+                            <input type="number" class="form-control form-control-lg @error('admission_fee') is-invalid @enderror" id="admission_fee" name="admission_fee" value="{{ old('admission_fee', $setting->admission_fee ?? 100000) }}" min="0" step="1000" required>
+                        </div>
+                        <div class="form-text">Angka ini akan ditampilkan di halaman pembayaran admisi mahasiswa, halaman review admin, dan kuitansi PDF. Contoh: 100000 = Rp 100.000</div>
+                        @error('admission_fee')
+                            <div class="text-danger small mt-1">{{ $message }}</div>
+                        @enderror
+                    </div>
+
                     <hr class="my-5">
 
                     <!-- Footer Settings Card -->
@@ -139,7 +153,7 @@
 
                     <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-primary btn-lg">
-                            <i class="bi bi-save me-2"></i>Simpan Perubahan Footer
+                            <i class="bi bi-save me-2"></i>Simpan Semua Perubahan
                         </button>
                     </div>
                 </form>

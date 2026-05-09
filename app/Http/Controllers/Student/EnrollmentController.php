@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\StudentTrack;
 use App\Models\Invoice;
+use App\Models\HomeSetting;
 use Carbon\Carbon;
 
 class EnrollmentController extends Controller
@@ -49,7 +50,7 @@ class EnrollmentController extends Controller
             Invoice::create([
                 'user_id' => $user->id,
                 'title' => 'Biaya Admisi',
-                'amount' => 500000, 
+                'amount' => HomeSetting::first()->admission_fee ?? 100000, 
                 'status' => 'unpaid',
                 'due_date' => Carbon::now()->addDays(7),
             ]);
