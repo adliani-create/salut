@@ -12,7 +12,7 @@
                     <!-- Admission Receipt Feature -->
                     @if($registration->user->admission_receipt)
                         <div class="mb-4">
-                            <h6 class="fw-bold text-success"><i class="bi bi-wallet2 me-2"></i>Bukti Transfer Tagihan Admisi (Rp 100.000)</h6>
+                            <h6 class="fw-bold text-success"><i class="bi bi-wallet2 me-2"></i>Bukti Transfer Tagihan Admisi (Rp {{ number_format(\App\Models\HomeSetting::first()->admission_fee ?? 100000, 0, ',', '.') }})</h6>
                             <a href="{{ asset('storage/' . $registration->user->admission_receipt) }}" target="_blank">
                                 <img src="{{ asset('storage/' . $registration->user->admission_receipt) }}" class="img-thumbnail rounded mt-2 shadow-sm" style="max-height: 200px; object-fit: cover;" alt="Bukti Transfer Admisi">
                             </a>

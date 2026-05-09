@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
+use App\Models\HomeSetting;
 
 class AdmissionReceiptController extends Controller
 {
@@ -50,7 +51,8 @@ class AdmissionReceiptController extends Controller
             'semester' => 'Semester 1',
             'no_ref' => 'INV-' . date('Ym', strtotime($user->created_at)) . '-' . rand(1000, 9999),
             'logo_base64' => $logoBase64,
-            'signature_base64' => $signatureBase64
+            'signature_base64' => $signatureBase64,
+            'admission_fee' => HomeSetting::first()->admission_fee ?? 100000,
         ];
 
         // Format PDF Name

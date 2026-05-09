@@ -23,7 +23,7 @@
         <div class="col-lg-8 mb-4">
             <div class="card shadow mb-4 border-0 h-100">
                 <div class="card-header py-3 bg-white border-0">
-                    <h6 class="m-0 font-weight-bold text-primary">Pratinjau Bukti Transfer (Rp 100.000)</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Pratinjau Bukti Transfer (Rp {{ number_format(\App\Models\HomeSetting::first()->admission_fee ?? 100000, 0, ',', '.') }})</h6>
                 </div>
                 <div class="card-body text-center bg-light d-flex align-items-center justify-content-center" style="min-height: 400px;">
                     @if($user->admission_receipt)

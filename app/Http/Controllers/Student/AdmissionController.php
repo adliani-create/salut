@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use App\Models\HomeSetting;
 
 class AdmissionController extends Controller
 {
@@ -14,7 +14,8 @@ class AdmissionController extends Controller
     public function pay()
     {
         $user = auth()->user();
-        return view('student.admission.pay', compact('user'));
+        $admissionFee = HomeSetting::first()->admission_fee ?? 100000;
+        return view('student.admission.pay', compact('user', 'admissionFee'));
     }
 
     /**

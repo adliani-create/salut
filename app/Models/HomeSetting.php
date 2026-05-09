@@ -24,5 +24,6 @@ class HomeSetting extends Model
         'instagram_url',
         'tiktok_url',
         'google_maps_link',
+        'admission_fee',
     ];
 }

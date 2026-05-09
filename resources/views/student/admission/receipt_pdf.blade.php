@@ -233,7 +233,7 @@
         <tbody>
             <tr>
                 <td>Biaya Layanan SALUT INDO GLOBAL</td>
-                <td class="price">Rp.500.000,-</td>
+                <td class="price">Rp.{{ number_format($admission_fee, 0, ',', '.') }},-</td>
             </tr>
         </tbody>
     </table>

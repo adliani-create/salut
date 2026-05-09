@@ -68,7 +68,7 @@
                                 
                                 <div class="bg-white p-4 rounded-4 shadow-sm border mb-4">
                                     <p class="small text-muted mb-1 text-uppercase fw-bold">Total Tagihan Admisi</p>
-                                    <h2 class="fw-bold text-primary mb-0">Rp 100.000</h2>
+                                    <h2 class="fw-bold text-primary mb-0">Rp {{ number_format($admissionFee, 0, ',', '.') }}</h2>
                                 </div>
 
                                 <div class="bg-white p-4 rounded-4 shadow-sm border border-start border-4 border-warning">
