@@ -13,7 +13,13 @@ class RegistrationController extends Controller
         $search = $request->get('q');
         // Acts as an Inbox: Only show pending registrations
         $registrations = Registration::with('user')
-            ->where('status', 'pending')
+            ->where(function ($query) {
+                $query->where('status', 'pending')
+                      ->orWhere(function ($q) {
+                          $q->where('status', 'draft')
+                            ->whereNotNull('whatsapp');
+                      });
+            })
             ->whereHas('user', function ($q) {
                 $q->whereHas('role', function ($r) {
                     $r->where('name', 'mahasiswa');

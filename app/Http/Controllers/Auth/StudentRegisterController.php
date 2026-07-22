@@ -68,7 +68,7 @@ class StudentRegisterController extends Controller
             'password' => ['required', 'min:8', 'confirmed'],
             
             // Update Data
-            'whatsapp' => ['required', 'numeric'],
+            'whatsapp' => ['required', 'string', 'min:8', 'max:20'],
             'jenjang' => ['required', 'in:S1,S2'],
             'fakultas_id' => ['required', 'exists:fakultas,id'],
             'prodi_id' => ['required', 'exists:prodis,id'],
@@ -196,7 +196,7 @@ class StudentRegisterController extends Controller
     public function storeStep2(Request $request)
     {
         $request->validate([
-            'whatsapp' => ['required', 'numeric'],
+            'whatsapp' => ['required', 'string', 'min:8', 'max:20'],
             'jenjang' => ['required', 'in:S1,S2'],
             'fakultas_id' => ['required', 'exists:fakultas,id'],
             'prodi_id' => ['required', 'exists:prodis,id'],

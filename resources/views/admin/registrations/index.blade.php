@@ -40,30 +40,58 @@
                                 <th>Nama</th>
                                 <th>Jurusan</th>
                                 <th>Program</th>
+                                <th>WhatsApp</th>
                                 <th>Status</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($registrations as $reg)
                             <tr>
-                                <td class="fw-medium">{{ $reg->user ? $reg->user->name : 'N/A' }}</td>
+                                <td class="fw-medium">
+                                    {{ $reg->user ? $reg->user->name : 'N/A' }}
+                                    <div class="small text-muted">{{ $reg->user ? $reg->user->email : '' }}</div>
+                                </td>
                                 <td>{{ $reg->prodi ?? '-' }}</td>
                                 <td>{{ $reg->fokus_karir ?? '-' }}</td>
                                 <td>
+                                    @if($reg->whatsapp)
+                                        @php
+                                            $waClean = preg_replace('/[^0-9]/', '', $reg->whatsapp);
+                                            if(str_starts_with($waClean, '0')) {
+                                                $waClean = '62' . substr($waClean, 1);
+                                            }
+                                            $waLink = "https://api.whatsapp.com/send?phone={$waClean}&text=Halo%20kak%20" . urlencode($reg->user->name ?? '') . "!%20Kami%20dari%20SALUT.%20Ada%20yang%20bisa%20kami%20bantu%20untuk%20menyelesaikan%20pendaftaran%20Anda%3F";
+                                        @endphp
+                                        <a href="{{ $waLink }}" target="_blank" class="btn btn-sm btn-success rounded-pill px-3">
+                                            <i class="bi bi-whatsapp me-1"></i> {{ $reg->whatsapp }}
+                                        </a>
+                                    @else
+                                        <span class="text-muted small">-</span>
+                                    @endif
+                                </td>
+                                <td>
                                     @if($reg->status == 'pending')
                                         <span class="badge bg-warning text-dark rounded-pill px-3">Pending</span>
+                                    @elseif($reg->status == 'draft')
+                                        <span class="badge bg-secondary rounded-pill px-3">Draft (Incomplete)</span>
                                     @elseif($reg->status == 'valid')
                                         <span class="badge bg-success rounded-pill px-3">Valid</span>
                                     @elseif($reg->status == 'invalid')
                                         <span class="badge bg-danger rounded-pill px-3">Invalid</span>
                                     @endif
                                 </td>
+                                <td>
+                                    <a href="{{ route('admin.registrations.show', $reg->id) }}" class="btn btn-sm btn-primary">
+                                        <i class="bi bi-eye"></i> Detail
+                                    </a>
+                                </td>
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="4" class="text-center py-5 text-muted">
+                                <td colspan="6" class="text-center py-5 text-muted">
                                     <i class="bi bi-check-circle-fill fs-1 d-block mb-3 text-success"></i>
-                                    Tidak ada registrasi baru yang pending.
+                                    Tidak ada registrasi baru yang pending atau draft.
                                 </td>
                             </tr>
                             @endforelse

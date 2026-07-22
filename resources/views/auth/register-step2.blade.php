@@ -21,7 +21,7 @@
 
                         <div class="mb-3">
                             <label for="whatsapp" class="form-label fw-bold">{{ __('No. WhatsApp') }}</label>
-                            <input id="whatsapp" type="number" class="form-control @error('whatsapp') is-invalid @enderror" name="whatsapp" value="{{ old('whatsapp') }}" required placeholder="08xxxxxxxxxx">
+                            <input id="whatsapp" type="text" class="form-control @error('whatsapp') is-invalid @enderror" name="whatsapp" value="{{ old('whatsapp') }}" required placeholder="08xxxxxxxxxx">
                             <div class="form-text">Nomor aktif untuk notifikasi penting.</div>
                             @error('whatsapp')
                                 <span class="invalid-feedback" role="alert">
